@@ -1,4 +1,9 @@
 language: python
+
+branches:
+  only:
+    - master
+
 matrix:
   include:
     - python: 3.5
@@ -11,12 +16,15 @@ matrix:
     - python: 3.8
       dist: xenial
       env: TOX_ENV=py38
+
 install:
   - pip install -U pip
   - pip install flake8 tox
+
 script:
   - tox -e $TOX_ENV
   - make flakes
+
 notifications:
   irc:
     channels:
