@@ -13,7 +13,6 @@ except ImportError:
     try:
         from passlib.utils.pbkdf2 import pbkdf2 as _pbkdf2
 
-
         def pbkdf2(val, salt, iterations, dklen, func):
             return _pbkdf2(val, salt, iterations, dklen, ("hmac-" + func).encode("utf-8"))
     except ImportError:

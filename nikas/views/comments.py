@@ -642,19 +642,19 @@ class API(object):
 
         if request.method == "GET":
             modal = (
-                    "<!DOCTYPE html>"
-                    "<html>"
-                    "<head>"
-                    "<script>"
-                    "  if (confirm('%s: Are you sure?')) {"
-                    "      xhr = new XMLHttpRequest;"
-                    "      xhr.open('POST', window.location.href);"
-                    "      xhr.send(null);"
-                    "      xhr.onload = function() {"
-                    "          window.location.href = %s;"
-                    "      };"
-                    "  }"
-                    "</script>" % (action.capitalize(), json.dumps(link)))
+                "<!DOCTYPE html>"
+                "<html>"
+                "<head>"
+                "<script>"
+                "  if (confirm('%s: Are you sure?')) {"
+                "      xhr = new XMLHttpRequest;"
+                "      xhr.open('POST', window.location.href);"
+                "      xhr.send(null);"
+                "      xhr.onload = function() {"
+                "          window.location.href = %s;"
+                "      };"
+                "  }"
+                "</script>" % (action.capitalize(), json.dumps(link)))
 
             return Response(modal, 200, content_type="text/html")
 
@@ -834,7 +834,7 @@ class API(object):
                     replies = []
 
                 comment['hidden_replies'] = comment['total_replies'] - \
-                                            len(replies)
+                    len(replies)
                 comment['replies'] = self._process_fetched_list(replies, plain)
 
         return JSON(rv, 200)
