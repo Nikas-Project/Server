@@ -17,9 +17,3 @@ install:
 script:
   - tox -e $TOX_ENV
   - make flakes
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#nikas"
-    on_success: change
-    on_failure: always
