@@ -6,7 +6,7 @@ RUN npm install -g requirejs uglify-js jade bower \
  && make init js
 
 # Second, create virtualenv
-FROM python:3.8-buster
+FROM python:3.8.3-buster
 WORKDIR /src/
 COPY --from=0 /src .
 RUN python3 -m venv /nikas \
@@ -17,7 +17,7 @@ RUN python3 -m venv /nikas \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Third, create final repository
-FROM python:3.8-slim-buster
+FROM python:3.8.3-slim-buster
 WORKDIR /nikas/
 COPY --from=1 /nikas .
 
