@@ -1,0 +1,16 @@
+include share/nikas.conf
+
+include nikas/js/embed.min.js
+include nikas/js/embed.dev.js
+include nikas/js/count.min.js
+include nikas/js/count.dev.js
+include nikas/js/admin.js
+
+include nikas/defaults.ini
+
+include nikas/templates/admin.html
+include nikas/templates/disabled.html
+include nikas/templates/login.html
+include nikas/css/admin.css
+include nikas/css/isso.css
+include nikas/img/isso.svg
