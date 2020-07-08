@@ -5,7 +5,8 @@ import sys
 
 from setuptools import setup, find_packages
 
-requires = ['itsdangerous', 'Jinja2', 'misaka>=2.0,<3.0', 'html5lib',
+requires = ['gunicorn', 'cffi', 'flask', 'itsdangerous',
+            'Jinja2', 'misaka>=2.0,<3.0', 'html5lib',
             'werkzeug>=1.0', 'bleach', 'flask-caching']
 
 if sys.version_info < (3, ):
