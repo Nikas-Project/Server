@@ -121,6 +121,8 @@ ENV/
 .ropeproject
 
 # IDE
-
 .vscode
 .idea
+
+# Libs
+bower_components
