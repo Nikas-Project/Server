@@ -166,9 +166,9 @@ def make_app(conf=None, threading=True, multiprocessing=False, uwsgi=False):
                 logger.info("connected to %s", host)
                 break
     else:
-        logger.warn("unable to connect to your website, Nikas will probably not "
-                    "work correctly. Please make sure, Nikas can reach your "
-                    "website via HTTP(S).")
+        logger.warning("unable to connect to your website, Nikas will probably not "
+                       "work correctly. Please make sure, Nikas can reach your "
+                       "website via HTTP(S).")
 
     wrapper = [local_manager.make_middleware]
 
