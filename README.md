@@ -1,4 +1,4 @@
-# Nikas
+# Nikas - Beta version
 
 The first persian comment system
 
