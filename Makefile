@@ -27,6 +27,8 @@ nikas/js/%.min.js: $(NIKAS_JS_SRC) $(NIKAS_CSS)
 nikas/js/%.dev.js: $(NIKAS_JS_SRC) $(NIKAS_CSS)
 	$(RJS) -o nikas/js/build.$*.js optimize="none" out=$@
 
+js: $(NIKAS_JS_DST)
+
 coverage: $(NIKAS_PY_SRC)
 	nosetests --with-doctest --with-coverage --cover-package=nikas --cover-html nikas/
 
