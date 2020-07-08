@@ -1,13 +1,13 @@
 define(["app/lib/promise", "app/globals"], function (Q, globals) {
-
     "use strict";
 
     var salt = "Eech7co8Ohloopo9Ol6baimi",
         location = function () {
-            return window.location.pathname
+            return window.location.pathname;
         };
 
-    var script, endpoint,
+    var script,
+        endpoint,
         js = document.getElementsByTagName("script");
 
     // prefer `data-nikas="//host/api/endpoint"` if provided
@@ -23,14 +23,19 @@ define(["app/lib/promise", "app/globals"], function (Q, globals) {
         for (i = 0; i < js.length; i++) {
             if (js[i].getAttribute("async") || js[i].getAttribute("defer")) {
                 // Todo : set client-configuration url
-                throw "Nikas's automatic configuration detection failed, please " +
-                "refer to client-configuration " +
-                "and add a custom `data-nikas` attribute.";
+                throw (
+                    "Nikas's automatic configuration detection failed, please " +
+                    "refer to client-configuration " +
+                    "and add a custom `data-nikas` attribute."
+                );
             }
         }
 
         script = js[js.length - 1];
-        endpoint = script.src.substring(0, script.src.length - "/js/embed.min.js".length);
+        endpoint = script.src.substring(
+            0,
+            script.src.length - "/js/embed.min.js".length
+        );
     }
 
     //  strip trailing slash
@@ -39,11 +44,9 @@ define(["app/lib/promise", "app/globals"], function (Q, globals) {
     }
 
     var curl = function (method, url, data, resolve, reject) {
-
         var xhr = new XMLHttpRequest();
 
         function onload() {
-
             var date = xhr.getResponseHeader("Date");
             if (date !== null) {
                 globals.offset.update(new Date(date));
@@ -59,7 +62,7 @@ define(["app/lib/promise", "app/globals"], function (Q, globals) {
                     reject(xhr.body);
                 }
             } else {
-                resolve({status: xhr.status, body: xhr.responseText});
+                resolve({ status: xhr.status, body: xhr.responseText });
             }
         }
 
@@ -83,31 +86,40 @@ define(["app/lib/promise", "app/globals"], function (Q, globals) {
     var qs = function (params) {
         var rv = "";
         for (var key in params) {
-            if (params.hasOwnProperty(key) &&
-                params[key] !== null && typeof (params[key]) !== "undefined") {
+            if (
+                params.hasOwnProperty(key) &&
+                params[key] !== null &&
+                typeof params[key] !== "undefined"
+            ) {
                 rv += key + "=" + encodeURIComponent(params[key]) + "&";
             }
         }
 
-        return rv.substring(0, rv.length - 1);  // chop off trailing "&"
+        return rv.substring(0, rv.length - 1); // chop off trailing "&"
     };
 
     var create = function (tid, data) {
         var deferred = Q.defer();
-        curl("POST", endpoint + "/new?" + qs({uri: tid || location()}), JSON.stringify(data),
+        curl(
+            "POST",
+            endpoint + "/new?" + qs({ uri: tid || location() }),
+            JSON.stringify(data),
             function (rv) {
                 if (rv.status === 201 || rv.status === 202) {
                     deferred.resolve(JSON.parse(rv.body));
                 } else {
                     deferred.reject(rv.body);
                 }
-            });
+            }
+        );
         return deferred.promise;
     };
 
     var modify = function (id, data) {
         var deferred = Q.defer();
-        curl("PUT", endpoint + "/id/" + id, JSON.stringify(data), function (rv) {
+        curl("PUT", endpoint + "/id/" + id, JSON.stringify(data), function (
+            rv
+        ) {
             if (rv.status === 403) {
                 deferred.reject("Not authorized to modify this comment!");
             } else if (rv.status === 200) {
@@ -135,40 +147,47 @@ define(["app/lib/promise", "app/globals"], function (Q, globals) {
 
     var view = function (id, plain) {
         var deferred = Q.defer();
-        curl("GET", endpoint + "/id/" + id + "?" + qs({plain: plain}), null,
+        curl(
+            "GET",
+            endpoint + "/id/" + id + "?" + qs({ plain: plain }),
+            null,
             function (rv) {
                 deferred.resolve(JSON.parse(rv.body));
-            });
+            }
+        );
         return deferred.promise;
     };
 
     var fetch = function (tid, limit, nested_limit, parent, lastcreated) {
-        if (typeof (limit) === 'undefined') {
+        if (typeof limit === "undefined") {
             limit = "inf";
         }
-        if (typeof (nested_limit) === 'undefined') {
+        if (typeof nested_limit === "undefined") {
             nested_limit = "inf";
         }
-        if (typeof (parent) === 'undefined') {
+        if (typeof parent === "undefined") {
             parent = null;
         }
 
-        var query_dict = {uri: tid || location(), after: lastcreated, parent: parent};
+        var query_dict = {
+            uri: tid || location(),
+            after: lastcreated,
+            parent: parent,
+        };
 
         if (limit !== "inf") {
-            query_dict['limit'] = limit;
+            query_dict["limit"] = limit;
         }
         if (nested_limit !== "inf") {
-            query_dict['nested_limit'] = nested_limit;
+            query_dict["nested_limit"] = nested_limit;
         }
 
         var deferred = Q.defer();
-        curl("GET", endpoint + "/?" +
-            qs(query_dict), null, function (rv) {
+        curl("GET", endpoint + "/?" + qs(query_dict), null, function (rv) {
             if (rv.status === 200) {
                 deferred.resolve(JSON.parse(rv.body));
             } else if (rv.status === 404) {
-                deferred.resolve({total_replies: 0});
+                deferred.resolve({ total_replies: 0 });
             } else {
                 deferred.reject(rv.body);
             }
@@ -190,37 +209,38 @@ define(["app/lib/promise", "app/globals"], function (Q, globals) {
 
     var like = function (id) {
         var deferred = Q.defer();
-        curl("POST", endpoint + "/id/" + id + "/like", null,
-            function (rv) {
-                deferred.resolve(JSON.parse(rv.body));
-            });
+        curl("POST", endpoint + "/id/" + id + "/like", null, function (rv) {
+            deferred.resolve(JSON.parse(rv.body));
+        });
         return deferred.promise;
     };
 
     var dislike = function (id) {
         var deferred = Q.defer();
-        curl("POST", endpoint + "/id/" + id + "/dislike", null,
-            function (rv) {
-                deferred.resolve(JSON.parse(rv.body));
-            });
+        curl("POST", endpoint + "/id/" + id + "/dislike", null, function (rv) {
+            deferred.resolve(JSON.parse(rv.body));
+        });
         return deferred.promise;
     };
 
-
     var feed = function (tid) {
-        return endpoint + "/feed?" + qs({uri: tid || location()});
+        return endpoint + "/feed?" + qs({ uri: tid || location() });
     };
 
     var preview = function (text) {
         var deferred = Q.defer();
-        curl("POST", endpoint + "/preview", JSON.stringify({text: text}),
+        curl(
+            "POST",
+            endpoint + "/preview",
+            JSON.stringify({ text: text }),
             function (rv) {
                 if (rv.status === 200) {
                     deferred.resolve(JSON.parse(rv.body).text);
                 } else {
                     deferred.reject(rv.body);
                 }
-            });
+            }
+        );
         return deferred.promise;
     };
 
@@ -237,6 +257,6 @@ define(["app/lib/promise", "app/globals"], function (Q, globals) {
         like: like,
         dislike: dislike,
         feed: feed,
-        preview: preview
+        preview: preview,
     };
 });

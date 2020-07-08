@@ -1,5 +1,4 @@
 define(function () {
-
     "use strict";
 
     function Element(node) {
@@ -52,7 +51,6 @@ define(function () {
          * during an event.
          */
         this.toggle = function (type, a, b) {
-
             var toggler = new Toggle(a, b);
             this.on(type, function () {
                 toggler.next();
@@ -87,13 +85,13 @@ define(function () {
         };
 
         this.blur = function () {
-            node.blur()
+            node.blur();
         };
         this.focus = function () {
-            node.focus()
+            node.focus();
         };
         this.scrollIntoView = function (args) {
-            node.scrollIntoView(args)
+            node.scrollIntoView(args);
         };
 
         this.checked = function () {
@@ -101,47 +99,47 @@ define(function () {
         };
 
         this.setAttribute = function (key, value) {
-            node.setAttribute(key, value)
+            node.setAttribute(key, value);
         };
         this.getAttribute = function (key) {
-            return node.getAttribute(key)
+            return node.getAttribute(key);
         };
 
         this.classList = node.classList;
 
         Object.defineProperties(this, {
-            "textContent": {
+            textContent: {
                 get: function () {
                     return node.textContent;
                 },
                 set: function (textContent) {
                     node.textContent = textContent;
-                }
+                },
             },
-            "innerHTML": {
+            innerHTML: {
                 get: function () {
                     return node.innerHTML;
                 },
                 set: function (innerHTML) {
                     node.innerHTML = innerHTML;
-                }
+                },
             },
-            "value": {
+            value: {
                 get: function () {
                     return node.value;
                 },
                 set: function (value) {
                     node.value = value;
-                }
+                },
             },
-            "placeholder": {
+            placeholder: {
                 get: function () {
                     return node.placeholder;
                 },
                 set: function (placeholder) {
                     node.placeholder = placeholder;
-                }
-            }
+                },
+            },
         });
     }
 
@@ -229,9 +227,11 @@ define(function () {
          */
 
         var el = document.createElement(tag.split(".")[0]);
-        tag.split(".").slice(1).forEach(function (val) {
-            el.classList.add(val);
-        });
+        tag.split(".")
+            .slice(1)
+            .forEach(function (val) {
+                el.classList.add(val);
+            });
 
         if (["A", "LINK"].indexOf(el.nodeName) > -1) {
             el.href = "#";

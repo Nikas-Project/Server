@@ -4,7 +4,12 @@
     padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-style: normal;
     font-weight: normal;
 }
@@ -13,7 +18,8 @@ input {
     text-align: center;
 }
 
-.header::before, .header::after {
+.header::before,
+.header::after {
     content: " ";
     display: table;
 }
@@ -22,7 +28,8 @@ input {
     clear: both;
 }
 
-.header::before, .header::after {
+.header::before,
+.header::after {
     content: " ";
     display: table;
 }
@@ -58,7 +65,8 @@ input {
     font-size: 1.05em;
 }
 
-.header a, .header a:visited {
+.header a,
+.header a:visited {
     color: #4d4c4c;
     text-decoration: none;
 }
@@ -68,7 +76,8 @@ input {
     box-shadow: 0 0 0.5em #c0c0c0 inset;
 }
 
-.outer .filters::before, .outer .filters::after {
+.outer .filters::before,
+.outer .filters::after {
     content: " ";
     display: table;
 }
@@ -77,7 +86,8 @@ input {
     clear: both;
 }
 
-.outer .filters::before, .outer .filters::after {
+.outer .filters::before,
+.outer .filters::after {
     content: " ";
     display: table;
 }

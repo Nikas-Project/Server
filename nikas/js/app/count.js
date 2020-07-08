@@ -1,6 +1,5 @@
 define(["app/api", "app/dom", "app/i18n"], function (api, $, i18n) {
     return function () {
-
         var objs = {};
 
         $.each("a", function (el) {
@@ -8,9 +7,11 @@ define(["app/api", "app/dom", "app/i18n"], function (api, $, i18n) {
                 return;
             }
 
-            var tid = el.getAttribute("data-nikas-id") ||
-                el.href.match(/^(.+)#nikas-thread$/)[1]
-                    .replace(/^.*\/\/[^\/]+/, '');
+            var tid =
+                el.getAttribute("data-nikas-id") ||
+                el.href
+                    .match(/^(.+)#nikas-thread$/)[1]
+                    .replace(/^.*\/\/[^\/]+/, "");
 
             if (tid in objs) {
                 objs[tid].push(el);
@@ -24,11 +25,13 @@ define(["app/api", "app/dom", "app/i18n"], function (api, $, i18n) {
         api.count(urls).then(function (rv) {
             for (var key in objs) {
                 if (objs.hasOwnProperty(key)) {
-
                     var index = urls.indexOf(key);
 
                     for (var i = 0; i < objs[key].length; i++) {
-                        objs[key][i].textContent = i18n.pluralize("num-comments", rv[index]);
+                        objs[key][i].textContent = i18n.pluralize(
+                            "num-comments",
+                            rv[index]
+                        );
                     }
                 }
             }

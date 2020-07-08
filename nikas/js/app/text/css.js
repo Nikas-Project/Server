@@ -1,5 +1,5 @@
 define(["text!../../../css/nikas.css"], function (nikas) {
     return {
-        inline: nikas
+        inline: nikas,
     };
 });

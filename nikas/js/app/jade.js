@@ -1,4 +1,10 @@
-define(["libjs-jade-runtime", "app/utils", "jade!app/text/postbox", "jade!app/text/comment", "jade!app/text/comment-loader"], function (runtime, utils, tt_postbox, tt_comment, tt_comment_loader) {
+define([
+    "libjs-jade-runtime",
+    "app/utils",
+    "jade!app/text/postbox",
+    "jade!app/text/comment",
+    "jade!app/text/comment-loader",
+], function (runtime, utils, tt_postbox, tt_comment, tt_comment_loader) {
     "use strict";
 
     var globals = {},
@@ -38,21 +44,27 @@ define(["libjs-jade-runtime", "app/utils", "jade!app/text/postbox", "jade!app/te
             date = new Date(parseInt(date, 10) * 1000);
         }
 
-        return [
-            date.getUTCFullYear(),
-            utils.pad(date.getUTCMonth(), 2),
-            utils.pad(date.getUTCDay(), 2)
-        ].join("-") + "T" + [
-            utils.pad(date.getUTCHours(), 2),
-            utils.pad(date.getUTCMinutes(), 2),
-            utils.pad(date.getUTCSeconds(), 2)
-        ].join(":") + "Z";
+        return (
+            [
+                date.getUTCFullYear(),
+                utils.pad(date.getUTCMonth(), 2),
+                utils.pad(date.getUTCDay(), 2),
+            ].join("-") +
+            "T" +
+            [
+                utils.pad(date.getUTCHours(), 2),
+                utils.pad(date.getUTCMinutes(), 2),
+                utils.pad(date.getUTCSeconds(), 2),
+            ].join(":") +
+            "Z"
+        );
     });
 
     return {
-        "set": set,
-        "render": function (name, locals) {
-            var rv, t = templates[name];
+        set: set,
+        render: function (name, locals) {
+            var rv,
+                t = templates[name];
             if (!t) {
                 throw new Error("Template not found: '" + name + "'");
             }
@@ -61,7 +73,10 @@ define(["libjs-jade-runtime", "app/utils", "jade!app/text/postbox", "jade!app/te
 
             var keys = [];
             for (var key in locals) {
-                if (locals.hasOwnProperty(key) && !globals.hasOwnProperty(key)) {
+                if (
+                    locals.hasOwnProperty(key) &&
+                    !globals.hasOwnProperty(key)
+                ) {
                     keys.push(key);
                     globals[key] = locals[key];
                 }
@@ -74,6 +89,6 @@ define(["libjs-jade-runtime", "app/utils", "jade!app/text/postbox", "jade!app/te
             }
 
             return rv;
-        }
+        },
     };
 });
