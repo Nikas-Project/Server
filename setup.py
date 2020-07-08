@@ -7,9 +7,9 @@ from setuptools import setup, find_packages
 
 requires = ['gunicorn', 'cffi', 'flask', 'itsdangerous',
             'Jinja2', 'misaka>=2.0,<3.0', 'html5lib',
-            'werkzeug>=1.0', 'bleach', 'flask-caching']
+            'werkzeug>=1.0', 'bleach', 'Flask-Caching']
 
-if sys.version_info < (3, ):
+if sys.version_info < (3,):
     raise SystemExit("Python 2 is not supported.")
 elif (3, 0) <= sys.version_info < (3, 4):
     raise SystemExit("Python 3 versions < 3.4 are not supported.")
@@ -26,7 +26,7 @@ setup(
     license='MIT',
     description='The first persian comment system ',
     classifiers=[
-        "Development Status :: Beta",
+        "Development Status :: 4 - Beta",
         "Topic :: Internet",
         "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
