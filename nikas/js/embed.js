@@ -1,5 +1,15 @@
-require(["app/lib/ready", "app/config", "app/i18n", "app/api", "nikas/js/app/nikas", "app/count", "app/dom", "app/text/css", "app/text/svg", "app/jade"], function (domready, config, i18n, api, nikas, count, $, css, svg, jade) {
-
+require([
+    "app/lib/ready",
+    "app/config",
+    "app/i18n",
+    "app/api",
+    "app/nikas",
+    "app/count",
+    "app/dom",
+    "app/text/css",
+    "app/text/svg",
+    "app/jade",
+], function (domready, config, i18n, api, nikas, count, $, css, svg, jade) {
     "use strict";
 
     jade.set("conf", config);
@@ -11,7 +21,7 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "nikas/js/app/nik
     var heading;
 
     function init() {
-        nikas_thread = $('#nikas-thread');
+        nikas_thread = $("#nikas-thread");
         heading = $.new("h4");
 
         if (config["css"] && $("style#nikas-style") === null) {
@@ -29,9 +39,11 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "nikas/js/app/nik
         }
 
         if (config["feed"]) {
-            var feedLink = $.new('a', i18n.translate('atom-feed'));
-            var feedLinkWrapper = $.new('span.nikas-feedlink');
-            feedLink.href = api.feed(nikas_thread.getAttribute("data-nikas-id"));
+            var feedLink = $.new("a", i18n.translate("atom-feed"));
+            var feedLinkWrapper = $.new("span.nikas-feedlink");
+            feedLink.href = api.feed(
+                nikas_thread.getAttribute("data-nikas-id")
+            );
             feedLinkWrapper.appendChild(feedLink);
             nikas_thread.append(feedLinkWrapper);
         }
@@ -41,15 +53,16 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "nikas/js/app/nik
     }
 
     function fetchComments() {
-
-        if ($('#nikas-root').length == 0) {
+        if ($("#nikas-root").length == 0) {
             return;
         }
 
-        $('#nikas-root').textContent = '';
-        api.fetch(nikas_thread.getAttribute("data-nikas-id") || location.pathname,
+        $("#nikas-root").textContent = "";
+        api.fetch(
+            nikas_thread.getAttribute("data-nikas-id") || location.pathname,
             config["max-comments-top"],
-            config["max-comments-nested"]).then(
+            config["max-comments-nested"]
+        ).then(
             function (rv) {
                 if (rv.total_replies === 0) {
                     heading.textContent = i18n.translate("no-comments");
@@ -71,8 +84,10 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "nikas/js/app/nik
                     nikas.insert_loader(rv, lastcreated);
                 }
 
-                if (window.location.hash.length > 0 &&
-                    window.location.hash.match("^#nikas-[0-9]+$")) {
+                if (
+                    window.location.hash.length > 0 &&
+                    window.location.hash.match("^#nikas-[0-9]+$")
+                ) {
                     $(window.location.hash).scrollIntoView();
                 }
             },
@@ -89,7 +104,6 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "nikas/js/app/nik
 
     window.Nikas = {
         init: init,
-        fetchComments: fetchComments
+        fetchComments: fetchComments,
     };
-
 });
