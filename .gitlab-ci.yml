@@ -3,7 +3,7 @@ image: docker:19
 stages:
   - Build image
   - Push to Docker Hub
-  - Push to github
+  - Push to Github
 
 services:
   - docker:dind
