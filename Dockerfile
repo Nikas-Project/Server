@@ -1,34 +1,35 @@
-# First, compile JS stuff
-FROM node:dubnium-buster
-WORKDIR /src/
-COPY . .
-RUN npm install -g requirejs uglify-js jade bower \
- && make init js
+FROM alpine:latest
 
-# Second, create virtualenv
-FROM python:3.8.3-buster
-WORKDIR /src/
-COPY --from=0 /src .
-RUN python3 -m venv /nikas \
- && . /nikas/bin/activate \
- && pip3 install --no-cache-dir --upgrade pip \
- && pip3 install --no-cache-dir gunicorn cffi flask \
- && python setup.py install \
- && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ENV GID=1000 UID=1000
 
-# Third, create final repository
-FROM python:3.8.3-slim-buster
-WORKDIR /nikas/
-COPY --from=1 /nikas .
+RUN apk upgrade --no-cache \
+ && apk add -t build-dependencies \
+    python3-dev \
+    libffi-dev \
+    build-base \
+ && apk add \
+    python3 \
+    py3-pip \
+    sqlite \
+    openssl \
+    openssl-dev \
+    ca-certificates \
+    su-exec \
+    tini
 
-# Configuration
-VOLUME /db /config
+RUN pip3 install --upgrade pip wheel setuptools \
+ && pip3 install --no-cache wheel nikas \
+ && apk del build-dependencies \
+ && rm -rf /tmp/* /var/cache/apk/*
+
+COPY run.sh /usr/local/bin/run.sh
+
+RUN chmod +x /usr/local/bin/run.sh
+
 EXPOSE 8080
-ENV NIKAS_SETTINGS /config/nikas.cfg
-CMD ["/nikas/bin/gunicorn", "-b", "0.0.0.0:8080", "-w", "4", "--preload", "nikas.run", "--worker-tmp-dir", "/dev/shm"]
 
-# Example of use:
-#
-# docker build -t nikas .
-# docker run -it --rm -v /opt/nikas:/config -v /opt/nikas:/db -v $PWD:$PWD nikas /nikas/bin/nikas -c \$NIKAS_SETTINGS import disqus.xml
-# docker run -d --rm --name nikas -p 8080:8080 -v /opt/nikas:/config -v /opt/nikas:/db nikas
+VOLUME /db /config
+
+LABEL maintainer="Arash Hatami <hatamiarash7@gmail.com>"
+
+CMD ["run.sh"]
