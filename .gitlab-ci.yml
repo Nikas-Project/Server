@@ -1,14 +1,21 @@
-image: docker:stable
+image: docker:19
 
 stages:
   - Build image
   - Push to Docker Hub
   - Push to github
 
+services:
+  - docker:dind
+
+before_script:
+  - docker info
+
 docker build:
   stage: Build image
   script:
-    - docker info
+    - version=$(cat version)
+    - echo $version
     - docker build -t nikas/server:latest -t docker.pkg.github.com/nikas-project/server/server:latest .
 
 docker hub:
