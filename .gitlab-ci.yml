@@ -1,0 +1,28 @@
+image: docker:stable
+
+stages:
+  - Build image
+  - Push to Docker Hub
+  - Push to github
+
+docker build:
+  stage: Build image
+  script:
+    - docker info
+    - docker build -t nikas/server:latest -t docker.pkg.github.com/nikas-project/server/server:latest .
+
+docker hub:
+  stage: Push to Docker Hub
+  only:
+    - master
+  script:
+    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    - docker push nikasproject/server
+
+docker github:
+  stage: Push to Github
+  only:
+    - master
+  script:
+    - echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com -u "$DOCKERHUB_USERNAME" --password-stdin
+    - docker push docker.pkg.github.com/nikas-project/server/server:latest

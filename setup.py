@@ -2,16 +2,22 @@
 # -*- encoding: utf-8 -*-
 
 import sys
+from os import path
 
 from setuptools import setup, find_packages
 
-requires = ['itsdangerous', 'Jinja2', 'misaka>=2.0,<3.0', 'html5lib',
-            'werkzeug>=1.0', 'bleach', 'flask-caching']
+requires = ['gunicorn', 'cffi', 'flask', 'itsdangerous',
+            'Jinja2', 'misaka>=2.0,<3.0', 'html5lib',
+            'werkzeug>=1.0', 'bleach', 'Flask-Caching']
 
-if sys.version_info < (3, ):
+if sys.version_info < (3,):
     raise SystemExit("Python 2 is not supported.")
 elif (3, 0) <= sys.version_info < (3, 4):
     raise SystemExit("Python 3 versions < 3.4 are not supported.")
+
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='nikas',
@@ -24,15 +30,17 @@ setup(
     url='https://github.com/Nikas-Project/Nikas-Server',
     license='MIT',
     description='The first persian comment system ',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     classifiers=[
-        "Development Status :: Beta",
+        "Development Status :: 4 - Beta",
         "Topic :: Internet",
         "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6"
-        "Programming Language :: Python :: 3.7"
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8"
     ],
     install_requires=requires,

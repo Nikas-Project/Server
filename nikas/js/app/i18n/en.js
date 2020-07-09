@@ -30,5 +30,5 @@ define({
     "date-day": "Yesterday\n{{ n }} days ago",
     "date-week": "last week\n{{ n }} weeks ago",
     "date-month": "last month\n{{ n }} months ago",
-    "date-year": "last year\n{{ n }} years ago"
+    "date-year": "last year\n{{ n }} years ago",
 });

@@ -14,14 +14,14 @@ function ajax(req) {
 }
 
 function fade(element) {
-    var op = 1;  // initial opacity
+    var op = 1; // initial opacity
     var timer = setInterval(function () {
         if (op <= 0.1) {
             clearInterval(timer);
-            element.style.display = 'none';
+            element.style.display = "none";
         }
         element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        element.style.filter = "alpha(opacity=" + op * 100 + ")";
         op -= op * 0.1;
     }, 10);
 }
@@ -32,11 +32,19 @@ function moderate(com_id, hash, action, nikas_host_script) {
         url: nikas_host_script + "/id/" + com_id + "/" + action + "/" + hash,
         success: function () {
             fade(document.getElementById("nikas-" + com_id));
-        }
+        },
     });
 }
 
-function edit(com_id, hash, author, email, website, comment, nikas_host_script) {
+function edit(
+    com_id,
+    hash,
+    author,
+    email,
+    website,
+    comment,
+    nikas_host_script
+) {
     ajax({
         method: "POST",
         url: nikas_host_script + "/id/" + com_id + "/edit/" + hash,
@@ -44,14 +52,14 @@ function edit(com_id, hash, author, email, website, comment, nikas_host_script) 
             text: comment,
             author: author,
             email: email,
-            website: website
+            website: website,
         }),
         success: function (ret) {
-            console.log("edit successed: ", ret);// TODO display some pretty stuff & update msg
+            console.log("edit successed: ", ret); // TODO display some pretty stuff & update msg
         },
         error: function (ret) {
             console.log("Error: ", ret); // TODO flash msg/notif
-        }
+        },
     });
 }
 
@@ -80,37 +88,49 @@ function set_editable(elt_id) {
 }
 
 function start_edit(com_id) {
-    var editable_elements = ['nikas-author-' + com_id,
-        'nikas-email-' + com_id,
-        'nikas-website-' + com_id,
-        'nikas-text-' + com_id];
+    var editable_elements = [
+        "nikas-author-" + com_id,
+        "nikas-email-" + com_id,
+        "nikas-website-" + com_id,
+        "nikas-text-" + com_id,
+    ];
     for (var idx = 0; idx <= editable_elements.length; idx++) {
         set_editable(editable_elements[idx]);
     }
-    document.getElementById('edit-btn-' + com_id).classList.toggle('hidden');
-    document.getElementById('stop-edit-btn-' + com_id).classList.toggle('hidden');
-    document.getElementById('send-edit-btn-' + com_id).classList.toggle('hidden');
+    document.getElementById("edit-btn-" + com_id).classList.toggle("hidden");
+    document
+        .getElementById("stop-edit-btn-" + com_id)
+        .classList.toggle("hidden");
+    document
+        .getElementById("send-edit-btn-" + com_id)
+        .classList.toggle("hidden");
 }
 
 function stop_edit(com_id) {
-    var editable_elements = ['nikas-author-' + com_id,
-        'nikas-email-' + com_id,
-        'nikas-website-' + com_id,
-        'nikas-text-' + com_id];
+    var editable_elements = [
+        "nikas-author-" + com_id,
+        "nikas-email-" + com_id,
+        "nikas-website-" + com_id,
+        "nikas-text-" + com_id,
+    ];
     for (var idx = 0; idx <= editable_elements.length; idx++) {
         unset_editable(editable_elements[idx]);
     }
-    document.getElementById('edit-btn-' + com_id).classList.toggle('hidden');
-    document.getElementById('stop-edit-btn-' + com_id).classList.toggle('hidden');
-    document.getElementById('send-edit-btn-' + com_id).classList.toggle('hidden');
+    document.getElementById("edit-btn-" + com_id).classList.toggle("hidden");
+    document
+        .getElementById("stop-edit-btn-" + com_id)
+        .classList.toggle("hidden");
+    document
+        .getElementById("send-edit-btn-" + com_id)
+        .classList.toggle("hidden");
 }
 
 function send_edit(com_id, hash, nikas_host_script) {
-    var author = document.getElementById('nikas-author-' + com_id).textContent;
-    var email = document.getElementById('nikas-email-' + com_id).textContent;
-    var website = document.getElementById('nikas-website-' + com_id).textContent;
-    var comment = document.getElementById('nikas-text-' + com_id).textContent;
+    var author = document.getElementById("nikas-author-" + com_id).textContent;
+    var email = document.getElementById("nikas-email-" + com_id).textContent;
+    var website = document.getElementById("nikas-website-" + com_id)
+        .textContent;
+    var comment = document.getElementById("nikas-text-" + com_id).textContent;
     edit(com_id, hash, author, email, website, comment, nikas_host_script);
     stop_edit(com_id);
 }
-

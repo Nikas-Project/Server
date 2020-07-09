@@ -1,13 +1,13 @@
 ({
     baseUrl: ".",
-    mainConfigFile: 'config.js',
+    mainConfigFile: "config.js",
     paths: {
         "app/text/svg": "app/text/dummy",
-        "app/text/css": "app/text/dummy"
+        "app/text/css": "app/text/dummy",
     },
 
     name: "components/almond/almond",
-    include: ['count'],
+    include: ["count"],
     out: "count.min.js",
-    wrap: true
-})
+    wrap: true,
+});
