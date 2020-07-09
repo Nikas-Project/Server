@@ -14,7 +14,7 @@ before_script:
 docker build:
   stage: Build image
   script:
-    - version=$(cat version)
+    - version=$(cat version.env)
     - echo $version
     - docker build -t nikas/server:latest -t docker.pkg.github.com/nikas-project/server/server:latest .
 
