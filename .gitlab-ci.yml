@@ -39,3 +39,12 @@ push to github:
     - docker load -i image/github.tar
     - echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com -u "$DOCKERHUB_USERNAME" --password-stdin
     - docker push docker.pkg.github.com/nikas-project/server/server:latest
+
+push to gitlab:
+  stage: Push to registries
+  only:
+    - master
+  script:
+    - docker load -i image/github.tar
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $CI_REGISTRY/nikas-project/server:latest
