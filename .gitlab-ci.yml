@@ -29,7 +29,7 @@ push to dockerhub:
     - master
   script:
     - docker load -i image/dockerhub.tar
-    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    - docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_TOKEN"
     - docker push nikasproject/server:stable
 
 push to github:
@@ -38,7 +38,7 @@ push to github:
     - master
   script:
     - docker load -i image/github.tar
-    - echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com -u "$DOCKERHUB_USERNAME" --password-stdin
+    - docker login -u "$DOCKERHUB_USERNAME" -p "$GITHUB_TOKEN" docker.pkg.github.com
     - docker push docker.pkg.github.com/nikas-project/server/server:latest
 
 push to gitlab:
