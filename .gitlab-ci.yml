@@ -3,7 +3,7 @@ image: docker:stable
 stages:
   - Build image
   - Push to Docker Hub
-  - Push to github
+  - Push to Github
 
 docker build:
   stage: Build image
