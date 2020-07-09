@@ -1,20 +1,42 @@
 image: docker:19
 
 stages:
-  - Deploy image
+  - Build image
+  - Push to Dockerhub
+  - Push to Github
 
 services:
   - docker:dind
 
-docker build:
-  stage: Deploy image
+build image:
+  stage: Build image
   only:
     - master
   script:
     - version=$(cat version.env)
     - echo $version
     - docker build -t nikasproject/server:stable -t docker.pkg.github.com/nikas-project/server/server:latest .
+    - mkdir image
+    - docker save nikasproject/server:stable > image/dockerhub.tar
+    - docker save docker.pkg.github.com/nikas-project/server/server:latest > image/github.tar
+  artifacts:
+    paths:
+      - image
+
+push to dockerhub:
+  stage: Push to Dockerhub
+  only:
+    - master
+  script:
+    - docker load -i image/dockerhub.tar
     - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - docker push nikasproject/server:stable
+
+push to github:
+  stage: Push to Github
+  only:
+    - master
+  script:
+    - docker load -i image/github.tar
     - echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com -u "$DOCKERHUB_USERNAME" --password-stdin
     - docker push docker.pkg.github.com/nikas-project/server/server:latest
