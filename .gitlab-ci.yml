@@ -14,7 +14,7 @@ build image:
   script:
     - version=$(cat version.env)
     - echo $version
-    - docker build -t nikasproject/server:stable -t docker.pkg.github.com/nikas-project/server/server:latest .
+    - docker build -t nikasproject/server:stable -t docker.pkg.github.com/nikas-project/server/server:latest -t $CI_REGISTRY/nikas-project/server:latest .
     - mkdir image
     - docker save nikasproject/server:stable > image/dockerhub.tar
     - docker save docker.pkg.github.com/nikas-project/server/server:latest > image/github.tar
