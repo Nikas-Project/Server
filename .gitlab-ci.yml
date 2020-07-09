@@ -2,8 +2,7 @@ image: docker:19
 
 stages:
   - Build image
-  - Push to Dockerhub
-  - Push to Github
+  - Push to registries
 
 services:
   - docker:dind
@@ -24,7 +23,7 @@ build image:
       - image
 
 push to dockerhub:
-  stage: Push to Dockerhub
+  stage: Push to registries
   only:
     - master
   script:
@@ -33,7 +32,7 @@ push to dockerhub:
     - docker push nikasproject/server:stable
 
 push to github:
-  stage: Push to Github
+  stage: Push to registries
   only:
     - master
   script:
