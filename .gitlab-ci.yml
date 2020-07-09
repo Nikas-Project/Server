@@ -16,7 +16,7 @@ docker build:
   script:
     - version=$(cat version.env)
     - echo $version
-    - docker build -t nikas/server:latest -t docker.pkg.github.com/nikas-project/server/server:latest .
+    - docker build -t nikasproject/server:stable -t docker.pkg.github.com/nikas-project/server/server:latest .
 
 docker hub:
   stage: Push to Docker Hub
@@ -24,7 +24,7 @@ docker hub:
     - master
   script:
     - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-    - docker push nikasproject/server
+    - docker push nikasproject/server:stable
 
 docker github:
   stage: Push to Github
