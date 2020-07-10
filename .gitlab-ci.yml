@@ -9,8 +9,6 @@ services:
 
 build image:
   stage: Build image
-  only:
-    - master
   script:
     - version=$(cat version.env)
     - echo $version
