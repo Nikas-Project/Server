@@ -20,6 +20,7 @@ build image:
     - docker save nikasproject/server:stable > image/dockerhub.tar
     - docker save docker.pkg.github.com/nikas-project/server/server:latest > image/github.tar
   artifacts:
+    expire_in: 15 mins
     paths:
       - image
 
