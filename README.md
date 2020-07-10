@@ -2,4 +2,4 @@
 
 The first persian comment system
 
-[![Build Status](https://travis-ci.com/Nikas-Project/Server.svg?branch=dev)](https://travis-ci.com/Nikas-Project/Server)
+[![pipeline status](https://gitlab.com/nikas-project/Server/badges/master/pipeline.svg)](https://gitlab.com/nikas-project/Server/-/commits/master)
