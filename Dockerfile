@@ -15,9 +15,8 @@ RUN apk upgrade --no-cache \
     openssl-dev \
     ca-certificates \
     su-exec \
-    tini
-
-RUN pip3 install --upgrade pip wheel setuptools \
+    tini \
+ && pip3 install --upgrade pip wheel setuptools \
  && pip3 install --no-cache wheel nikas \
  && apk del build-dependencies \
  && rm -rf /tmp/* /var/cache/apk/*
