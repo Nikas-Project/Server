@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  nikas:
+    image: nikasproject/server:stable
+    restart: unless-stopped
+    container_name: nikas
+    environment:
+      - GID=1000
+      - UID=1000
+    volumes:
+      - ./docker/config:/config
+      - ./docker/db:/db
+    networks:
+      - nikas
+    ports:
+      - 8080:8080
+
+networks:
+  nikas:
+    external: false
+    driver: bridge
