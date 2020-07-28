@@ -7,6 +7,14 @@ stages:
 services:
   - docker:dind
 
+include:
+  - template: Container-Scanning.gitlab-ci.yml
+  - template: Secret-Detection.gitlab-ci.yml
+
+secret_detection:
+  variables:
+    SECRET_DETECTION_HISTORIC_SCAN: "true"
+
 build image:
   stage: Build image
   script:
