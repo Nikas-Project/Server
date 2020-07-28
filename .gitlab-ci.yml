@@ -53,8 +53,12 @@ push to gitlab:
     - docker push $CI_REGISTRY/nikas-project/server:latest
 
 dependency_scanning:
-  stage: Build image
+  stage: .pre
   variables:
     DS_REMEDIATE: "false"
     DS_PYTHON_VERSION: 3
     PIP_REQUIREMENTS_FILE: "requirements.txt"
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - gl-dependency-scanning-report.json
