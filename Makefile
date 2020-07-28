@@ -32,7 +32,7 @@ js: $(NIKAS_JS_DST)
 coverage: $(NIKAS_PY_SRC)
 	nosetests --with-doctest --with-coverage --cover-package=nikas --cover-html nikas/
 
-test: $($NIKAS_PY_SRC)
+test: $(NIKAS_PY_SRC)
 	python3 setup.py nosetests
 
 clean:
