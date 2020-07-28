@@ -127,3 +127,6 @@ ENV/
 
 # Libs
 bower_components
+
+# Tests
+nosetests.json
