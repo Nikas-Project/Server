@@ -6,14 +6,13 @@ from os import path
 
 from setuptools import setup, find_packages
 
-requires = ['gunicorn', 'cffi', 'flask', 'itsdangerous',
-            'Jinja2', 'misaka>=2.0,<3.0', 'html5lib',
-            'werkzeug>=1.0', 'bleach', 'Flask-Caching']
-
 if sys.version_info < (3,):
     raise SystemExit("Python 2 is not supported.")
 elif (3, 0) <= sys.version_info < (3, 4):
     raise SystemExit("Python 3 versions < 3.4 are not supported.")
+
+with open('requirements.txt', 'r') as reqs:
+    requires = reqs.readlines()
 
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
@@ -27,7 +26,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    url='https://github.com/Nikas-Project/Nikas-Server',
+    url='https://github.com/Nikas-Project/Server',
     license='MIT',
     description='The first persian comment system ',
     long_description=long_description,
