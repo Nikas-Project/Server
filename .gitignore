@@ -15,7 +15,7 @@
 /lib
 /lib64
 /man
-/share
+/share/python-wheels
 /nikas.egg-info/
 /nikas/js/components
 /nikas/js/embed.min.js
