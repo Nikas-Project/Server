@@ -34,7 +34,7 @@ class TestPBKDF2(unittest.TestCase):
     def test_default(self):
         # original setting (and still default)
         pbkdf2 = PBKDF2(iterations=1000)
-        self.assertEqual(pbkdf2.uhash(""), "42476aafe2e4")
+        self.assertEqual(pbkdf2.uhash(""), "3e94ef6a5c2d")
 
     def test_different_salt(self):
         a = PBKDF2(b"a", iterations=1)
