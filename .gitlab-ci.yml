@@ -1,5 +1,9 @@
 image: docker:19
 
+include:
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+
 stages:
   - Build image
   - Push to registries
@@ -48,4 +52,27 @@ push to gitlab:
     - docker load -i image/gitlab.tar
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $CI_REGISTRY/nikas-project/server:latest
+
+dependency_scanning:
+  stage: .pre
+  variables:
+    DS_REMEDIATE: "false"
+    DS_PYTHON_VERSION: 3
+    PIP_REQUIREMENTS_FILE: "requirements.txt"
+  artifacts:
+    expire_in: 1 week
+    reports:
+      dependency_scanning: gl-dependency-scanning-report.json
+
+license_scanning:
+  stage: .pre
+  variables:
+    CI_DEBUG_TRACE: "true"
+    LM_PYTHON_VERSION: 3
+    ASDF_PYTHON_VERSION: 3
+    PIP_REQUIREMENTS_FILE: "requirements.txt"
+  artifacts:
+    expire_in: 1 week
+    reports:
+      license_scanning: gl-license-scanning-report.json
 
