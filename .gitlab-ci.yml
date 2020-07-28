@@ -22,7 +22,7 @@ test:
     - apk upgrade
     - apk add -t build-dependencies python3-dev libffi-dev build-base
     - apk add python3 py3-pip sqlite openssl openssl-dev ca-certificates su-exec tini
-    - pip3 install nose
+    - pip3 install nose wheel
     - python3 setup.py develop
     - python3 setup.py nosetests
 
