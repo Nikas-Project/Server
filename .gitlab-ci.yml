@@ -10,16 +10,19 @@ stages:
 services:
   - docker:dind
 
+variables:
+    GL_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+
 build image:
   stage: Build image
   script:
     - version=$(cat version.env)
     - echo $version
-    - docker build -t nikasproject/server:stable -t docker.pkg.github.com/nikas-project/server/server:latest -t $CI_REGISTRY/nikas-project/server:latest .
+    - docker build -t nikasproject/server:stable -t docker.pkg.github.com/nikas-project/server/server:latest -t $GL_IMAGE .
     - mkdir image
     - docker save nikasproject/server:stable > image/dockerhub.tar
     - docker save docker.pkg.github.com/nikas-project/server/server:latest > image/github.tar
-    - docker save $CI_REGISTRY/nikas-project/server:latest > image/gitlab.tar
+    - docker save $GL_IMAGE > image/gitlab.tar
   artifacts:
     expire_in: 15 mins
     paths:
@@ -50,7 +53,7 @@ push to gitlab:
   script:
     - docker load -i image/gitlab.tar
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker push $CI_REGISTRY/nikas-project/server:latest
+    - docker push $GL_IMAGE
 
 container_scanning:
   stage: Push to registries
