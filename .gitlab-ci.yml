@@ -1,19 +1,14 @@
 image: docker:19
 
+include:
+  - template: Container-Scanning.gitlab-ci.yml
+
 stages:
   - Build image
   - Push to registries
 
 services:
   - docker:dind
-
-include:
-  - template: Container-Scanning.gitlab-ci.yml
-  - template: Secret-Detection.gitlab-ci.yml
-
-secret_detection:
-  variables:
-    SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 build image:
   stage: Build image
@@ -57,3 +52,9 @@ push to gitlab:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $CI_REGISTRY/nikas-project/server:latest
 
+container_scanning:
+  stage: Push to registries
+  image: registry.gitlab.com/gitlab-org/security-products/analyzers/klar:2.4.1
+  artifacts:
+    paths:
+      - container-scanning-report.json
