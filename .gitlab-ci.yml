@@ -1,7 +1,7 @@
 image: docker:19
 
 include:
-  - template: Container-Scanning.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
 
 stages:
   - Build image
@@ -10,19 +10,16 @@ stages:
 services:
   - docker:dind
 
-variables:
-    GL_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-
 build image:
   stage: Build image
   script:
     - version=$(cat version.env)
     - echo $version
-    - docker build -t nikasproject/server:stable -t docker.pkg.github.com/nikas-project/server/server:latest -t $GL_IMAGE .
+    - docker build -t nikasproject/server:stable -t docker.pkg.github.com/nikas-project/server/server:latest -t $CI_REGISTRY/nikas-project/server:latest .
     - mkdir image
     - docker save nikasproject/server:stable > image/dockerhub.tar
     - docker save docker.pkg.github.com/nikas-project/server/server:latest > image/github.tar
-    - docker save $GL_IMAGE > image/gitlab.tar
+    - docker save $CI_REGISTRY/nikas-project/server:latest > image/gitlab.tar
   artifacts:
     expire_in: 15 mins
     paths:
@@ -53,11 +50,11 @@ push to gitlab:
   script:
     - docker load -i image/gitlab.tar
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker push $GL_IMAGE
+    - docker push $CI_REGISTRY/nikas-project/server:latest
 
-container_scanning:
-  stage: Push to registries
-  image: registry.gitlab.com/gitlab-org/security-products/analyzers/klar:2.4.1
-  artifacts:
-    paths:
-      - container-scanning-report.json
+dependency_scanning:
+  stage: Build image
+  variables:
+    DS_REMEDIATE: "false"
+    DS_PYTHON_VERSION: 3
+    PIP_REQUIREMENTS_FILE: "requirements.txt"
