@@ -9,7 +9,6 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 misaka==2.1.1
-nikas==1.0.0
 packaging==20.4
 pycparser==2.20
 pyparsing==2.4.7
