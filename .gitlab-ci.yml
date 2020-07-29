@@ -24,7 +24,10 @@ test:
     - apk add python3 py3-pip sqlite openssl openssl-dev ca-certificates su-exec tini
     - pip3 install nose wheel
     - python3 setup.py install
-    - python3 setup.py nosetests
+    - python3 setup.py nosetests --with-xunit
+  artifacts:
+    reports:
+      junit: nosetests.xml
 
 build image:
   stage: Build image
