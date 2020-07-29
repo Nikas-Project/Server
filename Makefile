@@ -1,4 +1,4 @@
-# INSTALLATION: pip install sphinx && npm install --global node-sass
+include .env.pypi
 
 NIKAS_JS_SRC := $(shell find nikas/js/app -type f) \
 	       $(shell ls nikas/js/*.js | grep -vE "(min|dev)") \
@@ -40,3 +40,8 @@ clean:
 
 .PHONY: clean site man init js coverage test
 
+pypi:
+	python3 setup.py sdist bdist_wheel
+	twine check dist/*
+	@-twine upload --repository-url https://test.pypi.org/legacy/ -u hatamiarash7 -p $(PYPI_TEST_PASSWORD) dist/*
+	@-twine upload -u __token__ -p $(PYPI_TOKEN) dist/*
