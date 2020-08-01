@@ -1,4 +1,4 @@
-# 1.0.1 ( Jul 29, 2020 )
+# 1.0.1 ( Aug 1, 2020 )
 
 - Use gitlab-ci
 - Update EOF
