@@ -8,6 +8,7 @@
 
 # 1.0.0 ( Jul 9, 2020 )
 
+- First beta release
 - Migrate to Nikas
 - Dockerize project :  
     - Create `Dockerfile` and `docker-compose.yml`
