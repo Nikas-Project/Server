@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <title>Admin</title>
   <link type="text/css" href="{{ nikas_host_script }}/css/nikas.css" rel="stylesheet">
@@ -7,152 +8,155 @@
   <link rel="shortcut icon" href="{{ nikas_host_script }}/img/favicon.ico" type="image/x-icon">
   <link rel="icon" href="{{ nikas_host_script }}/img/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
-<div class="wrapper">
-  <div class="header">
-    <header>
-      <img class="logo" src="{{ nikas_host_script }}/img/logo.png" alt="logo"/>
-      <div class="title">
-        <a href="./">
-          <h1>Nikas</h1>
-        </a>
-      </div>
-    </header>
-  </div>
-  <div class="outer">
-    <div class="filters">
-      <div class="mode">
-        <a href="?mode=1&page={{ page }}&order_by={{ order_by }}">
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        <img class="logo" src="{{ nikas_host_script }}/img/logo.png" alt="logo" />
+        <div class="title">
+          <a href="./">
+            <h1>Nikas</h1>
+          </a>
+        </div>
+      </header>
+    </div>
+    <div class="outer">
+      <div class="filters">
+        <div class="mode">
+          <a href="?mode=1&page={{ page }}&order_by={{ order_by }}">
             <span class="label label-valid {% if mode == 1 %}active{% endif %}">
               Valid ({{ counts.get(1, 0) }})
             </span>
-        </a>
-        <a href="?mode=2&page={{ page }}&order_by={{ order_by }}">
+          </a>
+          <a href="?mode=2&page={{ page }}&order_by={{ order_by }}">
             <span class="label label-pending {% if mode == 2 %}active{% endif %}">
               Pending ({{ counts.get(2, 0) }})
             </span>
-        </a>
-        <a href="?mode=4&page={{ page }}&order_by={{ order_by }}">
+          </a>
+          <a href="?mode=4&page={{ page }}&order_by={{ order_by }}">
             <span class="label label-staled {% if mode == 4 %}active{% endif %}">
               Staled ({{ counts.get(4, 0) }})
             </span>
-        </a>
-      </div>
-      <div class="group">
-        Group by thread: <input type="checkbox" {% if order_by == "tid" %}checked{% endif %}
-                                onClick="javascript:window.location='?mode={{ mode }}&page={{ page }}&order_by={% if order_by == "tid" %}id{% else %}tid{% endif %}';"/>
-      </div>
-      <div class="pagination">
-        Pages:
-        {% if page > 0 %}
+          </a>
+        </div>
+        <div class="group">
+          Group by thread: <input type="checkbox" {% if order_by == "tid" %}checked{% endif %}
+            onClick="javascript:window.location='?mode={{ mode }}&page={{ page }}&order_by={% if order_by == "tid" %}id{% else %}tid{% endif %}';" />
+        </div>
+        <div class="pagination">
+          Pages:
+          {% if page > 0 %}
           <a href="?mode={{ mode }}&page={{ page - 1 }}">
             «
           </a>
-        {% endif %}
-        <input type="text" size="1" name="page" value="{{ page }}"/>
-        {% if page < max_page %}
+          {% endif %}
+          <input type="text" size="1" name="page" value="{{ page }}" />
+          {% if page < max_page %}
           <a href="?mode={{ mode }}&page={{ page + 1 }}">
             »
           </a>
-        {% endif %}
-        / {{ max_page }}
+          {% endif %}
+          / {{ max_page }}
+        </div>
+      </div>
+      <div class="filters order">
+        Order:
+        {% for order in ['id', 'created', 'modified', 'likes', 'dislikes'] %}
+        <a href="?mode={{ mode }}&page={{ page }}&order_by={{ order }}&asc={{ 1 - asc }}">
+          <span class="label label-valid {% if order == order_by %}active{% endif %}">
+            {{ order }}
+            {% if order == order_by %}
+            {% if asc %} ↑ {% else %} ↓ {% endif %}
+            {% else %}
+            ↓
+            {% endif %}
+          </span>
+        </a>
+        {% endfor %}
       </div>
     </div>
-    <div class="filters order">
-      Order:
-      {% for order in ['id', 'created', 'modified', 'likes', 'dislikes'] %}
-        <a href="?mode={{ mode }}&page={{ page }}&order_by={{ order }}&asc={{ 1 - asc }}">
-              <span class="label label-valid {% if order == order_by %}active{% endif %}">
-                {{ order }}
-                {% if order == order_by %}
-                  {% if asc %} ↑ {% else %} ↓ {% endif %}
-                {% else %}
-                  ↓
-                {% endif %}
-              </span>
-        </a>
-      {% endfor %}
-    </div>
-  </div>
-  <div id="nikas-root">
-    {% set thread_id = "no_id" %}
-    {% for comment in comments %}
+    <div id="nikas-root">
+      {% set thread_id = "no_id" %}
+      {% for comment in comments %}
       {% if order_by == "tid" %}
-        {% if thread_id != comment.tid %}
-          {% set thread_id = comment.tid %}
-          <h2 class="thread-title">{{ comment.title }} (<a href="{{ comment.uri }}">{{ comment.uri }}</a>)</h2>
-        {% endif %}
+      {% if thread_id != comment.tid %}
+      {% set thread_id = comment.tid %}
+      <h2 class="thread-title">{{ comment.title }} (<a href="{{ comment.uri }}">{{ comment.uri }}</a>)</h2>
+      {% endif %}
       {% endif %}
       <div class='nikas-comment' id='nikas-{{ comment.id }}'>
         {% if conf.avatar %}
-          <div class='avatar'>
-            svg(data-hash='#{{ comment.hash }}')
-          </div>
+        <div class='avatar'>
+          svg(data-hash='#{{ comment.hash }}')
+        </div>
         {% endif %}
         <div class='text-wrapper'>
           <div class='nikas-comment-header' role='meta'>
             {% if order_by != "tid" %}
-              <div>Thread: {{ comment.title }} (<a href="{{ comment.uri }}">{{ comment.uri }}</a>)</div><br/>
+            <div>Thread: {{ comment.title }} (<a href="{{ comment.uri }}">{{ comment.uri }}</a>)</div><br />
             {% endif %}
             {% if comment.author %}
-              <span class='author' id="nikas-author-{{ comment.id }}">{{ comment.author }}</span>
+            <span class='author' id="nikas-author-{{ comment.id }}">{{ comment.author }}</span>
             {% else %}
-              <span class='author' id="nikas-author-{{ comment.id }}">Anonymous</span>
+            <span class='author' id="nikas-author-{{ comment.id }}">Anonymous</span>
             {% endif %}
             {% if comment.email %}
-              (<span id="nikas-email-{{ comment.id }}">{{ comment.email }}</span>
-              <a href="mailto:{{ comment.email }}" rel='nofollow' class='email'>mailto</a>)
+            (<span id="nikas-email-{{ comment.id }}">{{ comment.email }}</span>
+            <a href="mailto:{{ comment.email }}" rel='nofollow' class='email'>mailto</a>)
             {% else %}
-              <span id="nikas-email-{{ comment.id }}"></span>
+            <span id="nikas-email-{{ comment.id }}"></span>
             {% endif %}
             {% if comment.website %}
-              (<span id="nikas-website-{{ comment.id }}">{{ comment.website }}</span>
-              <a href="{{ comment.website }}" rel='nofollow' class='website'>open</a>)
+            (<span id="nikas-website-{{ comment.id }}">{{ comment.website }}</span>
+            <a href="{{ comment.website }}" rel='nofollow' class='website'>open</a>)
             {% else %}
-              <span id="nikas-website-{{ comment.id }}"></span>
+            <span id="nikas-website-{{ comment.id }}"></span>
             {% endif %}
             <span class="spacer"> &bull;</span>
             <time>{{ comment.created | datetimeformat }}</time>
             <span class='note'>
-          {% if comment.mode == 1 %}
-            <span class="label label-valid">Valid</span>
-          {% elif comment.mode == 2 %}
-            <span class="label label-pending">Pending</span>
-          {% elif comment.mode == 4 %}
-            <span class="label label-staled">Staled</span>
-          {% endif %}
-        </span>
+              {% if comment.mode == 1 %}
+              <span class="label label-valid">Valid</span>
+              {% elif comment.mode == 2 %}
+              <span class="label label-pending">Pending</span>
+              {% elif comment.mode == 4 %}
+              <span class="label label-staled">Staled</span>
+              {% endif %}
+            </span>
           </div>
           <div class='text'>
             {% if comment.mode == 4 %}
-              <strong>HIDDEN</strong>. Original text: <br/>
+            <strong>HIDDEN</strong>. Original text: <br />
             {% endif %}
             <div id="nikas-text-{{ comment.id }}">{{ comment.text }}</div>
           </div>
           <div class='nikas-comment-footer'>
             {% if conf.votes and comment.likes - comment.dislikes != 0 %}
-              <span class='votes'>{{ comment.likes - comment.dislikes }}</span>
+            <span class='votes'>{{ comment.likes - comment.dislikes }}</span>
             {% endif %}
             <span class='spacer'></span>
             <a id="edit-btn-{{ comment.id }}" class="edit" onClick="javascript:start_edit({{ comment.id }})">Edit</a>
-            <a id="stop-edit-btn-{{ comment.id }}" class="hidden edit" onClick="javascript:stop_edit({{ comment.id }})">Cancel</a>
+            <a id="stop-edit-btn-{{ comment.id }}" class="hidden edit"
+              onClick="javascript:stop_edit({{ comment.id }})">Cancel</a>
             <a id="send-edit-btn-{{ comment.id }}" class="hidden edit"
-               onClick="javascript:send_edit({{ comment.id }}, '{{ comment.hash }}','{{ nikas_host_script }}')">Send</a>
+              onClick="javascript:send_edit({{ comment.id }}, '{{ comment.hash }}','{{ nikas_host_script }}')">Send</a>
             {% if comment.mode != 4 %}
-              <a class="delete"
-                 onClick="javascript:delete_com({{ comment.id }}, '{{ comment.hash }}', '{{ nikas_host_script }}')">
-                Delete
-              </a>
+            <a class="delete"
+              onClick="javascript:delete_com({{ comment.id }}, '{{ comment.hash }}', '{{ nikas_host_script }}')">
+              Delete
+            </a>
             {% endif %}
             {% if comment.mode == 2 %}
-              <a class='validate'
-                 onClick="javascript:validate_com({{ comment.id }}, '{{ comment.hash }}', '{{ nikas_host_script }}')">Validate</a>
+            <a class='validate'
+              onClick="javascript:validate_com({{ comment.id }}, '{{ comment.hash }}', '{{ nikas_host_script }}')">Validate</a>
             {% endif %}
           </div>
         </div>
       </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
-</div>
 </body>
+
 </html>

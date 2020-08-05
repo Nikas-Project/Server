@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <title>Admin</title>
   <link type="text/css" href="{{ nikas_host_script }}/css/nikas.css" rel="stylesheet">
@@ -6,26 +7,28 @@
   <link rel="shortcut icon" href="{{ nikas_host_script }}/img/favicon.ico" type="image/x-icon">
   <link rel="icon" href="{{ nikas_host_script }}/img/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
-<div class="wrapper">
-  <div class="header">
-    <header>
-      <img class="logo" src="{{ nikas_host_script }}/img/nikas.svg" alt="Wynaut by @veekun"/>
-      <div class="title">
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        <img class="logo" src="{{ nikas_host_script }}/img/nikas.svg" alt="logo/>
+      <div class=" title">
         <a href="./">
           <h1>Nikas</h1>
         </a>
-      </div>
+    </div>
     </header>
   </div>
   <main>
     <div id="login">
       Administration secured by password:
       <form method="POST" action="{{ nikas_host_script }}/login">
-        <input type="password" name="password" autofocus/>
+        <input type="password" name="password" autofocus />
       </form>
     </div>
   </main>
-</div>
+  </div>
 </body>
+
 </html>
