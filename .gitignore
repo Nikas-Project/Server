@@ -132,3 +132,6 @@ bower_components
 # Tests
 nosetests.json
 cover
+
+#personal file
+nikas.conf
