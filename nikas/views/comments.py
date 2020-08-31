@@ -17,6 +17,7 @@ from werkzeug.routing import Rule
 from werkzeug.utils import redirect
 from werkzeug.wrappers import Response
 from werkzeug.wsgi import get_current_url
+from werkzeug.security import check_password_hash
 
 from nikas import utils, local
 from nikas.compat import text_type as str
@@ -1109,7 +1110,7 @@ class API(object):
             return render_template('disabled.html', nikas_host_script=nikas_host_script)
         data = req.form
         password = self.nikas.conf.get("admin", "password")
-        if data['password'] and data['password'] == password:
+        if data['password'] and check_password_hash(password, str(data['password'])):
             response = redirect(re.sub(
                 r'/login$',
                 '/admin',
