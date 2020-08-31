@@ -10,6 +10,7 @@
 .sass-cache
 .vagrant
 
+# Nikas
 /bin
 /include
 /lib
@@ -22,9 +23,7 @@
 /nikas/js/embed.dev.js
 /nikas/js/count.min.js
 /nikas/js/count.dev.js
-
-/docs/_build
-/docs/_static/css/site.css
+nikas.conf
 
 /pip-selfcheck.json
 
