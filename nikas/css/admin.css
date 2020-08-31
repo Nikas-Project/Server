@@ -1,7 +1,7 @@
-@import "https://cdn.jsdelivr.net/npm/vazir-font@26.0.2/dist/font-face.css";
+@import "https://cdn.jsdelivr.net/npm/vazir-font@26.0.2/dist/Farsi-Digits/font-face-FD.css";
 
 :root {
-    --font: "Vazir", Georgia, "Times New Roman", Times, serif;
+    --font: "Vazir FD", Georgia, "Times New Roman", Times, serif;
 }
 
 * {
