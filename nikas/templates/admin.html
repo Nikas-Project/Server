@@ -28,21 +28,23 @@
   </head>
   <body>
     <div class="wrapper">
-      <div class="header">
-        <header>
-          <img
-            class="logo"
-            src="{{ nikas_host_script }}/img/logo.png"
-            alt="logo"
-          />
-          <div class="title">
-            <a href="./">
-              <h1>نیکاس</h1>
-            </a>
+      <div class="header-container">
+        <div class="header">
+          <header>
+            <img
+              class="logo"
+              src="{{ nikas_host_script }}/img/logo.png"
+              alt="logo"
+            />
+            <div class="title">
+              <a href="./">
+                <h1>نیکاس</h1>
+              </a>
+            </div>
+          </header>
+          <div class="logout">
+            <a href="/logout">خروج</a>
           </div>
-        </header>
-        <div class="logout">
-          <a href="/logout">خروج</a>
         </div>
       </div>
       <div class="outer">
@@ -119,22 +121,19 @@
           <div class="text-wrapper">
             <div class="nikas-comment-header" role="meta">
               {% if order_by != "tid" %}
-              <div>
-                Thread: {{ comment.title }} (<a href="{{ comment.uri }}"
-                  >{{ comment.uri }}</a
-                >)
+              <div class="address">
+                <span>منبع</span> : {{ comment.title or 'ثبت نشده است' }}
+                <span style="margin-right: 25px">صفحه</span> :
+                <a href="{{ comment.uri }}">{{ comment.uri }}</a>
               </div>
               <br />
-              {% endif %} {% if comment.author %}
-              <span class="author" id="nikas-author-{{ comment.id }}"
-                >{{ comment.author }}</span
-              >
-              {% else %}
-              <span class="author" id="nikas-author-{{ comment.id }}"
-                >Anonymous</span
-              >
-              {% endif %} {% if comment.email %} (<span
-                id="nikas-email-{{ comment.id }}"
+              {% endif %}
+              <span class="author-title">فرستنده : </span
+              ><span class="author" id="nikas-author-{{ comment.id }}">
+                {% if comment.author %} {{ comment.author }} {% else %} ناشناس
+                {% endif %}
+              </span>
+              {% if comment.email %} (<span id="nikas-email-{{ comment.id }}"
                 >{{ comment.email }}</span
               >
               <a href="mailto:{{ comment.email }}" rel="nofollow" class="email"
@@ -154,11 +153,11 @@
               <time>{{ comment.created | datetimeformat }}</time>
               <span class="note">
                 {% if comment.mode == 1 %}
-                <span class="label label-valid">Valid</span>
+                <span class="label label-valid">تایید شده</span>
                 {% elif comment.mode == 2 %}
-                <span class="label label-pending">Pending</span>
+                <span class="label label-pending">در انتظار تایید</span>
                 {% elif comment.mode == 4 %}
-                <span class="label label-staled">Staled</span>
+                <span class="label label-staled">قدیمی</span>
                 {% endif %}
               </span>
             </div>
@@ -177,32 +176,32 @@
                 id="edit-btn-{{ comment.id }}"
                 class="edit"
                 onClick="javascript:start_edit({{ comment.id }})"
-                >Edit</a
+                >ویرایش</a
               >
               <a
                 id="stop-edit-btn-{{ comment.id }}"
                 class="hidden edit"
                 onClick="javascript:stop_edit({{ comment.id }})"
-                >Cancel</a
+                >لغو</a
               >
               <a
                 id="send-edit-btn-{{ comment.id }}"
                 class="hidden edit"
                 onClick="javascript:send_edit({{ comment.id }}, '{{ comment.hash }}','{{ nikas_host_script }}')"
-                >Send</a
+                >ارسال</a
               >
               {% if comment.mode != 4 %}
               <a
                 class="delete"
                 onClick="javascript:delete_com({{ comment.id }}, '{{ comment.hash }}', '{{ nikas_host_script }}')"
               >
-                Delete
+                حذف
               </a>
               {% endif %} {% if comment.mode == 2 %}
               <a
                 class="validate"
                 onClick="javascript:validate_com({{ comment.id }}, '{{ comment.hash }}', '{{ nikas_host_script }}')"
-                >Validate</a
+                >تایید</a
               >
               {% endif %}
             </div>

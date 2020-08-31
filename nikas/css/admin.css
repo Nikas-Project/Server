@@ -8,11 +8,12 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    color: #212121;
 }
 
 a {
     text-decoration: none;
-    color: #4d4c4c;
+    transition: all 250ms;
 }
 
 a,
@@ -37,6 +38,10 @@ input {
     font-family: var(--font);
 }
 
+.wrapper {
+    background-color: #fafafa;
+}
+
 /*************************** Header ***************************/
 
 .header::before,
@@ -53,6 +58,10 @@ input {
 .header::after {
     content: " ";
     display: table;
+}
+
+.header-container {
+    background-color: #00796b;
 }
 
 .header {
@@ -81,6 +90,10 @@ input {
     align-items: center;
 }
 
+.header header .title h1 {
+    color: #ffffff;
+}
+
 .header .logout {
     width: 50%;
     height: 60px;
@@ -88,10 +101,13 @@ input {
     align-items: center;
 }
 
+.header .logout a {
+    color: #ffffff;
+}
 /*************************** Outer ***************************/
 
 .outer {
-    background-color: #eeeeee;
+    background-color: #b2dfdb;
     padding: 10px 0 10px 0;
 }
 
@@ -123,15 +139,26 @@ input {
     direction: rtl;
 }
 
+.outer .order a {
+    font-size: 15px;
+}
+
 .outer .order a:first-child {
     margin-right: 10px;
 }
 
+.outer .order a:first-child span {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.outer .order a:last-child span {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
 .label {
     background-color: #ddd;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     line-height: 1.4em;
     outline: 0 none;
@@ -139,7 +166,7 @@ input {
 }
 
 .active {
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6) inset;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4) inset;
 }
 
 .label-valid {
@@ -157,13 +184,24 @@ input {
     display: flex;
 }
 
+.mode a:first-child span {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+.mode a:last-child span {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
 .pagination {
     float: left;
 }
 
 .note .label {
     margin: 9px;
-    padding: 3px;
+    padding: 5px;
+    border-radius: 7px;
 }
 
 #login {
@@ -171,6 +209,44 @@ input {
     text-align: center;
     width: 100%;
     direction: rtl;
+}
+
+.nikas-comment {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    padding: 1em;
+    border-radius: 7px;
+    margin: 1.5em auto !important;
+    background-color: #ffffff;
+}
+
+.nikas-comment:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.nikas-comment:not(:first-of-type) {
+    border-top: unset !important;
+}
+
+.nikas-comment .text {
+    margin-top: 20px;
+    direction: rtl;
+    text-align: justify;
+    text-align-last: right;
+    font-weight: 300;
+    color: #212121;
+}
+
+.nikas-comment-header {
+    direction: rtl;
+}
+
+.nikas-comment-header .author-title {
+    font-weight: bold;
+}
+
+.nikas-comment-header .address span {
+    font-weight: bold;
 }
 
 .nikas-comment-footer a {
