@@ -172,6 +172,7 @@
     font-size: 0.8em;
     color: gray !important;
     clear: left;
+    margin-top: 10px;
 }
 
 .nikas-feedlink,
@@ -193,7 +194,9 @@
     top: 0.2em;
 }
 
-.nikas-comment > div.text-wrapper > .nikas-comment-footer > a:last-child {
+.nikas-comment > div.text-wrapper > .nikas-comment-footer > a.edit,
+.nikas-comment > div.text-wrapper > .nikas-comment-footer > a.reply,
+.nikas-comment > div.text-wrapper > .nikas-comment-footer > a.delete {
     padding-right: 1em;
 }
 
@@ -290,7 +293,7 @@
     cursor: pointer;
     outline: 0;
     line-height: 1.4em;
-    border-radius: 15px;
+    border-radius: 10px;
     padding: 5px 10px 5px 10px;
     transition: 0.2s linear all;
     font-size: 12px;
