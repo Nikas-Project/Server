@@ -6,11 +6,11 @@ define({
     "postbox-preview": "پیش نمایش",
     "postbox-edit": "ویرایش",
     "postbox-submit": "ثبت",
-    "postbox-notification": "Subscribe to email notification of replies",
+    "postbox-notification": "اطلاع رسانی از طریق ایمیل",
 
-    "num-comments": "One Comment\n{{ n }} Comments",
-    "no-comments": "No Comments Yet",
-    "atom-feed": "Atom feed",
+    "num-comments": "یک نظر\n{{ n }} نظر",
+    "no-comments": "هنوز نظری ثبت نشده است",
+    "atom-feed": "فید اتم",
 
     "comment-reply": "پاسخ",
     "comment-edit": "ویرایش",
@@ -22,7 +22,7 @@ define({
     "comment-deleted": "نظر حذف شد.",
     "comment-queued": "در انتظار بررسی توسط مدیریت.",
     "comment-anonymous": "ناشناس",
-    "comment-hidden": "{{ n }} Hidden",
+    "comment-hidden": "{{ n }} مخفی",
 
     "date-now": "همین الان",
     "date-minute": "یک دقیقه پیش\n{{ n }} دقیقه پیش",
