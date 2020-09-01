@@ -1,32 +1,31 @@
 <?xml version="1.0"?>
 <disqus xmlns="http://disqus.com"
-        xmlns:dsq="http://disqus.com/disqus-internals"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://disqus.com/api/schemas/1.0/disqus.xsd
-                            http://disqus.com/api/schemas/1.0/internals.xsd"
->
+    xmlns:dsq="http://disqus.com/disqus-internals"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://disqus.com/api/schemas/1.0/disqus.xsd
+                            http://disqus.com/api/schemas/1.0/internals.xsd">
     <category dsq:id="1">
-      <forum>disqusdev</forum>
-      <title>Technology</title>
+        <forum>disqusdev</forum>
+        <title>Technology</title>
     </category>
 
     <thread dsq:id="2">
-      <id>some-id</id>
-      <forum>disqusdev</forum>
-      <category dsq:id="1"/>
-      <link>http://example.org/</link>
-      <title>Hello, World!</title>
-      <message/>
-      <createdAt>2012-12-12T12:12:12Z</createdAt>
-      <author>
-        <name>Baz</name>
-        <email>foo@bar.com</email>
-      </author>
+        <id>some-id</id>
+        <forum>disqusdev</forum>
+        <category dsq:id="1" />
+        <link>http://example.org/</link>
+        <title>Hello, World!</title>
+        <message />
+        <createdAt>2012-12-12T12:12:12Z</createdAt>
+        <author>
+            <name>Baz</name>
+            <email>foo@bar.com</email>
+        </author>
     </thread>
 
     <!-- Yeah... occurs. No idea, why. -->
     <thread dsq:id="3">
-        <id/>
+        <id />
     </thread>
 
     <!-- regular post -->
@@ -78,4 +77,4 @@
         <thread dsq:id="1337" />
     </post>
 
-  </disqus>
+</disqus>
