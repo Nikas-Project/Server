@@ -20,7 +20,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='nikas',
-    version='1.0.1',
+    version='1.1.0',
     author='Arash Hatami',
     author_email='hatamiarash7@gmail.com',
     packages=find_packages(),
