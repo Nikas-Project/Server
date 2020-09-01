@@ -133,20 +133,21 @@
                 {% if comment.author %} {{ comment.author }} {% else %} ناشناس
                 {% endif %}
               </span>
-              {% if comment.email %} (<span id="nikas-email-{{ comment.id }}"
-                >{{ comment.email }}</span
-              >
+              {% if comment.email %} (
               <a href="mailto:{{ comment.email }}" rel="nofollow" class="email"
-                >mailto</a
-              >) {% else %}
+                >ایمیل :
+              </a>
+              <span id="nikas-email-{{ comment.id }}">{{ comment.email }}</span>
+              ) {% else %}
               <span id="nikas-email-{{ comment.id }}"></span>
-              {% endif %} {% if comment.website %} (<span
-                id="nikas-website-{{ comment.id }}"
+              {% endif %} {% if comment.website %} (
+              <a href="{{ comment.website }}" rel="nofollow" class="website"
+                >وب سایت :
+              </a>
+              <span id="nikas-website-{{ comment.id }}"
                 >{{ comment.website }}</span
               >
-              <a href="{{ comment.website }}" rel="nofollow" class="website"
-                >open</a
-              >) {% else %}
+              ) {% else %}
               <span id="nikas-website-{{ comment.id }}"></span>
               {% endif %}
               <span class="spacer"> &bull;</span>
