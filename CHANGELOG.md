@@ -1,5 +1,8 @@
 # 1.1.0 ( Sep 1, 2020 )
 
+- Server
+    - Use hashed password
+    - Fix config parser problems
 - Admin
     - Make RTL
     - Change theme & colors
