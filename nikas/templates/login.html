@@ -1,34 +1,52 @@
 <html>
+  <head>
+    <title>نیکاس - مدیریت</title>
+    <link
+      type="text/css"
+      href="{{ nikas_host_script }}/css/nikas.css"
+      rel="stylesheet"
+    />
+    <link
+      type="text/css"
+      href="{{ nikas_host_script }}/css/admin.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      href="{{ nikas_host_script }}/img/favicon.ico"
+      type="image/x-icon"
+    />
+    <link
+      rel="icon"
+      href="{{ nikas_host_script }}/img/favicon.ico"
+      type="image/x-icon"
+    />
+  </head>
 
-<head>
-  <title>Admin</title>
-  <link type="text/css" href="{{ nikas_host_script }}/css/nikas.css" rel="stylesheet">
-  <link type="text/css" href="{{ nikas_host_script }}/css/admin.css" rel="stylesheet">
-  <link rel="shortcut icon" href="{{ nikas_host_script }}/img/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="{{ nikas_host_script }}/img/favicon.ico" type="image/x-icon">
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="header">
-      <header>
-        <img class="logo" src="{{ nikas_host_script }}/img/logo.png" alt="logo" />
-        <div class=" title">
-          <a href="./">
-            <h1>Nikas</h1>
-          </a>
-        </div>
-      </header>
-    </div>
-    <main>
-      <div id="login">
-        Administration secured by password:
-        <form method="POST" action="{{ nikas_host_script }}/login">
-          <input type="password" name="password" autofocus />
-        </form>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <header>
+          <img
+            class="logo"
+            src="{{ nikas_host_script }}/img/logo.png"
+            alt="logo"
+          />
+          <div class="title">
+            <a href="#">
+              <h1 style="color: #212121">نیکاس</h1>
+            </a>
+          </div>
+        </header>
       </div>
-    </main>
-  </div>
-</body>
-
+      <main>
+        <div id="login">
+          توکن مدیریت :
+          <form method="POST" action="{{ nikas_host_script }}/login">
+            <input type="password" name="password" autofocus />
+          </form>
+        </div>
+      </main>
+    </div>
+  </body>
 </html>

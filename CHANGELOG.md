@@ -1,3 +1,20 @@
+# 1.1.0 ( Sep 1, 2020 )
+
+- Admin
+    - Make RTL
+    - Change theme & colors
+    - Use Persian font ( [Vazir](https://github.com/rastikerdar/vazir-font) )
+    - Fix margin & size problems
+- Client
+    - Make RTL
+    - Simplify styles
+    - Use Persian font ( [Vazir](https://github.com/rastikerdar/vazir-font) )
+    - Update font sizes
+    - Add `FA` for i18n
+    - Remove all shadows
+    - Fix margin problems
+    - Use justify align
+
 # 1.0.1 ( Aug 1, 2020 )
 
 - Use gitlab-ci

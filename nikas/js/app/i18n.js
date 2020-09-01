@@ -1,9 +1,9 @@
-define(["app/config", "app/i18n/en"], function (config, en) {
+define(["app/config", "app/i18n/fa"], function (config, fa) {
     "use strict";
 
     var pluralforms = function (lang) {
         switch (lang) {
-            case "en":
+            case "fa":
                 return function (msgs, n) {
                     return msgs[n === 1 ? 0 : 1];
                 };
@@ -15,13 +15,13 @@ define(["app/config", "app/i18n/en"], function (config, en) {
     // useragent's preferred language (or manually overridden)
     var lang = config.lang;
 
-    // fall back to English
+    // fall back
     if (!pluralforms(lang)) {
-        lang = "en";
+        lang = "fa";
     }
 
     var catalogue = {
-        en: en,
+        fa: fa,
     };
 
     var plural = pluralforms(lang);
@@ -30,7 +30,7 @@ define(["app/config", "app/i18n/en"], function (config, en) {
         return (
             config[msgid + "-text-" + lang] ||
             catalogue[lang][msgid] ||
-            en[msgid] ||
+            fa[msgid] ||
             "???"
         );
     };

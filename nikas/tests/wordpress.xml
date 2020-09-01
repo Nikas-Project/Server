@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
-     xmlns:content="http://purl.org/rss/1.0/modules/content/"
-     xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:wp="http://wordpress.org/export/1.0/">
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:wp="http://wordpress.org/export/1.0/">
     <!-- This WXR dump is incomplete! It only contains elements needed for an
          import, a few are unused yet, but eventually useful later.
 
@@ -120,7 +120,7 @@
         <item>
             <title>...</title>
             <link>http://example.tld/?p=4</link>
-             <wp:comment>
+            <wp:comment>
                 <wp:comment_id>11</wp:comment_id>
                 <wp:comment_author><![CDATA[Anonymous]]></wp:comment_author>
                 <wp:comment_author_email>info@posativ.org
