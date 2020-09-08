@@ -19,13 +19,15 @@
     padding: 0;
     margin: 0;
     font-family: var(--font);
+    border-top: 1px solid #e8e8e8;
 }
 
 #nikas-thread > h4 {
     color: #555;
-    font-weight: bold;
-    text-align: right;
+    font-weight: 500;
+    text-align: center;
     direction: rtl;
+    margin-bottom: 5px;
 }
 
 #nikas-thread > .nikas-feedlink {
@@ -165,7 +167,7 @@
 .nikas-comment > div.text-wrapper > div.textarea-wrapper .preview {
     width: 100%;
     border: 1px solid #f0f0f0;
-    border-radius: 2px;
+    border-radius: 5px;
 }
 
 .nikas-comment > div.text-wrapper > .nikas-comment-footer {
@@ -230,6 +232,20 @@
     padding: 0;
 }
 
+.nikas-postbox > .copyright {
+    display: block;
+    padding: 0;
+    margin: 0;
+    font-size: 10px;
+    color: #757575;
+}
+
+.nikas-postbox > .copyright a {
+    margin-left: 3px;
+    text-decoration: none;
+    color: #4a4a4a;
+}
+
 .nikas-postbox > .form-wrapper > .auth-section,
 .nikas-postbox > .form-wrapper > .auth-section .post-action {
     display: block;
@@ -239,7 +255,7 @@
 .nikas-postbox > .form-wrapper .preview {
     margin: 0 0 0.3em;
     padding: 0.4em 0.8em;
-    border-radius: 3px;
+    border-radius: 5px;
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
@@ -271,7 +287,7 @@
 .nikas-postbox > .form-wrapper > .auth-section .input-wrapper input {
     padding: 0.3em 10px;
     max-width: 100%;
-    border-radius: 3px;
+    border-radius: 5px;
     background-color: #fff;
     line-height: 1.4em;
     border: 1px solid rgba(0, 0, 0, 0.2);
@@ -287,13 +303,12 @@
 }
 
 .nikas-postbox > .form-wrapper > .auth-section .post-action > input {
-    border-radius: 2px;
+    border-radius: 5px;
     border: 1px solid #ccc;
     background-color: #ddd;
     cursor: pointer;
     outline: 0;
     line-height: 1.4em;
-    border-radius: 10px;
     padding: 5px 10px 5px 10px;
     transition: 0.2s linear all;
     font-size: 12px;
