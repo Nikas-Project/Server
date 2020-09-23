@@ -127,6 +127,7 @@ ENV/
 
 # Libs
 bower_components
+node_modules
 
 # Tests
 nosetests.json

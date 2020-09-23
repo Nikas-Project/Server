@@ -29,6 +29,9 @@ nikas/js/%.dev.js: $(NIKAS_JS_SRC) $(NIKAS_CSS)
 
 js: $(NIKAS_JS_DST)
 
+sass:
+	gulp sass
+
 coverage: $(NIKAS_PY_SRC)
 	nosetests --with-doctest --with-coverage --cover-package=nikas --cover-html nikas/
 
