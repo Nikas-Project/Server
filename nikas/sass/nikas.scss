@@ -1,0 +1,459 @@
+@import "https://cdn.jsdelivr.net/npm/vazir-font@26.0.2/dist/Farsi-Digits/font-face-FD.css";
+
+$font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
+
+#nikas-thread {
+    padding: 0;
+    margin: 0;
+    font-family: $font-family;
+    border-top: 1px solid #e8e8e8;
+
+    * {
+        box-sizing: border-box;
+        font-family: $font-family;
+    }
+
+    .nikas-comment-header {
+        a {
+            text-decoration: none;
+        }
+    }
+
+    > h4 {
+        color: #555;
+        font-weight: 500;
+        text-align: center;
+        direction: rtl;
+        margin-bottom: 5px;
+    }
+
+    > .nikas-feedlink {
+        float: right;
+        padding-left: 1em;
+
+        > a {
+            font-size: 0.8em;
+            vertical-align: bottom;
+        }
+    }
+
+    .textarea {
+        min-height: 58px;
+        outline: 0;
+        color: black;
+        direction: rtl;
+        &:focus {
+            border-color: rgba(0, 0, 0, 0.8);
+        }
+
+        &.placeholder {
+            color: #757575;
+            direction: rtl;
+        }
+    }
+
+    input {
+        &:focus {
+            border-color: rgba(0, 0, 0, 0.8);
+        }
+    }
+}
+
+#nikas-root {
+    direction: rtl;
+
+    .nikas-comment {
+        max-width: 68em;
+        padding-top: 0.95em;
+        margin: 0.95em auto;
+
+        &:not(:first-of-type) {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .preview {
+        .nikas-comment {
+            padding-top: 0;
+            margin: 0;
+        }
+    }
+}
+
+.nikas-follow-up {
+    .nikas-comment {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+}
+
+.nikas-comment {
+    > div.avatar {
+        display: block;
+        width: 7%;
+        float: right;
+        margin: 3px 0 0 15px;
+
+        > svg {
+            max-width: 48px;
+            max-height: 48px;
+            border-radius: 15px;
+        }
+    }
+
+    > div.text-wrapper {
+        display: block;
+
+        > .nikas-comment-header {
+            font-size: 0.85em;
+
+            .spacer {
+                padding: 0 6px;
+                color: gray !important;
+                font-weight: normal;
+                text-shadow: none !important;
+
+                &:hover {
+                    color: #606060 !important;
+                }
+            }
+
+            a.permalink {
+                color: gray !important;
+                font-weight: normal;
+                text-shadow: none !important;
+
+                &:hover {
+                    color: #606060 !important;
+                }
+            }
+
+            .note {
+                color: gray !important;
+                font-weight: normal;
+                text-shadow: none !important;
+                float: left;
+                margin-left: 5px;
+
+                &:hover {
+                    color: #606060 !important;
+                }
+            }
+
+            a.parent {
+                color: gray !important;
+                font-weight: normal;
+                text-shadow: none !important;
+
+                &:hover {
+                    color: #606060 !important;
+                }
+            }
+
+            .author {
+                color: #555;
+                font-size: 12px;
+            }
+        }
+
+        > .nikas-comment-footer {
+            font-size: 0.95em;
+            font-size: 0.8em;
+            color: gray !important;
+            clear: left;
+            margin-top: 10px;
+
+            a {
+                font-weight: bold;
+                text-decoration: none;
+                padding-left: 0;
+                transition: 0.1s linear all;
+
+                &:hover {
+                    color: #111111 !important;
+                    text-shadow: #aaaaaa 0 0 1px !important;
+                }
+            }
+
+            > a {
+                position: relative;
+                top: 0.2em;
+
+                &.edit {
+                    padding-right: 1em;
+                }
+
+                &.reply {
+                    padding-right: 1em;
+                }
+
+                &.delete {
+                    padding-right: 1em;
+                }
+            }
+
+            .votes {
+                color: gray;
+            }
+
+            .upvote {
+                svg {
+                    position: relative;
+                    top: 0.2em;
+                    margin-right: 3px;
+                }
+            }
+
+            .downvote {
+                svg {
+                    position: relative;
+                    top: 0.2em;
+                    margin-right: 3px;
+                }
+            }
+        }
+
+        > .textarea-wrapper {
+            .textarea {
+                margin-top: 0.2em;
+                color: black;
+                direction: rtl;
+            }
+
+            .preview {
+                margin-top: 0.2em;
+                color: black;
+                direction: rtl;
+            }
+        }
+
+        > div.text {
+            p {
+                margin-top: 1em;
+                font-size: 14px;
+                font-weight: 400;
+                direction: rtl;
+                text-align: justify;
+                text-align-last: right;
+
+                &:last-child {
+                    margin-bottom: 0.2em;
+                }
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-size: 130%;
+                font-weight: bold;
+            }
+        }
+
+        > div.textarea-wrapper {
+            .textarea {
+                width: 100%;
+                border: 1px solid #f0f0f0;
+                border-radius: 5px;
+            }
+
+            .preview {
+                width: 100%;
+                border: 1px solid #f0f0f0;
+                border-radius: 5px;
+            }
+        }
+    }
+
+    .nikas-follow-up {
+        padding-left: unset;
+        padding-right: calc(7% + 20px);
+    }
+
+    .nikas-postbox {
+        margin-top: 0.8em;
+    }
+}
+
+.nikas-feedlink {
+    font-weight: bold;
+    text-decoration: none;
+    padding-left: 0;
+    transition: 0.1s linear all;
+
+    &:hover {
+        color: #111111 !important;
+        text-shadow: #aaaaaa 0 0 1px !important;
+    }
+}
+
+.nikas-comment.nikas-no-votes {
+    > * {
+        > .nikas-comment-footer {
+            span.votes {
+                display: none;
+            }
+        }
+    }
+}
+
+.nikas-postbox {
+    max-width: 68em;
+    margin: 0 auto 2em;
+    clear: right;
+
+    > .form-wrapper {
+        display: block;
+        padding: 0;
+
+        > .auth-section {
+            display: block;
+
+            .post-action {
+                display: block;
+                float: right;
+                margin: 0 0 0 5px;
+
+                > input {
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                    background-color: #ddd;
+                    cursor: pointer;
+                    outline: 0;
+                    line-height: 1.4em;
+                    padding: 5px 10px 5px 10px;
+                    transition: 0.2s linear all;
+                    font-size: 12px;
+                    margin-bottom: 0;
+
+                    &:hover {
+                        background-color: #ccc;
+                    }
+
+                    &:active {
+                        background-color: #bbb;
+                    }
+                }
+            }
+
+            .input-wrapper {
+                display: inline-block;
+                position: relative;
+                max-width: 25%;
+                margin: 0 5px 0 0;
+
+                input {
+                    padding: 0.3em 10px;
+                    max-width: 100%;
+                    border-radius: 5px;
+                    background-color: #fff;
+                    line-height: 1.4em;
+                    border: 1px solid rgba(0, 0, 0, 0.2);
+                    font-family: $font-family;
+                    text-align: center;
+                    font-size: 12px;
+                    color: black;
+                }
+            }
+        }
+
+        .textarea {
+            margin: 0 0 0.3em;
+            padding: 0.4em 0.8em;
+            border-radius: 5px;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .preview {
+            margin: 0 0 0.3em;
+            padding: 0.4em 0.8em;
+            border-radius: 5px;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            display: none;
+            background: #f8f8f8
+                repeating-linear-gradient(
+                    -45deg,
+                    #f8f8f8,
+                    #f8f8f8 10px,
+                    #fff 10px,
+                    #fff 20px
+                );
+        }
+
+        input[type="checkbox"] {
+            vertical-align: middle;
+            position: relative;
+            bottom: 1px;
+            margin-left: 0;
+        }
+
+        .notification-section {
+            font-size: 0.9em;
+            padding-top: 0.3em;
+        }
+
+        input[name="edit"] {
+            display: none;
+        }
+
+        > .notification-section {
+            display: none;
+            padding-bottom: 10px;
+        }
+    }
+
+    > .copyright {
+        display: block;
+        padding: 0;
+        margin: 0;
+        font-size: 10px;
+        color: #757575;
+
+        a {
+            margin-left: 3px;
+            text-decoration: none;
+            color: #4a4a4a;
+        }
+    }
+}
+
+.nikas-postbox.preview-mode {
+    > .form-wrapper {
+        input[name="preview"] {
+            display: none;
+        }
+
+        .textarea {
+            display: none;
+        }
+
+        .preview {
+            display: block;
+        }
+
+        input[name="edit"] {
+            display: inline;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .nikas-postbox {
+        > .form-wrapper {
+            > .auth-section {
+                .input-wrapper {
+                    display: block;
+                    max-width: 100%;
+                    margin: 0 0 0.3em;
+
+                    input {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
