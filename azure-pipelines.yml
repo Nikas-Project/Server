@@ -1,16 +1,16 @@
 trigger:
-- master
+  - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-alpine"
 
 steps:
-- script: |
-    apk update
-    apk upgrade
-    apk add -t build-dependencies python3-dev libffi-dev build-base
-    apk add python3 py3-pip sqlite openssl openssl-dev ca-certificates su-exec tini
-    pip3 install nose wheel
-    python3 setup.py install
-    python3 setup.py nosetests --with-xunit
-  displayName: 'Test project'
+  - script: |
+      apk update
+      apk upgrade
+      apk add -t build-dependencies python3-dev libffi-dev build-base
+      apk add python3 py3-pip sqlite openssl openssl-dev ca-certificates su-exec tini
+      pip3 install nose wheel
+      python3 setup.py install
+      python3 setup.py nosetests --with-xunit
+    displayName: "Test project"
