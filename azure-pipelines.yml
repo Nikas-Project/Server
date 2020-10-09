@@ -6,9 +6,9 @@ pool:
 
 steps:
   - script: |
-      apt-get update
-      apt-get upgrade -y
-      apt-get install build-dependencies python3-dev libffi-dev build-base python3 py3-pip sqlite openssl openssl-dev ca-certificates su-exec tini -y
+      sudo apt-get update
+      sudo apt-get upgrade -y
+      sudo apt-get install build-dependencies python3-dev libffi-dev build-base python3 py3-pip sqlite openssl openssl-dev ca-certificates su-exec tini -y
       pip3 install nose wheel
       python3 setup.py install
       python3 setup.py nosetests --with-xunit
