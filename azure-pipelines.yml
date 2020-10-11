@@ -1,11 +1,16 @@
 trigger:
   - master
 
+resources:
+  - repo: self
+
 pool:
   vmImage: "ubuntu-18.04"
 
 variables:
+  trivyVersion: 0.9.1
   imageName: "nikasproject/server"
+  tag: "azuredevops-$(Build.BuildNumber)"
 
 stages:
   - stage: Test
@@ -23,12 +28,38 @@ stages:
   - stage: Build
     dependsOn: Test
     condition: succeeded()
+    displayName: Build, Scan and Push image
     jobs:
       - job: Build
+        displayName: Build, Scan and Push
         steps:
           - task: Docker@2
             displayName: Build docker image
             inputs:
+              containerRegistry: "DockerHub"
               repository: $(imageName)
               command: build
-              Dockerfile: Dockerfile
+              Dockerfile: "$(Build.SourcesDirectory)/Dockerfile"
+              tags: $(tag)
+
+          - script: |
+              sudo apt-get install rpm
+              wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
+              sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
+              trivy -v
+            displayName: "Download and install Trivy"
+
+          - task: CmdLine@2
+            displayName: "Run trivy scan"
+            inputs:
+              script: |
+                trivy image --exit-code 0 --severity LOW,MEDIUM $(imageName):$(tag)
+                trivy image --exit-code 1 --severity HIGH,CRITICAL $(imageName):$(tag)
+
+          - task: Docker@2
+            displayName: "Push image"
+            inputs:
+              containerRegistry: "Docker hub"
+              repository: "$(imageName)"
+              command: push
+              tags: "$(tag)"
