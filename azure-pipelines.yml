@@ -10,7 +10,7 @@ pool:
 variables:
   trivyVersion: 0.9.1
   imageName: "nikasproject/server"
-  tag: "azuredevops-$(Build.BuildNumber)"
+  tag: "azure-$(Build.BuildNumber)"
 
 stages:
   - stage: Test
