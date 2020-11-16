@@ -20,8 +20,8 @@
 
 # 1.0.1 ( Aug 1, 2020 )
 
-- Use gitlab-ci
-- Update EOF
+- Use Gitlab CI
+- Change EOF
 - Add example files
 - Fix `Makefile` problems
 - Fix `.gitignore` problems
