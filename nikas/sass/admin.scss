@@ -43,6 +43,14 @@ html,
 
 /*************************** Login ****************************/
 
+html .wrapper header {
+    text-align: center;
+
+    .title {
+        margin-top: 5px;
+    }
+}
+
 #login {
     margin-top: 40px;
     text-align: center;
