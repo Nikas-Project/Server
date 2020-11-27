@@ -8,7 +8,8 @@ variables:
   DOCKER_DRIVER: overlay
 
 stages:
-  - test
+  - Test
+  - Deploy package
   - Build image
   - Push to registries
 
@@ -28,6 +29,34 @@ test:
   artifacts:
     reports:
       junit: nosetests.xml
+
+deploy:pypi-test:
+  stage: Deploy package
+  image: python:latest
+  script:
+    - pip install twine
+    - python setup.py sdist bdist_wheel
+    - TWINE_PASSWORD=${PYPI_TEST_TOKEN} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+deploy:gitlab:
+  stage: Deploy package
+  image: python:latest
+  only:
+    - master
+  script:
+    - pip install twine
+    - python setup.py sdist bdist_wheel
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci python -m twine upload --repository-url https://gitlab.example.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+
+deploy:pypi:
+  stage: Deploy package
+  image: python:latest
+  only:
+    - master
+  script:
+    - pip install twine
+    - python setup.py sdist bdist_wheel
+    - TWINE_PASSWORD=${PYPI_TOKEN} TWINE_USERNAME=__token__ python -m twine upload dist/*
 
 build image:
   stage: Build image
@@ -93,4 +122,3 @@ license_scanning:
     expire_in: 1 week
     reports:
       license_scanning: gl-license-scanning-report.json
-
