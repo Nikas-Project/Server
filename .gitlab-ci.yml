@@ -41,12 +41,13 @@ deploy:pypi-test:
 deploy:gitlab:
   stage: Deploy package
   image: python:latest
+  allow_failure: true
   only:
     - master
   script:
     - pip install twine
     - python setup.py sdist bdist_wheel
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi --skip-existing --verbose dist/*
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi --skip-existing dist/*
 
 deploy:pypi:
   stage: Deploy package
