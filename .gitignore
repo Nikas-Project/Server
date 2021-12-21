@@ -132,3 +132,4 @@ node_modules
 # Tests
 nosetests.json
 cover
+local/
