@@ -2,11 +2,9 @@
 
 var fibers = require("fibers"),
     gulp = require("gulp"),
-    sass = require("gulp-sass"),
+    sass = require("gulp-sass")(require("sass")),
     sourcemaps = require("gulp-sourcemaps"),
     prefixer = require("gulp-autoprefixer");
-
-sass.compiler = require("sass");
 
 var sassOptions = {
     fiber: fibers,
