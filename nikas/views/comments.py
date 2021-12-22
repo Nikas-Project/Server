@@ -9,7 +9,7 @@ import re
 import time
 from datetime import datetime, timedelta
 from xml.etree import ElementTree as ET
-from hashlib import sha256
+from argon2 import PasswordHasher
 
 from itsdangerous import SignatureExpired, BadSignature
 from werkzeug.exceptions import BadRequest, Forbidden, NotFound
@@ -1111,7 +1111,9 @@ class API(object):
         data = req.form
         password = self.nikas.conf.get("admin", "password")
 
-        if data['password'] and sha256(str(data['password']).encode('utf-8')).hexdigest() == password:
+        ph = PasswordHasher()
+
+        if data['password'] and ph.verify(str(password), str(data['password'])):
             response = redirect(re.sub(
                 r'/login$',
                 '/admin',
