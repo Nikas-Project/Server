@@ -105,6 +105,12 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
             max-height: 48px;
             border-radius: 15px;
         }
+
+        > img {
+            max-width: 48px;
+            max-height: 48px;
+            border-radius: 15px;
+        }
     }
 
     > div.text-wrapper {

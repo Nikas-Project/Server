@@ -81,6 +81,11 @@
   max-height: 48px;
   border-radius: 15px;
 }
+.nikas-comment > div.avatar > img {
+  max-width: 48px;
+  max-height: 48px;
+  border-radius: 15px;
+}
 .nikas-comment > div.text-wrapper {
   display: block;
 }
