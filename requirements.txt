@@ -7,7 +7,7 @@ gevent==20.6.2
 gunicorn==20.0.4
 html5lib==1.1
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 misaka==2.1.1
 packaging==20.4
