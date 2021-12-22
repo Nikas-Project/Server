@@ -1,3 +1,15 @@
+# 1.1.1 ( Dec 22, 2021 )
+
+- Server
+    - Use [Argon2](https://en.wikipedia.org/wiki/Argon2) instead of SHA-256 for authentication process
+        - Common Weakness Enumeration: [CWE-327](https://cwe.mitre.org/data/definitions/327.html).
+        - Common Weakness Enumeration: [CWE-328](https://cwe.mitre.org/data/definitions/328.html).
+        - Common Weakness Enumeration: [CWE-916](https://cwe.mitre.org/data/definitions/916.html).
+- Admin
+    - Fix logout problem
+- Client
+    - Fix style problems for some CMS platforms
+
 # 1.1.0 ( Sep 1, 2020 )
 
 - Server

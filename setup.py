@@ -20,7 +20,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='nikas',
-    version='1.1.0',
+    version='1.1.1',
     author='Arash Hatami',
     author_email='hatamiarash7@gmail.com',
     packages=find_packages(),
@@ -43,7 +43,7 @@ setup(
         "Programming Language :: Python :: 3.8"
     ],
     install_requires=requires,
-    setup_requires=["cffi>=1.3.0"],
+    setup_requires=["cffi>=1.3.0", "argon2-cffi>=21.3.0"],
     entry_points={
         'console_scripts':
             ['nikas = nikas:main'],
