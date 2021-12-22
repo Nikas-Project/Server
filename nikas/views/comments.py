@@ -1130,14 +1130,13 @@ class API(object):
             return render_template('login.html', nikas_host_script=nikas_host_script)
 
     def logout(self, env, req):
-        response = redirect('/login')
+        response = redirect('/admin')
         cookie = functools.partial(dump_cookie,
-                                   value=self.nikas.sign({"logged": True}),
+                                   value=self.nikas.sign({"logged": False}),
                                    expires=0)
         response.headers.add("Set-Cookie", cookie("admin-session"))
         response.headers.add("X-Set-Cookie", cookie("nikas-admin-session"))
-        nikas_host_script = self.nikas.conf.get("server", "public-endpoint") or local.host
-        return render_template('login.html', nikas_host_script=nikas_host_script)
+        return response
 
     def admin(self, env, req):
         nikas_host_script = self.nikas.conf.get("server", "public-endpoint") or local.host
