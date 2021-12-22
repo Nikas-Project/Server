@@ -43,6 +43,8 @@
   color: #757575;
   direction: rtl;
   font-size: 14px;
+  display: block;
+  cursor: text;
 }
 #nikas-thread input:focus {
   border-color: rgba(0, 0, 0, 0.8);
