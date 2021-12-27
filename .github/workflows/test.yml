@@ -18,6 +18,7 @@ jobs:
         python-version: "3.10"
     - name: Install dependencies
       run: |
+        sudo apt-get update
         sudo apt-get install -y libxml2-utils sqlite openssl openssl-dev ca-certificates su-exec tini
         python -m pip install --upgrade pip
         pip install flake8 pytest nose wheel
