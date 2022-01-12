@@ -131,3 +131,6 @@ node_modules
 nosetests.json
 cover
 local/
+
+# Others
+problems.md
