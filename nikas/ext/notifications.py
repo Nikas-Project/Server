@@ -8,6 +8,7 @@ import smtplib
 import socket
 import sys
 import time
+import ssl
 from email.header import Header
 from email.mime.text import MIMEText
 from email.utils import formatdate
@@ -33,6 +34,9 @@ if PY2K:
     from thread import start_new_thread
 else:
     from _thread import start_new_thread
+
+# TODO: Use with config
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 class SMTPConnection(object):
@@ -118,11 +122,11 @@ class SMTP(object):
 
         if admin:
             if comment["website"]:
-                rv.write("User's URL: %s\n" % comment["website"])
+                rv.write("وب سایت کاربر : %s\n" % comment["website"])
 
-            rv.write("IP address: %s\n" % comment["remote_addr"])
+            rv.write("آدرس IP : %s\n" % comment["remote_addr"])
 
-        rv.write("Link to comment: %s\n" %
+        rv.write("لینک نظر : %s\n" %
                  (local("origin") + thread["uri"] + "#nikas-%i" % comment["id"]))
         rv.write("\n")
         rv.write("---\n")
@@ -131,16 +135,16 @@ class SMTP(object):
             uri = self.public_endpoint + "/id/%i" % comment["id"]
             key = self.nikas.sign(comment["id"])
 
-            rv.write("Delete comment: %s\n" % (uri + "/delete/" + key))
+            rv.write("حذف نظر : %s\n" % (uri + "/delete/" + key))
 
             if comment["mode"] == 2:
-                rv.write("Activate comment: %s\n" % (uri + "/activate/" + key))
+                rv.write("تایید نظر : %s\n" % (uri + "/activate/" + key))
 
         else:
             uri = self.public_endpoint + "/id/%i" % parent_comment["id"]
             key = self.nikas.sign(('unsubscribe', recipient))
 
-            rv.write("Unsubscribe from this conversation: %s\n" % (uri + "/unsubscribe/" + quote(recipient) + "/" + key))
+            rv.write("لغو عضویت از این گفتگو : %s\n" % (uri + "/unsubscribe/" + quote(recipient) + "/" + key))
 
         rv.seek(0)
         return rv.read()
@@ -148,7 +152,7 @@ class SMTP(object):
     def notify_new(self, thread, comment):
         if self.admin_notify:
             body = self.format(thread, comment, None, admin=True)
-            subject = "New comment posted"
+            subject = "نظر جدید ثبت شد"
             if thread['title']:
                 subject = "%s on %s" % (subject, thread["title"])
             self.sendmail(subject, body, thread, comment)
