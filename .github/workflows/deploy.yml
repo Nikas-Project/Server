@@ -26,8 +26,8 @@ jobs:
     - name: Deploy to test server
       run: |
         python setup.py sdist bdist_wheel
-        TWINE_PASSWORD=${PYPI_TEST_TOKEN} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
+        TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
     - name: Deploy
       run: |
         python setup.py sdist bdist_wheel
-        TWINE_PASSWORD=${PYPI_TOKEN} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
+        TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
