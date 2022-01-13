@@ -21,7 +21,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libxml2-utils libsqlite0 libxml2-utils sqlite openssl ca-certificates tini
         python -m pip install --upgrade pip
-        pip install setuptools flake8 pytest nose wheel
+        pip install setuptools flake8 pytest wheel
+        pip install nose --no-binary :all:
         # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
       run: |
