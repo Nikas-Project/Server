@@ -43,7 +43,7 @@ setup(
         "Programming Language :: Python :: 3.8"
     ],
     install_requires=requires,
-    setup_requires=["cffi>=1.15.0", "argon2-cffi>=21.3.0"],
+    setup_requires=["cffi>=1.15.0", "argon2-cffi>=21.3.0", "nose>=1.0"],
     entry_points={
         'console_scripts':
             ['nikas = nikas:main'],
