@@ -1,4 +1,4 @@
-name: Test
+name: Tests
 
 on:
   push:
@@ -7,12 +7,12 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  Nose:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.10
+    - name: Set up Python 3
       uses: actions/setup-python@v2
       with:
         python-version: "3.8"
@@ -21,7 +21,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libxml2-utils libsqlite0 libxml2-utils sqlite openssl ca-certificates tini
         python -m pip install --upgrade pip
-         pip install setuptools flake8 pytest wheel nose-py3
+        pip install setuptools flake8 pytest wheel nose-py3
         # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
       run: |
