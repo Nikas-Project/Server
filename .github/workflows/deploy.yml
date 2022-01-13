@@ -7,6 +7,9 @@ on:
     types: 
       - completed
 
+env:
+  IMAGE_NAME: nikasproject/server
+
 jobs:
   PyPi:
     runs-on: ubuntu-latest
@@ -31,3 +34,19 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
         TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
+  Docker:
+    needs: PyPi
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build image
+      run: |
+        version=$(cat version.env)
+        echo $version
+        docker build -t ${{ env.IMAGE_NAME }}:${version} .
+    - name: Dockerhub
+      run: |
+        version=$(cat version.env)    
+        docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+        docker push ${{ env.IMAGE_NAME }}:${version}
