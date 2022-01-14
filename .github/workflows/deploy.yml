@@ -53,7 +53,7 @@ jobs:
       run: |
         version=$(cat version.env)
         echo $version
-        docker build -t ${{ env.IMAGE_NAME }}:${version} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ GITHUB_IMAGE_NAME }}:${version} .
+        docker build -t ${{ env.IMAGE_NAME }}:${version} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.GITHUB_IMAGE_NAME }}:${version} .
     
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
@@ -82,4 +82,4 @@ jobs:
       run: |
         version=$(cat version.env)    
         docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.GITHUB_TOKEN }}" docker.pkg.github.com
-        docker push ${{ GITHUB_IMAGE_NAME }}:${version}
+        docker push ${{ env.GITHUB_IMAGE_NAME }}:${version}
