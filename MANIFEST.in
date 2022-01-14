@@ -13,4 +13,6 @@ include nikas/templates/disabled.html
 include nikas/templates/login.html
 include nikas/css/admin.css
 include nikas/css/nikas.css
-include nikas/img/nikas.svg
+
+include nikas/img/nikas.png
+include nikas/img/favicon.ico
