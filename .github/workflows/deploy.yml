@@ -49,11 +49,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     
+    - name: Get version
+      id: get_version
+      run: |
+        echo "::set-output name=version::$(cat version.env)"
+
     - name: Build image
       run: |
-        version=$(cat version.env)
-        echo $version
-        docker build -t ${{ env.IMAGE_NAME }}:${version} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.GITHUB_IMAGE_NAME }}:${version} .
+        docker build -t ${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.version}} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.GITHUB_IMAGE_NAME }}:${{ steps.get_version.outputs.version }} .
     
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
@@ -73,13 +76,11 @@ jobs:
         sarif_file: "trivy-results.sarif"
 
     - name: Push to Dockerhub
-      run: |
-        version=$(cat version.env)    
+      run: |   
         docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
-        docker push ${{ env.IMAGE_NAME }}:${version}
+        docker push ${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.version }}
     
     - name: Push to Github
-      run: |
-        version=$(cat version.env)    
+      run: |   
         docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.GITHUB_TOKEN }}" docker.pkg.github.com
-        docker push ${{ env.GITHUB_IMAGE_NAME }}:${version}
+        docker push ${{ env.GITHUB_IMAGE_NAME }}:${{ steps.get_version.outputs.version }}
