@@ -1,3 +1,16 @@
+# 1.1.6 ( Jan 14, 2022 )
+
+- Server
+    - Fix problems with `gevent` and `greenlet`
+    - Fix SMTP problems
+    - Translate notification's body
+- Admin
+    - Fix [Quirks Mode](https://developer.mozilla.org/en-US/docs/Web/HTML/Quirks_Mode_and_Standards_Mode)
+- Client
+    - Missed logo and favicon added
+
+---
+
 # 1.1.1 ( Dec 22, 2021 )
 
 - Server
@@ -42,7 +55,7 @@
 
 - First beta release
 - Migrate to Nikas
-- Dockerize project :  
+- Dockerize project :
     - Create `Dockerfile` and `docker-compose.yml`
     - Publish docker image
 - Create `Makefile`
