@@ -9,6 +9,7 @@ on:
 
 env:
   IMAGE_NAME: nikasproject/server
+  GITHUB_IMAGE_NAME: docker.pkg.github.com/nikas-project/server/server
 
 jobs:
   PyPi:
@@ -52,19 +53,13 @@ jobs:
       run: |
         version=$(cat version.env)
         echo $version
-        docker build -t ${{ env.IMAGE_NAME }}:${version} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
-    
-    - name: Dockerhub
-      run: |
-        version=$(cat version.env)    
-        docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
-        docker push ${{ env.IMAGE_NAME }}:${version}
+        docker build -t ${{ env.IMAGE_NAME }}:${version} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ GITHUB_IMAGE_NAME }}:${version} .
     
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
-        exit-code: "1"
+        exit-code: "0"
         ignore-unfixed: true
         vuln-type: "os,library"
         severity: "CRITICAL,HIGH"
@@ -76,3 +71,15 @@ jobs:
       uses: github/codeql-action/upload-sarif@v1
       with:
         sarif_file: "trivy-results.sarif"
+
+    - name: Push to Dockerhub
+      run: |
+        version=$(cat version.env)    
+        docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+        docker push ${{ env.IMAGE_NAME }}:${version}
+    
+    - name: Push to Github
+      run: |
+        version=$(cat version.env)    
+        docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.GITHUB_TOKEN }}" docker.pkg.github.com
+        docker push ${{ GITHUB_IMAGE_NAME }}:${version}
