@@ -29,7 +29,7 @@ RUN apk upgrade --no-cache \
     su-exec \
     tini \
  && pip3 install --upgrade --ignore-installed pip wheel setuptools \
- && pip3 install --no-cache --ignore-installed wheel nikas \
+ && pip3 install --no-cache --ignore-installed wheel nikas==$VERSION \
  && apk del build-dependencies \
  && rm -rf /tmp/* /var/cache/apk/*
 
