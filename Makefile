@@ -45,6 +45,5 @@ clean:
 
 pypi:
 	python3 setup.py sdist bdist_wheel
-	twine check dist/*
 	@-twine upload --repository-url https://test.pypi.org/legacy/ -u hatamiarash7 -p $(PYPI_TEST_PASSWORD) dist/*
 	@-twine upload -u __token__ -p $(PYPI_TOKEN) dist/*
