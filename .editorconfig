@@ -21,6 +21,7 @@ indent_size = 2
 indent_size = 2
 insert_final_newline = false
 
+# env file configuration. specialy for version.env
 [*.env]
 end_of_line = lf
 insert_final_newline = false
