@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: [ "Tests" ]
     branches: [ master ]
-    types: 
+    types:
       - completed
 
 env:
@@ -18,29 +18,29 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    
+
     - name: Set up Python 3
       uses: actions/setup-python@v2
       with:
         python-version: "3.8"
-    
+
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils libsqlite0 libxml2-utils sqlite openssl ca-certificates tini
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
-    
+
     - name: Deploy to test server
       run: |
         python setup.py sdist bdist_wheel
         TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
-    
+
     - name: Deploy
       run: |
         python setup.py sdist bdist_wheel
         TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
-  
+
   Docker:
     needs: PyPi
     runs-on: ubuntu-latest
@@ -48,15 +48,19 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    
+
     - name: Get version
       run: |
         echo "NIKAS_VERSION=$(cat version.env)" >> $GITHUB_ENV
 
+    - name: Get Current Date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
     - name: Build image
       run: |
-        docker build -t ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }} .
-    
+        docker build -t ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }} --build-arg DATE_CREATED=${{ steps.date.outputs.date }} --build-arg VERSION=${{ env.NIKAS_VERSION }} .
+
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
@@ -75,11 +79,11 @@ jobs:
         sarif_file: "trivy-results.sarif"
 
     - name: Push to Dockerhub
-      run: |   
+      run: |
         docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
         docker push ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
-    
+
     - name: Push to Github
-      run: |   
+      run: |
         docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.GITHUB_TOKEN }}" docker.pkg.github.com
         docker push ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }}

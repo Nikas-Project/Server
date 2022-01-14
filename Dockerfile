@@ -1,5 +1,16 @@
 FROM alpine:latest
 
+ARG DATE_CREATED
+ARG VERSION
+
+LABEL org.opencontainers.image.created=$DATE_CREATED
+LABEL org.opencontainers.image.version=$VERSION
+LABEL org.opencontainers.image.authors="hatamiarash7"
+LABEL org.opencontainers.image.vendor="hatamiarash7"
+LABEL org.opencontainers.image.title="Nikas"
+LABEL org.opencontainers.image.description="The first Persian comment system"
+LABEL org.opencontainers.image.source="https://github.com/Nikas-Project/Server"
+
 ENV GID=1000 UID=1000
 
 RUN apk upgrade --no-cache \
