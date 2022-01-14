@@ -3,6 +3,7 @@ FROM alpine:latest
 ARG DATE_CREATED
 ARG VERSION
 
+LABEL maintainer="Arash Hatami <hatamiarash7@gmail.com>"
 LABEL org.opencontainers.image.created=$DATE_CREATED
 LABEL org.opencontainers.image.version=$VERSION
 LABEL org.opencontainers.image.authors="hatamiarash7"
@@ -39,7 +40,5 @@ RUN chmod +x /usr/local/bin/run.sh
 EXPOSE 8080
 
 VOLUME /db /config
-
-LABEL maintainer="Arash Hatami <hatamiarash7@gmail.com>"
 
 CMD ["run.sh"]
