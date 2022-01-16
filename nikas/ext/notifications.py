@@ -35,9 +35,6 @@ if PY2K:
 else:
     from _thread import start_new_thread
 
-# TODO: Use with config
-ssl._create_default_https_context = ssl._create_unverified_context
-
 
 class SMTPConnection(object):
 
@@ -54,7 +51,8 @@ class SMTPConnection(object):
         if self.conf.get('security') == 'starttls':
             if sys.version_info >= (3, 4):
                 import ssl
-                self.client.starttls(context=ssl.create_default_context())
+                # TODO: Use config to separate secure/unsecure connection: context=ssl.create_default_context()
+                self.client.starttls(context=ssl._create_unverified_context())
             else:
                 self.client.starttls()
 
