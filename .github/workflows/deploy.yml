@@ -1,34 +1,62 @@
 name: Deploy
 
 on:
-  workflow_run:
-    workflows: ["Tests"]
-    types:
-      - completed
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 env:
   IMAGE_NAME: nikasproject/server
   GITHUB_IMAGE_NAME: docker.pkg.github.com/nikas-project/server/server
 
 jobs:
-  PyPi:
+  Python:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Set up Python 3
+    - name: Setup Python
       uses: actions/setup-python@v2
       with:
         python-version: "3.8"
+
+    - name: Setup NodeJs
+      uses: actions/setup-node@v2
+      with:
+        node-version: "14.18.2"
 
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils libsqlite0 libxml2-utils sqlite openssl ca-certificates tini
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine
+        pip install setuptools flake8 pytest wheel twine nose-py3 gunicorn cffi flask
+
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Test with nose
+      run: |
+        python setup.py install
+        python setup.py nosetests --with-xunit
+
+    - name: Setup development
+      run: |
+        python3 setup.py develop
+        nikas --version
+
+    - name: Compile JS stuff
+      run: |
+        npm install -g requirejs uglify-js jade bower gulp-cli
+        npm install --save-dev sass gulp node-sass gulp-sass gulp-sourcemaps gulp-autoprefixer fibers
+        make init sass js
 
     - name: Deploy to test server
       run: |
