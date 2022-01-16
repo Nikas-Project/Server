@@ -69,7 +69,7 @@ jobs:
         TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
 
   Docker:
-    needs: PyPi
+    needs: Python
     runs-on: ubuntu-latest
 
     steps:
