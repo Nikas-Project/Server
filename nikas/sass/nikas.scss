@@ -25,7 +25,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
         font-weight: 500;
         text-align: center;
         direction: rtl;
-        margin: 10px 0 5px 0;
+        margin: 20px 0 5px 0;
         font-size: unset;
     }
 
@@ -342,6 +342,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
                     font-size: 12px;
                     margin-bottom: 0;
                     box-shadow: none;
+                    color: black;
 
                     &:hover {
                         background-color: #ccc;
@@ -428,6 +429,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
         margin: 0;
         font-size: 10px;
         color: #757575;
+        text-align: left;
 
         a {
             margin-left: 3px;
