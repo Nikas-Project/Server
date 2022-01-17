@@ -1,3 +1,12 @@
+# 1.1.9 ( Jan 17, 2022 )
+
+- Server
+    - Use `unverified_context` for SMTP connection
+- Client
+    - Fix style problems
+
+---
+
 # 1.1.6 ( Jan 14, 2022 )
 
 - Server
