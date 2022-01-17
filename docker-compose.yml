@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   nikas:
-    image: nikasproject/server:1.1.8
+    image: nikasproject/server:1.1.9
     restart: unless-stopped
     container_name: nikas
     environment:
