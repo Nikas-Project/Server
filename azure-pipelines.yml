@@ -41,6 +41,7 @@ stages:
               command: build
               Dockerfile: "$(Build.SourcesDirectory)/Dockerfile"
               tags: $(tag)
+              arguments: "--build-arg DATE_CREATED=$(date +'%Y-%m-%d') --build-arg VERSION=$(cat version.env)"
 
           - script: |
               sudo apt-get install rpm
