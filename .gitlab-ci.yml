@@ -30,14 +30,6 @@ test:
     reports:
       junit: nosetests.xml
 
-deploy:pypi-test:
-  stage: Deploy package
-  image: python:latest
-  script:
-    - pip install twine
-    - python setup.py sdist bdist_wheel
-    - TWINE_PASSWORD=${PYPI_TEST_TOKEN} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
-
 deploy:gitlab:
   stage: Deploy package
   image: python:latest
@@ -49,48 +41,20 @@ deploy:gitlab:
     - python setup.py sdist bdist_wheel
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi --skip-existing dist/*
 
-deploy:pypi:
-  stage: Deploy package
-  image: python:latest
-  only:
-    - master
-  script:
-    - pip install twine
-    - python setup.py sdist bdist_wheel
-    - TWINE_PASSWORD=${PYPI_TOKEN} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
-
 build image:
   stage: Build image
   script:
-    - version=$(cat version.env)
-    - echo $version
-    - docker build -t nikasproject/server:stable -t docker.pkg.github.com/nikas-project/server/server:latest -t $CI_REGISTRY/nikas-project/server:latest .
+    - NIKAS_VERSION=$(cat version.env)
+    - DATE_CREATED=$(date +'%Y-%m-%d')
+    - echo $NIKAS_VERSION
+    - echo $DATE_CREATED
+    - docker build -t $CI_REGISTRY/nikas-project/server:latest --build-arg DATE_CREATED=$DATE_CREATED --build-arg VERSION=$NIKAS_VERSION .
     - mkdir image
-    - docker save nikasproject/server:stable > image/dockerhub.tar
-    - docker save docker.pkg.github.com/nikas-project/server/server:latest > image/github.tar
     - docker save $CI_REGISTRY/nikas-project/server:latest > image/gitlab.tar
   artifacts:
-    expire_in: 15 mins
+    expire_in: 5 mins
     paths:
       - image
-
-push to dockerhub:
-  stage: Push to registries
-  only:
-    - master
-  script:
-    - docker load -i image/dockerhub.tar
-    - docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_TOKEN"
-    - docker push nikasproject/server:stable
-
-push to github:
-  stage: Push to registries
-  only:
-    - master
-  script:
-    - docker load -i image/github.tar
-    - docker login -u "$DOCKERHUB_USERNAME" -p "$GITHUB_TOKEN" docker.pkg.github.com
-    - docker push docker.pkg.github.com/nikas-project/server/server:latest
 
 push to gitlab:
   stage: Push to registries
