@@ -14,10 +14,15 @@ define(function () {
         fetchText = function (path, callback) {
             callback(fs.readFileSync(path, "utf-8"));
         };
-    } else if ((typeof window !== "undefined" && window.navigator && window.document) || typeof importScripts !== "undefined") {
+    } else if (
+        (typeof window !== "undefined" &&
+            window.navigator &&
+            window.document) ||
+        typeof importScripts !== "undefined"
+    ) {
         fetchText = function (url, callback) {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
+            xhr.open("GET", url, true);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     callback(xhr.responseText);
@@ -28,7 +33,6 @@ define(function () {
     }
 
     return {
-
         fetchText: fetchText,
 
         load: function (name, req, onload, config) {
@@ -44,19 +48,26 @@ define(function () {
                     onload(builds[name]);
                 }
             });
-
         },
         write: function (plugin, name, write) {
             if (builds.hasOwnProperty(name)) {
-                write("define('" + plugin + "!" + name + "', function () {" +
-                    "  var wfn = function (jade) {" +
-                    "    var fn = " + builds[name] + ";" +
-                    "    return fn;" +
-                    "  };" +
-                    "wfn.compiled = true;" +
-                    "return wfn;" +
-                    "});\n");
+                write(
+                    "define('" +
+                        plugin +
+                        "!" +
+                        name +
+                        "', function () {" +
+                        "  var wfn = function (jade) {" +
+                        "    var fn = " +
+                        builds[name] +
+                        ";" +
+                        "    return fn;" +
+                        "  };" +
+                        "wfn.compiled = true;" +
+                        "return wfn;" +
+                        "});\n"
+                );
             }
-        }
+        },
     };
 });

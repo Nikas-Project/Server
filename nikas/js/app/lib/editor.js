@@ -1,5 +1,4 @@
 define(["app/dom", "app/i18n"], function ($, i18n) {
-
     "use strict";
 
     return function (el) {

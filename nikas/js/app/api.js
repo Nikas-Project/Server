@@ -117,17 +117,20 @@ define(["app/lib/promise", "app/globals"], function (Q, globals) {
 
     var modify = function (id, data) {
         var deferred = Q.defer();
-        curl("PUT", endpoint + "/id/" + id, JSON.stringify(data), function (
-            rv
-        ) {
-            if (rv.status === 403) {
-                deferred.reject("Not authorized to modify this comment!");
-            } else if (rv.status === 200) {
-                deferred.resolve(JSON.parse(rv.body));
-            } else {
-                deferred.reject(rv.body);
+        curl(
+            "PUT",
+            endpoint + "/id/" + id,
+            JSON.stringify(data),
+            function (rv) {
+                if (rv.status === 403) {
+                    deferred.reject("Not authorized to modify this comment!");
+                } else if (rv.status === 200) {
+                    deferred.resolve(JSON.parse(rv.body));
+                } else {
+                    deferred.reject(rv.body);
+                }
             }
-        });
+        );
         return deferred.promise;
     };
 

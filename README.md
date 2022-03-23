@@ -4,6 +4,6 @@
 
 The first persian comment system
 
-- Python
-- Self-Hosted
-- Simple
+-   Python
+-   Self-Hosted
+-   Simple

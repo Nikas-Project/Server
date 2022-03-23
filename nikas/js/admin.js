@@ -128,8 +128,9 @@ function stop_edit(com_id) {
 function send_edit(com_id, hash, nikas_host_script) {
     var author = document.getElementById("nikas-author-" + com_id).textContent;
     var email = document.getElementById("nikas-email-" + com_id).textContent;
-    var website = document.getElementById("nikas-website-" + com_id)
-        .textContent;
+    var website = document.getElementById(
+        "nikas-website-" + com_id
+    ).textContent;
     var comment = document.getElementById("nikas-text-" + com_id).textContent;
     edit(com_id, hash, author, email, website, comment, nikas_host_script);
     stop_edit(com_id);

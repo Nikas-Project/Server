@@ -1,8 +1,9 @@
 define(function () {
-
     "use strict";
 
-    var stderr = function (text) { console.log(text); };
+    var stderr = function (text) {
+        console.log(text);
+    };
 
     var Promise = function () {
         this.success = [];
@@ -38,7 +39,7 @@ define(function () {
                     callback(error);
                 }, 0);
             });
-        }
+        },
     };
 
     var when = function (obj, func) {
@@ -50,8 +51,9 @@ define(function () {
     };
 
     return {
-        defer: function () { return new Defer(); },
-        when: when
+        defer: function () {
+            return new Defer();
+        },
+        when: when,
     };
-
 });

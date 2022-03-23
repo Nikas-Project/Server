@@ -252,15 +252,13 @@ define([
                     toggler.next();
                 };
                 $(".textarea", form).focus();
-                $("a.reply", footer).textContent = i18n.translate(
-                    "comment-close"
-                );
+                $("a.reply", footer).textContent =
+                    i18n.translate("comment-close");
             },
             function () {
                 form.remove();
-                $("a.reply", footer).textContent = i18n.translate(
-                    "comment-reply"
-                );
+                $("a.reply", footer).textContent =
+                    i18n.translate("comment-reply");
             }
         );
 
@@ -383,9 +381,8 @@ define([
                 }
 
                 $("a.cancel", footer).remove();
-                $("a.edit", footer).textContent = i18n.translate(
-                    "comment-edit"
-                );
+                $("a.edit", footer).textContent =
+                    i18n.translate("comment-edit");
             }
         );
 
@@ -408,9 +405,8 @@ define([
                     if (rv) {
                         el.remove();
                     } else {
-                        $("span.note", header).textContent = i18n.translate(
-                            "comment-deleted"
-                        );
+                        $("span.note", header).textContent =
+                            i18n.translate("comment-deleted");
                         text.innerHTML = "<p>&nbsp;</p>";
                         $("a.edit", footer).remove();
                         $("a.delete", footer).remove();
