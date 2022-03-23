@@ -1,0 +1,24 @@
+name: Formatter
+
+on: [push]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Format code
+        uses: creyD/prettier_action@v4.2
+        with:
+          prettier_options: --write **/*.{py,md,js,html,css,scss}
+          same_commit: false
+          commit_message: "[CI] Format Code!"
+          commit_description: "Format code using Prettier"
+          github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
