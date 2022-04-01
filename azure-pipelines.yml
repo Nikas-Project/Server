@@ -51,7 +51,7 @@ stages:
               repository: $(imageName)
               command: build
               Dockerfile: "$(Build.SourcesDirectory)/Dockerfile"
-              tags: $(cat version.env)
+              tags: $(version)
               arguments: "--build-arg DATE_CREATED=$(currentDate) --build-arg VERSION=$(version)"
 
           - script: |
