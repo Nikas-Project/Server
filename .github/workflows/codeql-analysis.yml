@@ -58,6 +58,14 @@ jobs:
       - name: Install style check dependencies
         run: pip install flake8
 
+      - name: Create .env
+        uses: 1arp/create-a-file-action@0.2
+        with:
+          file: ".env.pypi"
+          content: |
+            PYPI_TEST_PASSWORD=password
+            PYPI_TOKEN=pypi-AgEIc1233S5
+
       - name: Run style check
         run: make flakes
 
