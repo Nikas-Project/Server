@@ -2,9 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 env:
   IMAGE_NAME: nikasproject/server
@@ -15,103 +15,103 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Setup Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: "3.8"
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
 
-    - name: Setup NodeJs
-      uses: actions/setup-node@v2
-      with:
-        node-version: "14.18.2"
+      - name: Setup NodeJs
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.18.2"
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libxml2-utils libsqlite0 libxml2-utils sqlite openssl ca-certificates tini
-        python -m pip install --upgrade pip
-        pip install setuptools flake8 pytest wheel twine nose-py3 gunicorn cffi flask
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils libsqlite0 libxml2-utils sqlite openssl ca-certificates tini
+          python -m pip install --upgrade pip
+          pip install setuptools flake8 pytest wheel twine nose-py3 gunicorn cffi flask
 
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-    - name: Test with nose
-      run: |
-        python setup.py install
-        python setup.py nosetests --with-xunit
+      - name: Test with nose
+        run: |
+          python setup.py install
+          python setup.py nosetests --with-xunit
 
-    - name: Setup development
-      run: |
-        python3 setup.py develop
-        nikas --version
+      - name: Setup development
+        run: |
+          python3 setup.py develop
+          nikas --version
 
-    - name: Compile JS stuff
-      run: |
-        npm install -g requirejs uglify-js jade bower gulp-cli
-        npm install --save-dev sass gulp node-sass gulp-sass gulp-sourcemaps gulp-autoprefixer fibers
-        touch .env.pypi
-        make init sass js
+      - name: Compile JS stuff
+        run: |
+          npm install -g requirejs uglify-js jade bower gulp-cli
+          npm install --save-dev sass gulp node-sass gulp-sass gulp-sourcemaps gulp-autoprefixer fibers
+          touch .env.pypi
+          make init sass js
 
-    - name: Deploy to test server
-      run: |
-        python setup.py sdist bdist_wheel
-        TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
+      - name: Deploy to test server
+        run: |
+          python setup.py sdist bdist_wheel
+          TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
 
-    - name: Deploy
-      run: |
-        python setup.py sdist bdist_wheel
-        TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
+      - name: Deploy
+        run: |
+          python setup.py sdist bdist_wheel
+          TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
 
   Docker:
     needs: Python
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Get version
-      run: |
-        echo "NIKAS_VERSION=$(cat version.env)" >> $GITHUB_ENV
+      - name: Get version
+        run: |
+          echo "NIKAS_VERSION=$(cat version.env)" >> $GITHUB_ENV
 
-    - name: Get Current Date
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get Current Date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
-    - name: Build image
-      run: |
-        docker build -t ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }} --build-arg DATE_CREATED=${{ steps.date.outputs.date }} --build-arg VERSION=${{ env.NIKAS_VERSION }} .
+      - name: Build image
+        run: |
+          docker build -t ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }} --build-arg DATE_CREATED=${{ steps.date.outputs.date }} --build-arg VERSION=${{ env.NIKAS_VERSION }} .
 
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
-      with:
-        image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
-        exit-code: "0"
-        ignore-unfixed: true
-        vuln-type: "os,library"
-        severity: "CRITICAL,HIGH"
-        format: "template"
-        template: "@/contrib/sarif.tpl"
-        output: "trivy-results.sarif"
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          exit-code: "0"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+          format: "template"
+          template: "@/contrib/sarif.tpl"
+          output: "trivy-results.sarif"
 
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: "trivy-results.sarif"
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: "trivy-results.sarif"
 
-    - name: Push to Dockerhub
-      run: |
-        docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
-        docker push ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
+      - name: Push to Dockerhub
+        run: |
+          docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+          docker push ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
 
-    - name: Push to Github
-      run: |
-        docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.GITHUB_TOKEN }}" docker.pkg.github.com
-        docker push ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
+      - name: Push to Github
+        run: |
+          docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.GITHUB_TOKEN }}" docker.pkg.github.com
+          docker push ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
