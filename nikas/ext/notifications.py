@@ -8,7 +8,6 @@ import smtplib
 import socket
 import sys
 import time
-import ssl
 from email.header import Header
 from email.mime.text import MIMEText
 from email.utils import formatdate
