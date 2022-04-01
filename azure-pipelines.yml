@@ -66,6 +66,6 @@ stages:
             inputs:
               script: |
                 trivy image --download-db-only
-                trivy image --exit-code 0 --severity LOW,MEDIUM $(imageName):$(tag)
-                trivy image --exit-code 1 --severity HIGH,CRITICAL $(imageName):$(tag)
+                trivy image --exit-code 0 --severity LOW,MEDIUM $(imageName):$(version)
+                trivy image --exit-code 1 --severity HIGH,CRITICAL $(imageName):$(version)
                 trivy image --clear-cache
