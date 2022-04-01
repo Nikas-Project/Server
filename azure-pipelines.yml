@@ -50,12 +50,12 @@ stages:
               tags: $(cat version.env)
               arguments: "--build-arg DATE_CREATED=$(date +'%Y-%m-%d') --build-arg VERSION=$(cat version.env)"
 
-          - displayName: "Download and install Trivy"
-            script: |
+          - script: |
               sudo apt-get install rpm
               wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
               sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
               trivy -v
+            displayName: "Download and install Trivy"
 
           - task: CmdLine@2
             displayName: "Run trivy scan"
