@@ -10,7 +10,7 @@ pool:
 variables:
   trivyVersion: 0.9.1
   imageName: "nikasproject/server"
-  tag: "azure"
+  DOCKER_BUILDKIT: 1
 
 stages:
   - stage: Test
@@ -33,6 +33,13 @@ stages:
       - job: Build
         displayName: Build, Scan and Push
         steps:
+          - task: CmdLine@2
+            displayName: "Show build info"
+            inputs:
+              script: |
+                echo $(date +'%Y-%m-%d')
+                echo $(cat version.env)
+
           - task: Docker@2
             displayName: Build docker image
             inputs:
@@ -40,15 +47,15 @@ stages:
               repository: $(imageName)
               command: build
               Dockerfile: "$(Build.SourcesDirectory)/Dockerfile"
-              tags: $(tag)
+              tags: $(cat version.env)
               arguments: "--build-arg DATE_CREATED=$(date +'%Y-%m-%d') --build-arg VERSION=$(cat version.env)"
 
-          - script: |
+          - displayName: "Download and install Trivy"
+            script: |
               sudo apt-get install rpm
               wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
               sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
               trivy -v
-            displayName: "Download and install Trivy"
 
           - task: CmdLine@2
             displayName: "Run trivy scan"
@@ -58,11 +65,3 @@ stages:
                 trivy image --exit-code 0 --severity LOW,MEDIUM $(imageName):$(tag)
                 trivy image --exit-code 1 --severity HIGH,CRITICAL $(imageName):$(tag)
                 trivy image --clear-cache
-
-          - task: Docker@2
-            displayName: "Push image"
-            inputs:
-              containerRegistry: "DockerHub"
-              repository: "$(imageName)"
-              command: push
-              tags: "$(tag)"
