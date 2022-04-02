@@ -52,11 +52,8 @@ jobs:
         # "setup-python" action
         run: pip install -e .
 
-      - name: Install test suite dependencies
-        run: pip install pytest pytest-cov
-
-      - name: Install style check dependencies
-        run: pip install flake8
+      - name: Install test suite & style check dependencies
+        run: pip install pytest pytest-cov flake8 nose
 
       - name: Create .env
         uses: 1arp/create-a-file-action@0.2
