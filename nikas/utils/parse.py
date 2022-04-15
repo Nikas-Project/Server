@@ -1,23 +1,12 @@
-from __future__ import print_function, unicode_literals
-
-from itertools import chain
-
-try:
-    from urllib import unquote
-except ImportError:
-    from urllib.parse import unquote
+# -*- encoding: utf-8 -*-
 
 import html5lib
 
-from nikas.compat import map, filter, PY2K
-
-if PY2K:  # http://bugs.python.org/issue12984
-    from xml.dom.minidom import NamedNodeMap
-
-    NamedNodeMap.__contains__ = lambda self, key: self.has_key(key)  # noqa
+from itertools import chain
+from urllib.parse import unquote
 
 
-def thread(data, default=u"Untitled.", id=None):
+def thread(data, default="Untitled.", id=None):
     """
     Extract <h1> title from web page. The title is *probably* the text node,
     which is the nearest H1 node in context to an element with the `nikas-thread` id.

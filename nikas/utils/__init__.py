@@ -1,12 +1,7 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import division, unicode_literals
-
-import pkg_resources
-
-werkzeug = pkg_resources.get_distribution("werkzeug")
-
 import hashlib
+import ipaddress
 import json
 import os
 
@@ -15,13 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 from werkzeug.wrappers import Response
 from werkzeug.exceptions import BadRequest
 
-from nikas.compat import text_type
 from nikas.wsgi import Request
-
-try:
-    import ipaddress
-except ImportError:
-    import ipaddr as ipaddress
 
 
 def anonymize(remote_addr):
@@ -30,7 +19,7 @@ def anonymize(remote_addr):
     and /48 (zero'd).
 
     """
-    if not isinstance(remote_addr, text_type) and isinstance(remote_addr, str):
+    if isinstance(remote_addr, bytes):
         remote_addr = remote_addr.decode('ascii', 'ignore')
     try:
         ipv4 = ipaddress.IPv4Address(remote_addr)
@@ -39,7 +28,7 @@ def anonymize(remote_addr):
         try:
             ipv6 = ipaddress.IPv6Address(remote_addr)
             if ipv6.ipv4_mapped is not None:
-                return anonymize(text_type(ipv6.ipv4_mapped))
+                return anonymize(str(ipv6.ipv4_mapped))
             return u'' + ipv6.exploded.rsplit(':', 5)[0] + ':' + ':'.join(['0000'] * 5)
         except ipaddress.AddressValueError:
             return u'0.0.0.0'
@@ -104,9 +93,6 @@ class Bloomfilter:
 
 
 class JSONRequest(Request):
-    if werkzeug.version.startswith("0.8"):
-        def get_data(self, **kw):
-            return self.data.decode('utf-8')
 
     def get_json(self):
         try:

@@ -1,23 +1,9 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import codecs
 import hashlib
 
-from nikas.compat import string_types, text_type as str
-
-try:
-    from werkzeug.security import pbkdf2_bin as pbkdf2
-except ImportError:
-    try:
-        from passlib.utils.pbkdf2 import pbkdf2 as _pbkdf2
-
-        def pbkdf2(val, salt, iterations, dklen, func):
-            return _pbkdf2(val, salt, iterations, dklen, ("hmac-" + func).encode("utf-8"))
-    except ImportError:
-        raise ImportError("No PBKDF2 implementation found. Either upgrade "
-                          "to `werkzeug` 0.9 or install `passlib`.")
+from hashlib import pbkdf2_hmac as pbkdf2
 
 
 def _TypeError(name, expected, val):
@@ -27,7 +13,7 @@ def _TypeError(name, expected, val):
 
 class Hash(object):
     func = None
-    salt = b"Eech7cohj45hgOl6baimi"
+    salt = b"Eech7co8Ohloopo9Ol6baimi"
 
     def __init__(self, salt=None, func="sha1"):
 
@@ -56,7 +42,7 @@ class Hash(object):
     def uhash(self, val):
         """Calculate hash from unicode value and return hex value as unicode"""
 
-        if not isinstance(val, string_types):
+        if not isinstance(val, (str, )):
             raise _TypeError("val", "str", val)
 
         return codecs.encode(self.hash(val.encode("utf-8")), "hex_codec").decode("utf-8")
@@ -81,7 +67,8 @@ class PBKDF2(Hash):
         self.func = func
 
     def compute(self, val):
-        return pbkdf2(val, self.salt, self.iterations, self.dklen, self.func)
+        return pbkdf2(hash_name=self.func, password=val, salt=self.salt,
+                      iterations=self.iterations, dklen=self.dklen)
 
 
 def new(conf):
