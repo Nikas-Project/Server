@@ -1,40 +1,39 @@
-define(["app/api", "app/dom", "app/i18n"], function (api, $, i18n) {
-    return function () {
-        var objs = {};
+var api = require("app/api");
+var $ = require("app/dom");
+var i18n = require("app/i18n");
 
-        $.each("a", function (el) {
-            if (!el.href.match || !el.href.match(/#nikas-thread$/)) {
-                return;
-            }
+module.exports = function () {
 
-            var tid =
-                el.getAttribute("data-nikas-id") ||
-                el.href
-                    .match(/^(.+)#nikas-thread$/)[1]
-                    .replace(/^.*\/\/[^\/]+/, "");
+    var objs = {};
 
-            if (tid in objs) {
-                objs[tid].push(el);
-            } else {
-                objs[tid] = [el];
-            }
-        });
+    $.each("a", function (el) {
+        if (!el.href.match || !el.href.match(/#nikas-thread$/)) {
+            return;
+        }
 
-        var urls = Object.keys(objs);
+        var tid = el.getAttribute("data-nikas-id") ||
+            el.href.match(/^(.+)#nikas-thread$/)[1]
+                .replace(/^.*\/\/[^\/]+/, '');
 
-        api.count(urls).then(function (rv) {
-            for (var key in objs) {
-                if (objs.hasOwnProperty(key)) {
-                    var index = urls.indexOf(key);
+        if (tid in objs) {
+            objs[tid].push(el);
+        } else {
+            objs[tid] = [el];
+        }
+    });
 
-                    for (var i = 0; i < objs[key].length; i++) {
-                        objs[key][i].textContent = i18n.pluralize(
-                            "num-comments",
-                            rv[index]
-                        );
-                    }
+    var urls = Object.keys(objs);
+
+    api.count(urls).then(function (rv) {
+        for (var key in objs) {
+            if (objs.hasOwnProperty(key)) {
+
+                var index = urls.indexOf(key);
+
+                for (var i = 0; i < objs[key].length; i++) {
+                    objs[key][i].textContent = i18n.pluralize("num-comments", rv[index]);
                 }
             }
-        });
-    };
-});
+        }
+    });
+};
