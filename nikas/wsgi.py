@@ -1,27 +1,15 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import socket
-import sys
 
-try:
-    from urllib.parse import quote, urlparse
+from urllib.parse import quote, urlparse
 
-    from socketserver import ThreadingMixIn
-    from http.server import HTTPServer
-except ImportError:
-    from urllib import quote
-    from urlparse import urlparse
-
-    from SocketServer import ThreadingMixIn
-    from BaseHTTPServer import HTTPServer
+from socketserver import ThreadingMixIn
+from http.server import HTTPServer
 
 from werkzeug.serving import WSGIRequestHandler
 from werkzeug.wrappers import Request as _Request
 from werkzeug.datastructures import Headers
-
-from nikas.compat import string_types
 
 
 def host(environ):  # pragma: no cover
@@ -52,7 +40,7 @@ def urlsplit(name):
     Parse :param:`name` into (netloc, port, ssl)
     """
 
-    if not (isinstance(name, string_types)):
+    if not isinstance(name, (str, )):
         name = str(name)
 
     if not name.startswith(('http://', 'https://')):
@@ -84,8 +72,6 @@ def origin(hosts):
     hosts = [urlsplit(h) for h in hosts]
 
     def func(environ):
-        if 'NIKAS_CORS_ORIGIN' in environ:
-            return environ['NIKAS_CORS_ORIGIN']
 
         if not hosts:
             return "http://invalid.local"
@@ -149,32 +135,14 @@ class CORSMiddleware(object):
             return start_response(status, headers.to_wsgi_list(), exc_info)
 
         if environ.get("REQUEST_METHOD") == "OPTIONS":
-            add_cors_headers("200 Ok", [("Content-Type", "text/plain")])
+            add_cors_headers("200 OK", [("Content-Type", "text/plain")])
             return []
 
         return self.app(environ, add_cors_headers)
 
 
-class LegacyWerkzeugMiddleware(object):
-    # Add compatibility with werkzeug 0.8
-
-    def __init__(self, app):
-        self.app = app
-
-    def __call__(self, environ, start_response):
-        def to_native(x, charset=sys.getdefaultencoding(), errors='strict'):
-            if x is None or isinstance(x, str):
-                return x
-            return x.decode(charset, errors)
-
-        def fix_headers(status, headers, exc_info=None):
-            headers = [(to_native(key), value) for key, value in headers]
-            return start_response(status, headers, exc_info)
-
-        return self.app(environ, fix_headers)
-
-
 class Request(_Request):
+
     # Assuming UTF-8, comments with 65536 characters would consume
     # 128 kb memory. The remaining 128 kb cover additional parameters
     # and WSGI headers.

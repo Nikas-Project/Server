@@ -1,19 +1,16 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals
 
 import pkg_resources
-
 dist = pkg_resources.get_distribution("nikas")
 
-# check if exectuable is `nikas` and gevent is available
+# check if executable is `nikas` and gevent is available
 import sys
 
 if sys.argv[0].startswith("nikas"):
     try:
         import gevent.monkey
-
         gevent.monkey.patch_all()
     except ImportError:
         pass
@@ -26,10 +23,6 @@ import tempfile
 from os.path import dirname, join
 from argparse import ArgumentParser
 from functools import partial, reduce
-
-import pkg_resources
-
-werkzeug = pkg_resources.get_distribution("werkzeug")
 
 from itsdangerous import URLSafeTimedSerializer
 
@@ -90,7 +83,7 @@ class Nikas(object):
             elif backend in ("smtp", "SMTP"):
                 smtp_backend = True
             else:
-                logger.warn("unknown notification backend '%s'", backend)
+                logger.warning("unknown notification backend '%s'", backend)
         if smtp_backend or conf.getboolean("general", "reply-notifications"):
             subscribers.append(SMTP(self))
 
@@ -99,6 +92,7 @@ class Nikas(object):
         self.urls = Map()
 
         views.Info(self)
+        views.Metrics(self)
         comments.API(self, self.hasher)
 
     def render(self, text):
@@ -159,6 +153,10 @@ def make_app(conf=None, threading=True, multiprocessing=False, uwsgi=False):
 
     nikas = App(conf)
 
+    if not any(conf.getiter("general", "host")):
+        logger.error("No website(s) configured, Nikas won't work.")
+        sys.exit(1)
+
     # check HTTP server connection
     for host in conf.getiter("general", "host"):
         with http.curl('HEAD', host, '/', 5) as resp:
@@ -174,7 +172,7 @@ def make_app(conf=None, threading=True, multiprocessing=False, uwsgi=False):
 
     if nikas.conf.getboolean("server", "profile"):
         wrapper.append(partial(ProfilerMiddleware,
-                               sort_by=("cumulative",), restrictions=("nikas/(?!lib)", 10)))
+                               sort_by=("cumulative", ), restrictions=("nikas/(?!lib)", 10)))
 
     wrapper.append(partial(SharedDataMiddleware, exports={
         '/js': join(dirname(__file__), 'js/'),
@@ -190,9 +188,6 @@ def make_app(conf=None, threading=True, multiprocessing=False, uwsgi=False):
 
     wrapper.extend([wsgi.SubURI, ProxyFixCustom])
 
-    if werkzeug.version.startswith("0.8"):
-        wrapper.append(wsgi.LegacyWerkzeugMiddleware)
-
     return reduce(lambda x, f: f(x), wrapper, nikas)
 
 
@@ -202,8 +197,8 @@ def main():
 
     parser.add_argument('--version', action='version',
                         version='%(prog)s ' + dist.version)
-    parser.add_argument("-c", dest="conf", default="/etc/nikas.conf",
-                        metavar="/etc/nikas.conf", help="set configuration file")
+    parser.add_argument("-c", dest="conf", default="/etc/nikas.cfg",
+                        metavar="/etc/nikas.cfg", help="set configuration file")
 
     imprt = subparser.add_parser('import', help="import Disqus XML export")
     imprt.add_argument("dump", metavar="FILE")
@@ -214,12 +209,11 @@ def main():
     imprt.add_argument("--empty-id", dest="empty_id", action="store_true",
                        help="workaround for weird Disqus XML exports, #135")
 
-    # run Nikas as stand-alone server
+    # run nikas as stand-alone server
     subparser.add_parser("run", help="run server")
 
     args = parser.parse_args()
-    conf = config.load(
-        join(dist.location, dist.project_name, "defaults.ini"), args.conf)
+    conf = config.load(config.default_file(), args.conf)
 
     if args.command == "import":
         conf.set("guard", "enabled", "off")
@@ -243,10 +237,6 @@ def main():
 
         logger.propagate = False
         logging.getLogger("werkzeug").propagate = False
-
-    if not any(conf.getiter("general", "host")):
-        logger.error("No website(s) configured, Nikas won't work.")
-        sys.exit(1)
 
     if conf.get("server", "listen").startswith("http://"):
         host, port, _ = urlsplit(conf.get("server", "listen"))
