@@ -19,7 +19,7 @@ init:
 	npm install
 
 flakes:
-    flake8 nikas/ --count --max-line-length=127 --show-source --statistics
+	flake8 nikas/ --count --max-line-length=127 --show-source --statistics
 
 nikas/js/%.min.js: $(NIKAS_JS_SRC)
 	npm run build-prod
