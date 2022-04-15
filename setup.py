@@ -5,15 +5,13 @@ from pathlib import Path
 from re import sub as re_sub
 from setuptools import setup, find_packages
 
-requires = ['itsdangerous', 'Jinja2', 'misaka>=2.0,<3.0', 'html5lib',
-            'werkzeug>=1.0', 'bleach', 'Flask-Caching>=1.9', 'Flask', 'argon2-cffi']
+with open('requirements.txt', 'r') as reqs:
+    requires = reqs.readlines()
+
 tests_require = ['pytest', 'pytest-cov']
 
-# https://packaging.python.org/en/latest/guides/making-a-pypi-friendly-readme/
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
-# Filter out "License" section since license already displayed in PyPi sidebar
-# Remember to keep this in sync with changes to README!
 long_description = re_sub(r"\n## License\n.*LICENSE.*\n", "", long_description)
 
 setup(
@@ -43,6 +41,7 @@ setup(
         "Programming Language :: Python :: 3.10",
     ],
     install_requires=requires,
+    setup_requires=["cffi>=1.15.0", "argon2-cffi>=21.3.0"],
     tests_require=tests_require,
     entry_points={
         'console_scripts':

@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import division, print_function, unicode_literals
-
 import functools
 import io
 import json
@@ -12,27 +10,16 @@ import sys
 import textwrap
 from collections import defaultdict
 from time import mktime, strptime, time
-
-from nikas.compat import string_types
-from nikas.utils import anonymize
-
-try:
-    input = raw_input
-except NameError:
-    pass
-
-try:
-    from urlparse import urlparse
-except ImportError:
-    from urllib.parse import urlparse
-
+from urllib.parse import urlparse
 from xml.etree import ElementTree
+
+from nikas.utils import anonymize
 
 logger = logging.getLogger("nikas")
 
 
 def strip(val):
-    if isinstance(val, string_types):
+    if isinstance(val, (str, )):
         return val.strip()
     return val
 
@@ -86,6 +73,7 @@ class Disqus(object):
                 Disqus.ns + 'title').text.strip())
 
         for item in sorted(posts, key=lambda k: k['created']):
+
             dsq_id = item.pop('dsq:id')
             item['parent'] = remap.get(item.pop('dsq:parent', None))
             rv = self.db.comments.add(path, item)
@@ -173,7 +161,7 @@ class WordPress(object):
                 self.ns = WordPress.ns.replace("1.0", m.group(1))
                 break
         else:
-            logger.warn("No WXR namespace found, assuming 1.0")
+            logger.warning("No WXR namespace found, assuming 1.0")
 
     def insert(self, thread):
 
@@ -325,6 +313,7 @@ class Generic(object):
 
 
 def autodetect(peek):
+
     if 'xmlns="http://disqus.com' in peek:
         return Disqus
 
