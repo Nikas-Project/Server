@@ -1,14 +1,13 @@
 # -*- encoding: utf-8 -*-
 
+import sqlite3
 import logging
 import operator
 import os.path
-import sqlite3
+
 from collections import defaultdict
 
 logger = logging.getLogger("nikas")
-
-from nikas.compat import buffer
 
 from nikas.db.comments import Comments
 from nikas.db.threads import Threads
@@ -18,7 +17,6 @@ from nikas.db.preferences import Preferences
 
 class SQLite3:
     """DB-dependend wrapper around SQLite3.
-
     Runs migration if `user_version` is older than `MAX_VERSION` and register
     a trigger for automated orphan removal.
     """
@@ -75,10 +73,10 @@ class SQLite3:
         # which added older commenter's ip addresses to the current voters blob
         if self.version == 0:
             from nikas.utils import Bloomfilter
-            bf = buffer(Bloomfilter(iterable=["127.0.0.0"]).array)
+            bf = memoryview(Bloomfilter(iterable=["127.0.0.0"]).array)
 
             with sqlite3.connect(self.path) as con:
-                con.execute('UPDATE comments SET voters=?', (bf,))
+                con.execute('UPDATE comments SET voters=?', (bf, ))
                 con.execute('PRAGMA user_version = 1')
                 logger.info("%i rows changed", con.total_changes)
 
@@ -110,7 +108,7 @@ class SQLite3:
 
                     while ids:
                         rv = first(con.execute(
-                            "SELECT id FROM comments WHERE parent=?", (ids.pop(),)))
+                            "SELECT id FROM comments WHERE parent=?", (ids.pop(), )))
                         ids.extend(rv)
                         flattened[id].update(set(rv))
 

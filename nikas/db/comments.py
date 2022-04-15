@@ -3,7 +3,6 @@
 import logging
 import time
 
-from nikas.compat import buffer
 from nikas.utils import Bloomfilter
 
 logger = logging.getLogger("nikas")
@@ -12,7 +11,7 @@ MAX_LIKES_AND_DISLIKES = 142
 
 
 class Comments:
-    """Hopefully DB-independend SQL to store, modify and retrieve all
+    """Hopefully DB-independent SQL to store, modify and retrieve all
     comment-related actions.  Here's a short scheme overview:
 
         | tid (thread id) | id (comment id) | parent | ... | voters | remote_addr |
@@ -26,7 +25,7 @@ class Comments:
 
     fields = ['tid', 'id', 'parent', 'created', 'modified',
               'mode',  # status of the comment 1 = valid, 2 = pending,
-              # 4 = soft-deleted (cannot hard delete because of replies)
+                       # 4 = soft-deleted (cannot hard delete because of replies)
               'remote_addr', 'text', 'author', 'email', 'website',
               'likes', 'dislikes', 'voters', 'notification']
 
@@ -68,14 +67,14 @@ class Comments:
             'FROM threads WHERE threads.uri = ?;'], (
             c.get('parent'),
             c.get('created') or time.time(), None, c["mode"], c['remote_addr'],
-            c['text'], c.get('author'), c.get('email'), c.get('website'), buffer(
+            c['text'], c.get('author'), c.get('email'), c.get('website'), memoryview(
                 Bloomfilter(iterable=[c['remote_addr']]).array), c.get('notification'),
             uri)
         )
 
         return dict(zip(Comments.fields, self.db.execute(
             'SELECT *, MAX(c.id) FROM comments AS c INNER JOIN threads ON threads.uri = ?',
-            (uri,)).fetchone()))
+            (uri, )).fetchone()))
 
     def activate(self, id):
         """
@@ -84,7 +83,7 @@ class Comments:
         self.db.execute([
             'UPDATE comments SET',
             '    mode=1',
-            'WHERE id=? AND mode=2'], (id,))
+            'WHERE id=? AND mode=2'], (id, ))
 
     def is_previously_approved_author(self, email):
         """
@@ -133,7 +132,7 @@ class Comments:
         and values.
         """
         rv = self.db.execute(
-            'SELECT * FROM comments WHERE id=?', (id,)).fetchone()
+            'SELECT * FROM comments WHERE id=?', (id, )).fetchone()
         if rv:
             return dict(zip(Comments.fields, rv))
 
@@ -162,9 +161,9 @@ class Comments:
         sql_threads_fields = ', '.join(['threads.' + f
                                         for f in fields_threads])
         sql = ['SELECT ' + sql_comments_fields + ', ' + sql_threads_fields + ' '
-                                                                             'FROM comments INNER JOIN threads '
-                                                                             'ON comments.tid=threads.id '
-                                                                             'WHERE comments.mode = ? ']
+               'FROM comments INNER JOIN threads '
+               'ON comments.tid=threads.id '
+               'WHERE comments.mode = ? ']
         sql_args = [mode]
 
         if parent != 'any':
@@ -257,10 +256,10 @@ class Comments:
         effects."""
 
         refs = self.db.execute(
-            'SELECT * FROM comments WHERE parent=?', (id,)).fetchone()
+            'SELECT * FROM comments WHERE parent=?', (id, )).fetchone()
 
         if refs is None:
-            self.db.execute('DELETE FROM comments WHERE id=?', (id,))
+            self.db.execute('DELETE FROM comments WHERE id=?', (id, ))
             self._remove_stale()
             return None
 
@@ -279,7 +278,7 @@ class Comments:
         same ip address are ignored as well)."""
 
         rv = self.db.execute(
-            'SELECT likes, dislikes, voters FROM comments WHERE id=?', (id,)) \
+            'SELECT likes, dislikes, voters FROM comments WHERE id=?', (id, )) \
             .fetchone()
 
         if rv is None:
@@ -288,8 +287,7 @@ class Comments:
         operation_name = 'Upvote' if upvote else 'Downvote'
         likes, dislikes, voters = rv
         if likes + dislikes >= MAX_LIKES_AND_DISLIKES:
-            message = '{} denied due to a "likes + dislikes" total too high ({} >= {})'.format(operation_name, likes + dislikes,
-                                                                                               MAX_LIKES_AND_DISLIKES)
+            message = '{} denied due to a "likes + dislikes" total too high ({} >= {})'.format(operation_name, likes + dislikes, MAX_LIKES_AND_DISLIKES)
             logger.debug('Comments.vote(id=%s): %s', id, message)
             return {'likes': likes, 'dislikes': dislikes, 'message': message}
 
@@ -304,7 +302,7 @@ class Comments:
             'UPDATE comments SET',
             '    likes = likes + 1,' if upvote else 'dislikes = dislikes + 1,',
             '    voters = ?'
-            'WHERE id=?;'], (buffer(bf.array), id))
+            'WHERE id=?;'], (memoryview(bf.array), id))
 
         if upvote:
             return {'likes': likes + 1, 'dislikes': dislikes}
