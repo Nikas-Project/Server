@@ -1,26 +1,24 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-import sys
-from os import path
-
+from pathlib import Path
+from re import sub as re_sub
 from setuptools import setup, find_packages
 
-if sys.version_info < (3,):
-    raise SystemExit("Python 2 is not supported.")
-elif (3, 0) <= sys.version_info < (3, 4):
-    raise SystemExit("Python 3 versions < 3.4 are not supported.")
+requires = ['itsdangerous', 'Jinja2', 'misaka>=2.0,<3.0', 'html5lib',
+            'werkzeug>=1.0', 'bleach', 'Flask-Caching>=1.9', 'Flask', 'argon2-cffi']
+tests_require = ['pytest', 'pytest-cov']
 
-with open('requirements.txt', 'r') as reqs:
-    requires = reqs.readlines()
-
-this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+# https://packaging.python.org/en/latest/guides/making-a-pypi-friendly-readme/
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
+# Filter out "License" section since license already displayed in PyPi sidebar
+# Remember to keep this in sync with changes to README!
+long_description = re_sub(r"\n## License\n.*LICENSE.*\n", "", long_description)
 
 setup(
     name='nikas',
-    version='1.1.9',
+    version='2.0.0',
     author='Arash Hatami',
     author_email='hatamiarash7@gmail.com',
     packages=find_packages(),
@@ -31,21 +29,23 @@ setup(
     description='The first persian comment system ',
     long_description=long_description,
     long_description_content_type='text/markdown',
+    python_requires='>=3.6',
     classifiers=[
         "Development Status :: 4 - Beta",
         "Topic :: Internet",
         "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8"
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     install_requires=requires,
-    setup_requires=["cffi>=1.15.0", "argon2-cffi>=21.3.0", "nose>=1.0"],
+    tests_require=tests_require,
     entry_points={
         'console_scripts':
             ['nikas = nikas:main'],
-    }
+    },
 )
