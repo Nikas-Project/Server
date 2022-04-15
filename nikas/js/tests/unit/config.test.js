@@ -2,11 +2,11 @@
 
 test("Client configuration - no languages", () => {
     // Mock navigator.languages = []
-    global.languages = jest.spyOn(navigator, "languages", "get")
+    global.languages = jest.spyOn(navigator, "languages", "get");
     global.languages.mockReturnValue([]);
 
     // Mock navigator.language = null
-    global.language = jest.spyOn(navigator, "language", "get")
+    global.language = jest.spyOn(navigator, "language", "get");
     global.language.mockReturnValue(null);
 
     let config = require("app/config");

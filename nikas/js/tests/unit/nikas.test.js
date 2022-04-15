@@ -1,9 +1,9 @@
 "use strict";
 
-test('Create Postbox', () => {
+test("Create Postbox", () => {
     // Set up our document body
     document.body.innerHTML =
-        '<div id=nikas-thread></div>' +
+        "<div id=nikas-thread></div>" +
         // Note: `src` and `data-nikas` need to be set,
         // else `api` fails to initialize!
         '<script src="http://nikas.api/js/embed.min.js" data-nikas="/"></script>';
@@ -22,7 +22,7 @@ test('Create Postbox', () => {
     template.set("pluralize", i18n.pluralize);
     template.set("svg", svg);
 
-    var nikas_thread = $('#nikas-thread');
+    var nikas_thread = $("#nikas-thread");
     nikas_thread.append('<div id="nikas-root"></div>');
     nikas_thread.append(new nikas.Postbox(null));
 
