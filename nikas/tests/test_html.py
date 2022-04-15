@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
-import textwrap
 import unittest
+import textwrap
 
 from nikas import config
 from nikas.utils import html
@@ -29,7 +29,7 @@ class TestHTML(unittest.TestCase):
             self.assertEqual(convert(input), expected)
 
     def test_github_flavoured_markdown(self):
-        convert = html.Markdown(extensions=("fenced-code",))
+        convert = html.Markdown(extensions=("fenced-code", ))
 
         # without lang
         _in = textwrap.dedent("""\
@@ -98,3 +98,30 @@ class TestHTML(unittest.TestCase):
         self.assertIn(renderer("http://example.org/ and sms:+1234567890"),
                       ['<p><a href="http://example.org/" rel="nofollow noopener">http://example.org/</a> and sms:+1234567890</p>',
                        '<p><a rel="nofollow noopener" href="http://example.org/">http://example.org/</a> and sms:+1234567890</p>'])
+
+    def test_sanitized_render_extensions(self):
+        """Options should be normalized from both dashed-case or snake_case (legacy)"""
+        conf = config.new({
+            "markup": {
+                "options": "no_intra_emphasis",  # Deliberately snake_case
+                "flags": "",
+                "allowed-elements": "",
+                "allowed-attributes": ""
+            }
+        })
+        renderer = html.Markup(conf.section("markup")).render
+        self.assertEqual(renderer("foo_bar_baz"), '<p>foo_bar_baz</p>')
+
+        conf.set("markup", "options", "no-intra-emphasis")  # dashed-case
+        renderer = html.Markup(conf.section("markup")).render
+        self.assertEqual(renderer("foo_bar_baz"), '<p>foo_bar_baz</p>')
+
+    def test_code_blocks(self):
+        convert = html.Markdown(extensions=('fenced-code',))
+        examples = [
+            ("```\nThis is a code-fence. <hello>\n```", "<p><pre><code>This is a code-fence. &lt;hello&gt;\n</code></pre></p>"),
+            ("```c++\nThis is a code-fence. <hello>\n```", "<p><pre><code class=\"c++\">This is a code-fence. &lt;hello&gt;\n</code></pre></p>"),
+            ("    This is a four-character indent. <hello>", "<p><pre><code>This is a four-character indent. &lt;hello&gt;\n</code></pre></p>")]
+
+        for (input, expected) in examples:
+            self.assertEqual(convert(input), expected)
