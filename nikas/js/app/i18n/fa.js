@@ -1,4 +1,4 @@
-define({
+module.exports = {
     "postbox-text": "متن نظر را اینجا وارد کنید - حداقل ۳ حرف",
     "postbox-author": "نام (اختیاری)",
     "postbox-email": "آدرس ایمیل (اختیاری)",
@@ -31,4 +31,4 @@ define({
     "date-week": "هفته پیش\n{{ n }} هفته پیش",
     "date-month": "ماه پیش\n{{ n }} ماه پیش",
     "date-year": "سال پیش\n{{ n }} سال پیش",
-});
+};
