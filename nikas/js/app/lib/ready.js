@@ -9,14 +9,16 @@ var once = function (callback) {
 };
 
 var domready = function (callback) {
-
     // HTML5 standard to listen for dom readiness
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener("DOMContentLoaded", function () {
         once(callback);
     });
 
     // if dom is already ready, just run callback
-    if (document.readyState === "interactive" || document.readyState === "complete") {
+    if (
+        document.readyState === "interactive" ||
+        document.readyState === "complete"
+    ) {
         once(callback);
     }
 };
