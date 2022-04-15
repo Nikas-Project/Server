@@ -1,13 +1,16 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import collections
-import functools
-import json  # json.dumps to put URL in <script>
 import re
 import time
+import functools
+import json  # json.dumps to put URL in <script>
+
+from configparser import NoOptionError
 from datetime import datetime, timedelta
+from html import escape
+from io import BytesIO as StringIO
+from urllib.parse import unquote, urlparse
 from xml.etree import ElementTree as ET
 from argon2 import PasswordHasher
 
@@ -20,32 +23,14 @@ from werkzeug.wrappers import Response
 from werkzeug.wsgi import get_current_url
 
 from nikas import utils, local
-from nikas.compat import text_type as str
 from nikas.utils import (http, parse,
                          JSONResponse as JSON, XMLResponse as XML,
                          render_template)
-from nikas.utils.hash import md5
-from nikas.utils.hash import sha1
+from nikas.utils.hash import md5, sha1
 from nikas.views import requires
 
-try:
-    from cgi import escape
-except ImportError:
-    from html import escape
-try:
-    from urlparse import urlparse
-except ImportError:
-    from urllib.parse import urlparse
-try:
-    from urllib import unquote
-except ImportError:
-    from urllib.parse import unquote
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import BytesIO as StringIO
 
-# from Django appearently, looks good to me *duck*
+# from Django apparently, looks good to me *duck*
 __url_re = re.compile(
     r'^'
     r'(https?://)?'
@@ -90,6 +75,7 @@ def xhr(func):
     """
 
     def dec(self, env, req, *args, **kwargs):
+
         if req.content_type and not req.content_type.startswith("application/json"):
             raise Forbidden("CSRF")
         return func(self, env, req, *args, **kwargs)
@@ -98,6 +84,7 @@ def xhr(func):
 
 
 class API(object):
+
     FIELDS = set(['id', 'parent', 'text', 'author', 'website',
                   'mode', 'created', 'modified', 'likes', 'dislikes', 'hash', 'gravatar_image', 'notification'])
 
@@ -136,8 +123,25 @@ class API(object):
         self.conf = nikas.conf.section("general")
         self.moderated = nikas.conf.getboolean("moderation", "enabled")
         # this is similar to the wordpress setting "Comment author must have a previously approved comment"
-        self.approve_if_email_previously_approved = nikas.conf.getboolean("moderation", "approve-if-email-previously-approved")
-        self.trusted_proxies = list(nikas.conf.getiter("server", "trusted-proxies"))
+        try:
+            self.approve_if_email_previously_approved = nikas.conf.getboolean("moderation", "approve-if-email-previously-approved")
+        except NoOptionError:
+            self.approve_if_email_previously_approved = False
+        try:
+            self.trusted_proxies = list(nikas.conf.getiter("server", "trusted-proxies"))
+        except NoOptionError:
+            self.trusted_proxies = []
+
+        # These configuration records can be read out by client
+        self.public_conf = {}
+        self.public_conf["reply-to-self"] = nikas.conf.getboolean("guard", "reply-to-self")
+        self.public_conf["require-email"] = nikas.conf.getboolean("guard", "require-email")
+        self.public_conf["require-author"] = nikas.conf.getboolean("guard", "require-author")
+        self.public_conf["reply-notifications"] = nikas.conf.getboolean("general", "reply-notifications")
+        self.public_conf["gravatar"] = nikas.conf.getboolean("general", "gravatar")
+
+        if self.public_conf["gravatar"]:
+            self.public_conf["avatar"] = False
 
         self.guard = nikas.db.guard
         self.threads = nikas.db.threads
@@ -181,7 +185,7 @@ class API(object):
     """
     @apiDefine plainParam
     @apiParam {number=0,1} [plain]
-        Iff set to `1`, the plain text entered by the user will be returned in the comments’ `text` attribute (instead of the rendered markdown).
+        If set to `1`, the plain text entered by the user will be returned in the comments’ `text` attribute (instead of the rendered markdown).
     """
     """
     @apiDefine commentResponse
@@ -227,7 +231,7 @@ class API(object):
     @apiParam {string} [website]
         The comment’s author’s website’s url.
     @apiParam {number} [parent]
-        The parent comment’s id iff the new comment is a response to an existing comment.
+        The parent comment’s id if the new comment is a response to an existing comment.
 
     @apiExample {curl} Create a reply to comment with id 15:
         curl 'https://comments.example.com/new?uri=/thread/' -d '{"text": "Stop saying that! *nikas*!", "author": "Max Rant", "email": "rant@example.com", "parent": 15}' -H 'Content-Type: application/json' -c cookie.txt
@@ -249,7 +253,6 @@ class API(object):
             "likes": 0
         }
     """
-
     @xhr
     @requires(str, 'uri')
     def new(self, environ, request, uri):
@@ -311,10 +314,9 @@ class API(object):
         # notify extension, that the new comment has been successfully saved
         self.signal("comments.new:after-save", thread, rv)
 
-        cookie = functools.partial(dump_cookie,
-                                   value=self.nikas.sign(
-                                       [rv["id"], sha1(rv["text"])]),
-                                   max_age=self.conf.getint('max-age'))
+        cookie = self.create_cookie(
+            value=self.nikas.sign([rv["id"], sha1(rv["text"])]),
+            max_age=self.conf.getint('max-age'))
 
         rv["text"] = self.nikas.render(rv["text"])
         rv["hash"] = self.hash(rv['email'] or rv['remote_addr'])
@@ -350,16 +352,36 @@ class API(object):
                                 if addr not in self.trusted_proxies), remote_addr)
         return utils.anonymize(str(remote_addr))
 
+    def create_cookie(self, **kwargs):
+        """
+        Setting cookies to SameSite=None requires "Secure" attribute.
+        For http-only, we need to override the dump_cookie() default SameSite=None
+        or the cookie will be rejected.
+        https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite#samesitenone_requires_secure
+        """
+        nikas_host_script = self.nikas.conf.get("server", "public-endpoint") or local.host
+        samesite = self.nikas.conf.get("server", "samesite")
+        if nikas_host_script.startswith("https://"):
+            secure = True
+            samesite = samesite or "None"
+        else:
+            secure = False
+            samesite = samesite or "Lax"
+        return functools.partial(dump_cookie, **kwargs,
+                                 secure=secure, samesite=samesite)
+
     """
     @api {get} /id/:id view
     @apiGroup Comment
+    @apiDescription
+        View an existing comment, for the purpose of editing. Editing a comment is only possible for a short period of time after it was created and only if the requestor has a valid cookie for it. See the [nikas server documentation](https://posativ.org/nikas/docs/configuration/server) for details.
 
     @apiParam {number} id
         The id of the comment to view.
     @apiUse plainParam
 
     @apiExample {curl} View the comment with id 4:
-        curl 'https://comments.example.com/id/4'
+        curl 'https://comments.example.com/id/4' -b cookie.txt
 
     @apiUse commentResponse
 
@@ -383,6 +405,11 @@ class API(object):
         rv = self.comments.get(id)
         if rv is None:
             raise NotFound
+
+        try:
+            self.nikas.unsign(request.cookies.get(str(id), ''))
+        except (SignatureExpired, BadSignature):
+            raise Forbidden
 
         for key in set(rv.keys()) - API.FIELDS:
             rv.pop(key)
@@ -427,7 +454,6 @@ class API(object):
             "likes": 0
         }
     """
-
     @xhr
     def edit(self, environ, request, id):
 
@@ -461,10 +487,9 @@ class API(object):
 
         self.signal("comments.edit", rv)
 
-        cookie = functools.partial(dump_cookie,
-                                   value=self.nikas.sign(
-                                       [rv["id"], sha1(rv["text"])]),
-                                   max_age=self.conf.getint('max-age'))
+        cookie = self.create_cookie(
+            value=self.nikas.sign([rv["id"], sha1(rv["text"])]),
+            max_age=self.conf.getint('max-age'))
 
         rv["text"] = self.nikas.render(rv["text"])
 
@@ -477,7 +502,7 @@ class API(object):
     @api {delete} '/id/:id' delete
     @apiGroup Comment
     @apiDescription
-        Delte an existing comment. Deleting a comment is only possible for a short period of time after it was created and only if the requestor has a valid cookie for it. See the [nikas server documentation](https://posativ.org/nikas/docs/configuration/server) for details.
+        Delete an existing comment. Deleting a comment is only possible for a short period of time after it was created and only if the requestor has a valid cookie for it. See the [nikas server documentation](https://posativ.org/nikas/docs/configuration/server) for details.
 
     @apiParam {number} id
         Id of the comment to delete.
@@ -488,7 +513,6 @@ class API(object):
     @apiSuccessExample Successful deletion returns null:
         null
     """
-
     @xhr
     def delete(self, environ, request, id, key=None):
 
@@ -522,13 +546,14 @@ class API(object):
         self.signal("comments.delete", id)
 
         resp = JSON(rv, 200)
-        cookie = functools.partial(dump_cookie, expires=0, max_age=0)
+        cookie = self.create_cookie(expires=0, max_age=0)
+
         resp.headers.add("Set-Cookie", cookie(str(id)))
         resp.headers.add("X-Set-Cookie", cookie("nikas-%i" % id))
         return resp
 
     """
-    @api {get} /id/:id/:email/key unsubscribe
+    @api {get} /id/:id/unsubscribe/:email/:key unsubscribe
     @apiGroup Comment
     @apiDescription
         Opt out from getting any further email notifications about replies to a particular comment. In order to use this endpoint, the requestor needs a `key` that is usually obtained from an email sent out by nikas.
@@ -546,25 +571,22 @@ class API(object):
     @apiSuccessExample {html} Using GET:
         &lt;!DOCTYPE html&gt;
         &lt;html&gt;
-            &lt;head&gt;
-                &lt;script&gt;
-                    if (confirm('Delete: Are you sure?')) {
-                        xhr = new XMLHttpRequest;
-                        xhr.open('POST', window.location.href);
-                        xhr.send(null);
-                    }
-                &lt;/script&gt;
-
-    @apiSuccessExample Using POST:
-        Yo
+            &lt;head&gtSuccessfully unsubscribed&lt;/head&gt;
+            &lt;body&gt;
+              &lt;p&gt;You have been unsubscribed from replies in the given conversation.&lt;/p&gt;
+            &lt;/body&gt;
+        &lt;/html&gt;
     """
 
     def unsubscribe(self, environ, request, id, email, key):
         email = unquote(email)
 
         try:
-            rv = self.nikas.unsign(key, max_age=2 ** 32)
+            rv = self.nikas.unsign(key, max_age=2**32)
         except (BadSignature, SignatureExpired):
+            raise Forbidden
+
+        if not isinstance(rv, list) or len(rv) != 2:
             raise Forbidden
 
         if rv[0] != 'unsubscribe' or rv[1] != email:
@@ -592,7 +614,7 @@ class API(object):
         return Response(modal, 200, content_type="text/html")
 
     """
-    @api {post} /id/:id/:action/key moderate
+    @api {post} /id/:id/:action/:key moderate
     @apiGroup Comment
     @apiDescription
         Publish or delete a comment that is in the moderation queue (mode `2`). In order to use this endpoint, the requestor needs a `key` that is usually obtained from an email sent out by nikas.
@@ -601,7 +623,7 @@ class API(object):
 
     @apiParam {number} id
         The id of the comment to moderate.
-    @apiParam {string=activate,delete} action
+    @apiParam {string=activate,edit,delete} action
         `activate` to publish the comment (change its mode to `1`).
         `delete` to delete the comment
     @apiParam {string} key
@@ -626,21 +648,21 @@ class API(object):
                 &lt;/script&gt;
 
     @apiSuccessExample Using POST:
-        Yo
+        Comment has been deleted
     """
 
     def moderate(self, environ, request, id, action, key):
         try:
-            id = self.nikas.unsign(key, max_age=2 ** 32)
+            id = self.nikas.unsign(key, max_age=2**32)
         except (BadSignature, SignatureExpired):
             raise Forbidden
 
         item = self.comments.get(id)
-        thread = self.threads.get(item['tid'])
-        link = local("origin") + thread["uri"] + "#nikas-%i" % item["id"]
-
         if item is None:
             raise NotFound
+
+        thread = self.threads.get(item['tid'])
+        link = local("origin") + thread["uri"] + "#nikas-%i" % item["id"]
 
         if request.method == "GET":
             modal = (
@@ -666,7 +688,7 @@ class API(object):
             with self.nikas.lock:
                 self.comments.activate(id)
             self.signal("comments.activate", thread, item)
-            return Response("Yo", 200)
+            return Response("Comment has been activated", 200)
         elif action == "edit":
             data = request.get_json()
             with self.nikas.lock:
@@ -681,91 +703,90 @@ class API(object):
             self.cache.delete(
                 'hash', (item['email'] or item['remote_addr']).encode('utf-8'))
             self.signal("comments.delete", id)
-            return Response("Yo", 200)
+            return Response("Comment has been deleted", 200)
 
-    """
-    @api {get} / get comments
-    @apiGroup Thread
-    @apiDescription Queries the comments of a thread.
+        """
+        @api {get} / get comments
+        @apiGroup Thread
+        @apiDescription Queries the comments of a thread.
 
-    @apiParam {string} uri
-        The URI of thread to get the comments from.
-    @apiParam {number} [parent]
-        Return only comments that are children of the comment with the provided ID.
-    @apiUse plainParam
-    @apiParam {number} [limit]
-        The maximum number of returned top-level comments. Omit for unlimited results.
-    @apiParam {number} [nested_limit]
-        The maximum number of returned nested comments per commint. Omit for unlimited results.
-    @apiParam {number} [after]
-        Includes only comments were added after the provided UNIX timestamp.
+        @apiParam {string} uri
+            The URI of thread to get the comments from.
+        @apiParam {number} [parent]
+            Return only comments that are children of the comment with the provided ID.
+        @apiUse plainParam
+        @apiParam {number} [limit]
+            The maximum number of returned top-level comments. Omit for unlimited results.
+        @apiParam {number} [nested_limit]
+            The maximum number of returned nested comments per comment. Omit for unlimited results.
+        @apiParam {number} [after]
+            Includes only comments were added after the provided UNIX timestamp.
 
-    @apiSuccess {number} total_replies
-        The number of replies if the `limit` parameter was not set. If `after` is set to `X`, this is the number of comments that were created after `X`. So setting `after` may change this value!
-    @apiSuccess {Object[]} replies
-        The list of comments. Each comment also has the `total_replies`, `replies`, `id` and `hidden_replies` properties to represent nested comments.
-    @apiSuccess {number} id
-        Id of the comment `replies` is the list of replies of. `null` for the list of toplevel comments.
-    @apiSuccess {number} hidden_replies
-        The number of comments that were ommited from the results because of the `limit` request parameter. Usually, this will be `total_replies` - `limit`.
+        @apiSuccess {number} total_replies
+            The number of replies if the `limit` parameter was not set. If `after` is set to `X`, this is the number of comments that were created after `X`. So setting `after` may change this value!
+        @apiSuccess {Object[]} replies
+            The list of comments. Each comment also has the `total_replies`, `replies`, `id` and `hidden_replies` properties to represent nested comments.
+        @apiSuccess {number} id
+            Id of the comment `replies` is the list of replies of. `null` for the list of top-level comments.
+        @apiSuccess {number} hidden_replies
+            The number of comments that were omitted from the results because of the `limit` request parameter. Usually, this will be `total_replies` - `limit`.
 
-    @apiExample {curl} Get 2 comments with 5 responses:
-        curl 'https://comments.example.com/?uri=/thread/&limit=2&nested_limit=5'
-    @apiSuccessExample Example reponse:
-        {
-          "total_replies": 14,
-          "replies": [
+        @apiExample {curl} Get 2 comments with 5 responses:
+            curl 'https://comments.example.com/?uri=/thread/&limit=2&nested_limit=5'
+        @apiSuccessExample Example response:
             {
-              "website": null,
-              "author": null,
-              "parent": null,
-              "created": 1464818460.732863,
-              "text": "&lt;p&gt;Hello, World!&lt;/p&gt;",
-              "total_replies": 1,
-              "hidden_replies": 0,
-              "dislikes": 2,
-              "modified": null,
-              "mode": 1,
+              "total_replies": 14,
               "replies": [
                 {
                   "website": null,
                   "author": null,
-                  "parent": 1,
-                  "created": 1464818460.769638,
-                  "text": "&lt;p&gt;Hi, now some Markdown: &lt;em&gt;Italic&lt;/em&gt;, &lt;strong&gt;bold&lt;/strong&gt;, &lt;code&gt;monospace&lt;/code&gt;.&lt;/p&gt;",
+                  "parent": null,
+                  "created": 1464818460.732863,
+                  "text": "&lt;p&gt;Hello, World!&lt;/p&gt;",
+                  "total_replies": 1,
+                  "hidden_replies": 0,
+                  "dislikes": 2,
+                  "modified": null,
+                  "mode": 1,
+                  "replies": [
+                    {
+                      "website": null,
+                      "author": null,
+                      "parent": 1,
+                      "created": 1464818460.769638,
+                      "text": "&lt;p&gt;Hi, now some Markdown: &lt;em&gt;Italic&lt;/em&gt;, &lt;strong&gt;bold&lt;/strong&gt;, &lt;code&gt;monospace&lt;/code&gt;.&lt;/p&gt;",
+                      "dislikes": 0,
+                      "modified": null,
+                      "mode": 1,
+                      "hash": "2af4e1a6c96a",
+                      "id": 2,
+                      "likes": 2
+                    }
+                  ],
+                  "hash": "1cb6cc0309a2",
+                  "id": 1,
+                  "likes": 2
+                },
+                {
+                  "website": null,
+                  "author": null,
+                  "parent": null,
+                  "created": 1464818460.80574,
+                  "text": "&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium at commodi cum deserunt dolore, error fugiat harum incidunt, ipsa ipsum mollitia nam provident rerum sapiente suscipit tempora vitae? Est, qui?&lt;/p&gt;",
+                  "total_replies": 0,
+                  "hidden_replies": 0,
                   "dislikes": 0,
                   "modified": null,
                   "mode": 1,
-                  "hash": "2af4e1a6c96a",
-                  "id": 2,
-                  "likes": 2
-                }
-              ],
-              "hash": "1cb6cc0309a2",
-              "id": 1,
-              "likes": 2
-            },
-            {
-              "website": null,
-              "author": null,
-              "parent": null,
-              "created": 1464818460.80574,
-              "text": "&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium at commodi cum deserunt dolore, error fugiat harum incidunt, ipsa ipsum mollitia nam provident rerum sapiente suscipit tempora vitae? Est, qui?&lt;/p&gt;",
-              "total_replies": 0,
-              "hidden_replies": 0,
-              "dislikes": 0,
-              "modified": null,
-              "mode": 1,
-              "replies": [],
-              "hash": "1cb6cc0309a2",
-              "id": 3,
-              "likes": 0
-            },
-            "id": null,
-            "hidden_replies": 12
-        }
-    """
-
+                  "replies": [],
+                  "hash": "1cb6cc0309a2",
+                  "id": 3,
+                  "likes": 0
+                },
+                "id": null,
+                "hidden_replies": 12
+            }
+        """
     @requires(str, 'uri')
     def fetch(self, environ, request, uri):
 
@@ -814,7 +835,8 @@ class API(object):
             'id': root_id,
             'total_replies': reply_counts[root_id],
             'hidden_replies': reply_counts[root_id] - len(root_list),
-            'replies': self._process_fetched_list(root_list, plain)
+            'replies': self._process_fetched_list(root_list, plain),
+            'config': self.public_conf
         }
         # We are only checking for one level deep comments
         if root_id is None:
@@ -904,7 +926,6 @@ class API(object):
             "dislikes": 2
         }
     """
-
     @xhr
     def like(self, environ, request, id):
 
@@ -931,7 +952,6 @@ class API(object):
             "dislikes": 3
         }
     """
-
     @xhr
     def dislike(self, environ, request, id):
 
@@ -953,7 +973,7 @@ class API(object):
     @api {post} /count count comments
     @apiGroup Thread
     @apiDescription
-        Counts the number of comments on multiple threads. The requestor provides a list of thread uris. The number of comments on each thread is returned as a list, in the same order as the threads were requested. The counts include comments that are reponses to comments.
+        Counts the number of comments on multiple threads. The requestor provides a list of thread uris. The number of comments on each thread is returned as a list, in the same order as the threads were requested. The counts include comments that are responses to comments.
 
     @apiExample {curl} get the count of 5 threads:
         curl 'https://comments.example.com/count' -d '["/blog/firstPost.html", "/blog/controversalPost.html", "/blog/howToCode.html",    "/blog/boringPost.html", "/blog/nikas.html"]
@@ -977,7 +997,6 @@ class API(object):
     @apiDescription
         Provide an Atom feed for the given thread.
     """
-
     @requires(str, 'uri')
     def feed(self, environ, request, uri):
         conf = self.nikas.conf.section("rss")
@@ -1119,9 +1138,8 @@ class API(object):
                 '/admin',
                 get_current_url(env, strip_querystring=True)
             ))
-            cookie = functools.partial(dump_cookie,
-                                       value=self.nikas.sign({"logged": True}),
-                                       expires=datetime.now() + timedelta(1))
+            cookie = self.create_cookie(value=self.nikas.sign({"logged": True}),
+                                        expires=datetime.now() + timedelta(1))
             response.headers.add("Set-Cookie", cookie("admin-session"))
             response.headers.add("X-Set-Cookie", cookie("nikas-admin-session"))
             return response
@@ -1131,9 +1149,8 @@ class API(object):
 
     def logout(self, env, req):
         response = redirect('/admin')
-        cookie = functools.partial(dump_cookie,
-                                   value=self.nikas.sign({"logged": False}),
-                                   expires=0)
+        cookie = self.create_cookie(value=self.nikas.sign({"logged": False}),
+                                    expires=0)
         response.headers.add("Set-Cookie", cookie("admin-session"))
         response.headers.add("X-Set-Cookie", cookie("nikas-admin-session"))
         return response
@@ -1170,7 +1187,6 @@ class API(object):
                                counts=comment_mode_count,
                                order_by=order_by, asc=asc,
                                nikas_host_script=nikas_host_script)
-
     """
     @api {get} /latest latest
     @apiGroup Comment
