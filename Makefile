@@ -1,11 +1,11 @@
 include .env.pypi
 
 NIKAS_JS_SRC := $(shell find nikas/js/app -type f) \
-	       $(shell ls nikas/js/*.js | grep -vE "(min|dev)") \
-	       nikas/js/lib/requirejs-jade/jade.js
+	       $(shell ls nikas/js/*.js | grep -vE "(min|dev)")
 
 NIKAS_JS_DST := nikas/js/embed.min.js nikas/js/embed.dev.js \
-	       nikas/js/count.min.js nikas/js/count.dev.js
+	       nikas/js/count.min.js nikas/js/count.dev.js \
+	       nikas/js/count.dev.js.map nikas/js/embed.dev.js.map
 
 NIKAS_CSS := nikas/css/nikas.css
 
