@@ -1,6 +1,8 @@
 "use strict";
 
-var stderr = function (text) { console.log(text); };
+var stderr = function (text) {
+    console.log(text);
+};
 
 var Promise = function () {
     this.success = [];
@@ -36,7 +38,7 @@ Defer.prototype = {
                 callback(error);
             }, 0);
         });
-    }
+    },
 };
 
 var when = function (obj, func) {
@@ -47,7 +49,9 @@ var when = function (obj, func) {
     }
 };
 
-var defer = function () { return new Defer(); };
+var defer = function () {
+    return new Defer();
+};
 
 module.exports = {
     defer: defer,
