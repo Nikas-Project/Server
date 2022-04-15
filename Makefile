@@ -16,7 +16,7 @@ RJS = r.js
 SASS = sassc
 
 init:
-	npm install
+	npm install -f
 
 flakes:
 	flake8 nikas/ --count --max-line-length=127 --show-source --statistics
