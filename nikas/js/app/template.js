@@ -4,7 +4,7 @@ var tmpl_postbox = require("app/templates/postbox");
 var tmpl_comment = require("app/templates/comment");
 var tmpl_comment_loader = require("app/templates/comment-loader");
 
-"use strict";
+("use strict");
 
 var globals = {},
     templates = {};
@@ -21,7 +21,9 @@ load_tmpl("postbox", tmpl_postbox);
 load_tmpl("comment", tmpl_comment);
 load_tmpl("comment-loader", tmpl_comment_loader);
 
-set("bool", function (arg) { return arg ? true : false; });
+set("bool", function (arg) {
+    return arg ? true : false;
+});
 set("humanize", function (date) {
     if (typeof date !== "object") {
         date = new Date(parseInt(date, 10) * 1000);
@@ -34,19 +36,25 @@ set("datetime", function (date) {
         date = new Date(parseInt(date, 10) * 1000);
     }
 
-    return [
-        date.getUTCFullYear(),
-        utils.pad(date.getUTCMonth(), 2),
-        utils.pad(date.getUTCDay(), 2)
-    ].join("-") + "T" + [
-        utils.pad(date.getUTCHours(), 2),
-        utils.pad(date.getUTCMinutes(), 2),
-        utils.pad(date.getUTCSeconds(), 2)
-    ].join(":") + "Z";
+    return (
+        [
+            date.getUTCFullYear(),
+            utils.pad(date.getUTCMonth(), 2),
+            utils.pad(date.getUTCDay(), 2),
+        ].join("-") +
+        "T" +
+        [
+            utils.pad(date.getUTCHours(), 2),
+            utils.pad(date.getUTCMinutes(), 2),
+            utils.pad(date.getUTCSeconds(), 2),
+        ].join(":") +
+        "Z"
+    );
 });
 
 var render = function (name, locals) {
-    var rv, t = templates[name];
+    var rv,
+        t = templates[name];
     if (!t) {
         throw new Error("Template not found: '" + name + "'");
     }

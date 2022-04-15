@@ -1,11 +1,11 @@
 var utils = require("app/utils");
 
-"use strict";
+("use strict");
 
 var config = {
-    "css": true,
+    css: true,
     "css-url": null,
-    "lang": "",
+    lang: "",
     "default-lang": "en",
     "reply-to-self": false,
     "require-email": false,
@@ -14,14 +14,22 @@ var config = {
     "max-comments-top": "inf",
     "max-comments-nested": 5,
     "reveal-on-click": 5,
-    "gravatar": false,
-    "avatar": true,
+    gravatar: false,
+    avatar: true,
     "avatar-bg": "#f0f0f0",
-    "avatar-fg": ["#9abf88", "#5698c4", "#e279a3", "#9163b6",
-        "#be5168", "#f19670", "#e4bf80", "#447c69"].join(" "),
-    "vote": true,
+    "avatar-fg": [
+        "#9abf88",
+        "#5698c4",
+        "#e279a3",
+        "#9163b6",
+        "#be5168",
+        "#f19670",
+        "#e4bf80",
+        "#447c69",
+    ].join(" "),
+    vote: true,
     "vote-levels": null,
-    "feed": false
+    feed: false,
 };
 
 var js = document.getElementsByTagName("script");
