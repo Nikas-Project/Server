@@ -19,10 +19,10 @@ test("Client configuration - no languages", () => {
      *        - fall back on navigator.userLanguage
      *            - navigator.userLanguage empty
      *              (jsdom doesn't set it)
-     * - config["default-lang"] = "en"
-     * - final manual insertion of "en"
+     * - config["default-lang"] = "fa"
+     * - final manual insertion of "fa"
      */
-    let expected_langs = ["en", "en"];
+    let expected_langs = ["fa", "fa"];
 
     expect(config["langs"]).toStrictEqual(expected_langs);
 });
