@@ -15,8 +15,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        node-version: ["14", "16"]
       fail-fast: false
 
     steps:
@@ -30,10 +31,12 @@ jobs:
           cache: "pip"
           cache-dependency-path: "setup.py"
 
-      - name: Setup NodeJs
+      - name: Setup NodeJS ${{ matrix.node-version }} on ${{ matrix.os }}
         uses: actions/setup-node@v2
         with:
-          node-version: "14.18.2"
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: package.json
 
       - name: Install dependencies
         run: |
@@ -41,6 +44,7 @@ jobs:
           sudo apt-get install -y libxml2-utils libsqlite0 libxml2-utils sqlite openssl ca-certificates tini
           python -m pip install --upgrade pip
           pip install setuptools flake8 pytest pytest-cov wheel twine nose-py3 gunicorn cffi flask
+          touch .env.pypi
 
       - name: Lint with flake8
         run: |
@@ -49,24 +53,21 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-      - name: Run test suite
+      - name: Compile JS stuff
         run: |
-          touch .env.pypi
-          make test
-        env:
-          PYTHONHASHSEED: random
+          npm install
+          make init sass js
 
       - name: Setup development
         run: |
           pip install -e .
           nikas --version
 
-      - name: Compile JS stuff
+      - name: Run test suite
         run: |
-          npm install -g requirejs uglify-js jade bower gulp-cli
-          npm install --save-dev sass gulp node-sass gulp-sass gulp-sourcemaps gulp-autoprefixer fibers
-          touch .env.pypi
-          make init sass js
+          make test
+        env:
+          PYTHONHASHSEED: random
 
   Docker:
     needs: Python
