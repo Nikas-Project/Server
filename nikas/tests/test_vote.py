@@ -6,7 +6,7 @@ import unittest
 
 from werkzeug.wrappers import Response
 
-from nikas import nikas, core, config
+from nikas import Nikas, core, config
 from nikas.utils import http
 
 from fixtures import curl, loads, FakeIP, JSONClient
@@ -25,7 +25,7 @@ class TestVote(unittest.TestCase):
         conf.set("guard", "enabled", "off")
         conf.set("hash", "algorithm", "none")
 
-        class App(nikas, core.Mixin):
+        class App(Nikas, core.Mixin):
             pass
 
         app = App(conf)

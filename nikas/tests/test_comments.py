@@ -10,7 +10,7 @@ from urllib.parse import urlencode
 
 from werkzeug.wrappers import Response
 
-from nikas import nikas, core, config
+from nikas import Nikas, core, config
 from nikas.utils import http
 from nikas.views import comments
 
@@ -29,7 +29,7 @@ class TestComments(unittest.TestCase):
         conf.set("general", "latest-enabled", "true")
         self.conf = conf
 
-        class App(nikas, core.Mixin):
+        class App(Nikas, core.Mixin):
             pass
 
         self.app = App(conf)
@@ -510,7 +510,7 @@ class TestHostDependent(unittest.TestCase):
         conf.set("general", "dbpath", self.path)
         self.conf = conf
 
-        class App(nikas, core.Mixin):
+        class App(Nikas, core.Mixin):
             pass
 
         self.app = App(conf)
@@ -576,7 +576,7 @@ class TestModeratedComments(unittest.TestCase):
         conf.set("guard", "enabled", "off")
         conf.set("hash", "algorithm", "none")
 
-        class App(nikas, core.Mixin):
+        class App(Nikas, core.Mixin):
             pass
 
         self.app = App(conf)
@@ -667,7 +667,7 @@ class TestUnsubscribe(unittest.TestCase):
         conf.set("guard", "enabled", "off")
         conf.set("hash", "algorithm", "none")
 
-        class App(nikas, core.Mixin):
+        class App(Nikas, core.Mixin):
             pass
 
         self.app = App(conf)
@@ -713,7 +713,7 @@ class TestPurgeComments(unittest.TestCase):
         conf.set("guard", "enabled", "off")
         conf.set("hash", "algorithm", "none")
 
-        class App(nikas, core.Mixin):
+        class App(Nikas, core.Mixin):
             pass
 
         self.app = App(conf)

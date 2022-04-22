@@ -10,7 +10,7 @@ class TestConfig(unittest.TestCase):
 
     def test_parser(self):
 
-        parser = config.nikasParser()
+        parser = config.NikasParser()
         parser.read_file(io.StringIO("""
             [foo]
             bar = 1h
@@ -31,6 +31,6 @@ class TestConfig(unittest.TestCase):
         # Strings containing '%' should not be python-interpolated
         self.assertEqual(parser.get("foo", "password"), '%s%%foo')
 
-        # Section.get() should function the same way as plain nikasParser
+        # Section.get() should function the same way as plain NikasParser
         foosection = parser.section("foo")
         self.assertEqual(foosection.get("password"), '%s%%foo')

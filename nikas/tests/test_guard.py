@@ -8,7 +8,7 @@ from werkzeug import __version__
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
-from nikas import nikas, config, core
+from nikas import Nikas, config, core
 from nikas.utils import http
 
 from fixtures import curl, FakeIP
@@ -41,7 +41,7 @@ class TestGuard(unittest.TestCase):
         conf.set("guard", "require-email", "1" if require_email else "0")
         conf.set("guard", "require-author", "1" if require_author else "0")
 
-        class App(nikas, core.Mixin):
+        class App(Nikas, core.Mixin):
             pass
 
         app = App(conf)
