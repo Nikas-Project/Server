@@ -53,14 +53,15 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
         &:focus {
             border-color: rgba(0, 0, 0, 0.8);
         }
-    }
 
-    .nikas-textarea.nikas-placeholder {
-        color: #757575;
-        direction: rtl;
-        font-size: 14px;
-        display: block;
-        cursor: text;
+        .nikas-placeholder {
+            color: #757575;
+            direction: rtl;
+            font-size: 14px;
+            display: block;
+            cursor: text;
+            transition: all 0.25s;
+        }
     }
 
     input {
