@@ -15,7 +15,7 @@ jobs:
     name: 🚩 Initialize
     runs-on: ubuntu-latest
     outputs:
-      docker_file: ${{ steps.set-docker.outputs.docker }}
+      docker_file: ${{ steps.set-docker.outputs.file }}
 
     steps:
       - name: Cancel previous workflow
@@ -32,9 +32,11 @@ jobs:
         id: set-docker
         run: |
           if [[ "${{ github.base_ref }}" == "master" || "${{ github.ref }}" == "refs/heads/master" ]]; then
-            echo "::set-output name=docker::Dockerfile"
+            echo "Production"
+            echo "::set-output name=file::Dockerfile"
           else
-            echo "::set-output name=docker::Dockerfile.dev"
+            echo "Development"
+            echo "::set-output name=file::Dockerfile.dev"
           fi
 
   Python:
@@ -106,6 +108,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKERFILE: ${{ needs.Initialize.outputs.docker_file }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
 
     steps:
       - name: Checkout
