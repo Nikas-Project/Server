@@ -185,7 +185,6 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
                 text-decoration: none;
                 padding-left: 0;
                 transition: 0.1s linear all;
-                font-size: 14px;
 
                 &:hover {
                     color: #111111 !important;
@@ -195,7 +194,6 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
 
             > a {
                 position: relative;
-                top: 0.2em;
 
                 &.edit {
                     padding-left: 1em;
@@ -223,7 +221,6 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
             .nikas-upvote {
                 svg {
                     position: relative;
-                    top: 0.2em;
                     margin-right: 3px;
                 }
             }
@@ -231,7 +228,6 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
             .nikas-downvote {
                 svg {
                     position: relative;
-                    top: 0.2em;
                     margin-right: 3px;
                 }
             }

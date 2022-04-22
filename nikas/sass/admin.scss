@@ -168,6 +168,10 @@ html .wrapper header {
 
         .pagination {
             float: left;
+
+            input {
+                border-radius: 5px;
+            }
         }
     }
 
@@ -257,6 +261,14 @@ html .wrapper header {
 
         a {
             cursor: pointer;
+            padding-left: 1em;
+            color: #0d6efd;
+            transition: all 0.25s;
+            font-weight: bold;
+
+            &:hover {
+                color: black;
+            }
         }
 
         .hidden {

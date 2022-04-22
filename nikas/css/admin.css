@@ -144,6 +144,9 @@ html .wrapper header .title {
 .outer .filters .pagination {
   float: left;
 }
+.outer .filters .pagination input {
+  border-radius: 5px;
+}
 .outer .order {
   display: flex;
   direction: rtl;
@@ -216,6 +219,13 @@ html .wrapper header .title {
 }
 .nikas-comment .nikas-comment-footer a {
   cursor: pointer;
+  padding-left: 1em;
+  color: #0d6efd;
+  transition: all 0.25s;
+  font-weight: bold;
+}
+.nikas-comment .nikas-comment-footer a:hover {
+  color: black;
 }
 .nikas-comment .nikas-comment-footer .hidden {
   display: none;

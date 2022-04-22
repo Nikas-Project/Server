@@ -39,12 +39,13 @@
 #nikas-thread .nikas-textarea:focus {
   border-color: rgba(0, 0, 0, 0.8);
 }
-#nikas-thread .nikas-textarea.nikas-placeholder {
+#nikas-thread .nikas-textarea .nikas-placeholder {
   color: #757575;
   direction: rtl;
   font-size: 14px;
   display: block;
   cursor: text;
+  transition: all 0.25s;
 }
 #nikas-thread input:focus {
   border-color: rgba(0, 0, 0, 0.8);
@@ -143,7 +144,6 @@
   text-decoration: none;
   padding-left: 0;
   transition: 0.1s linear all;
-  font-size: 14px;
 }
 .nikas-comment > .nikas-text-wrapper > .nikas-comment-footer a:hover {
   color: #111111 !important;
@@ -151,7 +151,6 @@
 }
 .nikas-comment > .nikas-text-wrapper > .nikas-comment-footer > a {
   position: relative;
-  top: 0.2em;
 }
 .nikas-comment > .nikas-text-wrapper > .nikas-comment-footer > a.edit {
   padding-left: 1em;
@@ -170,12 +169,10 @@
 }
 .nikas-comment > .nikas-text-wrapper > .nikas-comment-footer .nikas-upvote svg {
   position: relative;
-  top: 0.2em;
   margin-right: 3px;
 }
 .nikas-comment > .nikas-text-wrapper > .nikas-comment-footer .nikas-downvote svg {
   position: relative;
-  top: 0.2em;
   margin-right: 3px;
 }
 .nikas-comment > .nikas-text-wrapper > .nikas-textarea-wrapper .nikas-textarea {

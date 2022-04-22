@@ -19,8 +19,8 @@ module.exports = {
     "comment-confirm": "تایید",
     "comment-close": "بستن",
     "comment-cancel": "لغو",
-    "comment-deleted": "نظر حذف شد.",
-    "comment-queued": "در انتظار بررسی توسط مدیریت.",
+    "comment-deleted": "نظر حذف شد",
+    "comment-queued": "در انتظار بررسی توسط مدیریت",
     "comment-anonymous": "ناشناس",
     "comment-hidden": "{{ n }} مخفی",
 
