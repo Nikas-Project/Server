@@ -11,10 +11,7 @@ module.exports = [
         devtool: "source-map",
         target: ["web", "es5"],
         resolve: {
-            modules: [
-                path.resolve(__dirname),
-                "node_modules",
-            ],
+            modules: [path.resolve(__dirname), "node_modules"],
         },
         module: {
             rules: [
