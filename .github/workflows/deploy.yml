@@ -11,7 +11,34 @@ env:
   GITHUB_IMAGE_NAME: docker.pkg.github.com/nikas-project/server/server
 
 jobs:
+  Initialize:
+    name: 🚩 Initialize
+    runs-on: ubuntu-latest
+    outputs:
+      docker_file: ${{ steps.set-docker.outputs.docker }}
+
+    steps:
+      - name: Cancel previous workflow
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set Dockerfile
+        id: set-docker
+        run: |
+          if [[ "${{ github.base_ref }}" == "master" || "${{ github.ref }}" == "refs/heads/master" ]]; then
+            echo "::set-output name=docker::Dockerfile"
+          else
+            echo "::set-output name=docker::Dockerfile.dev"
+          fi
+
   Python:
+    needs: Initialize
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -69,9 +96,16 @@ jobs:
         env:
           PYTHONHASHSEED: random
 
+      - name: Deploy to test server
+        run: |
+          python setup.py sdist bdist_wheel
+          TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
+
   Docker:
     needs: Python
     runs-on: ubuntu-latest
+    env:
+      DOCKERFILE: ${{ needs.Initialize.outputs.docker_file }}
 
     steps:
       - name: Checkout
@@ -86,8 +120,15 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
       - name: Build image
-        run: |
-          docker build -t ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }} -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }} --build-arg DATE_CREATED=${{ steps.date.outputs.date }} --build-arg VERSION=${{ env.NIKAS_VERSION }} .
+        run: >
+          docker build
+          -t ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
+          -t ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          -t ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
+          --build-arg DATE_CREATED=${{ steps.date.outputs.date }}
+          --build-arg VERSION=${{ env.NIKAS_VERSION }}
+          -f ${{ env.DOCKERFILE }}
+          .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -107,11 +148,13 @@ jobs:
           sarif_file: "trivy-results.sarif"
 
       - name: Push to Dockerhub
+        if: github.event_name != 'pull_request'
         run: |
           docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
           docker push ${{ env.IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
 
       - name: Push to Github
+        if: github.event_name != 'pull_request'
         run: |
           docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.GITHUB_TOKEN }}" docker.pkg.github.com
           docker push ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
