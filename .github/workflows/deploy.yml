@@ -50,7 +50,9 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
       - name: Run test suite
-        run: make test
+        run: |
+          touch .env.pypi
+          make test
         env:
           PYTHONHASHSEED: random
 
