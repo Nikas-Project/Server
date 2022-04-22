@@ -1,5 +1,3 @@
-/* nikas – Ich schrei sonst!
- */
 var $ = require("app/dom");
 var utils = require("app/utils");
 var config = require("app/config");
@@ -9,7 +7,7 @@ var i18n = require("app/i18n");
 var identicons = require("app/lib/identicons");
 var globals = require("app/globals");
 
-("use strict");
+"use strict";
 
 var editorify = function (el) {
     el = $.htmlify(el);
@@ -30,41 +28,34 @@ var editorify = function (el) {
     });
 
     return el;
-};
+}
 
 var Postbox = function (parent) {
+
     var localStorage = utils.localStorageImpl,
-        el = $.htmlify(
-            template.render("postbox", {
-                author: JSON.parse(localStorage.getItem("nikas-author")),
-                email: JSON.parse(localStorage.getItem("nikas-email")),
-                website: JSON.parse(localStorage.getItem("nikas-website")),
-                preview: "",
-            })
-        );
+        el = $.htmlify(template.render("postbox", {
+            "author": JSON.parse(localStorage.getItem("nikas-author")),
+            "email": JSON.parse(localStorage.getItem("nikas-email")),
+            "website": JSON.parse(localStorage.getItem("nikas-website")),
+            "preview": ''
+        }));
 
     // callback on success (e.g. to toggle the reply button)
-    el.onsuccess = function () {};
+    el.onsuccess = function () { };
 
     el.validate = function () {
-        if (
-            utils.text($(".nikas-textarea", this).innerHTML).length < 3 ||
-            $(".nikas-textarea", this).classList.contains("nikas-placeholder")
-        ) {
+        if (utils.text($(".nikas-textarea", this).innerHTML).length < 3 ||
+            $(".nikas-textarea", this).classList.contains("nikas-placeholder")) {
             $(".nikas-textarea", this).focus();
             return false;
         }
-        if (
-            config["require-email"] &&
-            $("[name='email']", this).value.length <= 0
-        ) {
+        if (config["require-email"] &&
+            $("[name='email']", this).value.length <= 0) {
             $("[name='email']", this).focus();
             return false;
         }
-        if (
-            config["require-author"] &&
-            $("[name='author']", this).value.length <= 0
-        ) {
+        if (config["require-author"] &&
+            $("[name='author']", this).value.length <= 0) {
             $("[name='author']", this).focus();
             return false;
         }
@@ -73,10 +64,7 @@ var Postbox = function (parent) {
 
     // only display notification checkbox if email is filled in
     var email_edit = function () {
-        if (
-            config["reply-notifications"] &&
-            $("[name='email']", el).value.length > 0
-        ) {
+        if (config["reply-notifications"] && $("[name='email']", el).value.length > 0) {
             $(".nikas-notification-section", el).show();
         } else {
             $(".nikas-notification-section", el).hide();
@@ -87,20 +75,14 @@ var Postbox = function (parent) {
 
     // email is not optional if this config parameter is set
     if (config["require-email"]) {
-        $("[name='email']", el).setAttribute(
-            "placeholder",
-            $("[name='email']", el)
-                .getAttribute("placeholder")
-                .replace(/ \(.*\)/, "")
-        );
+        $("[name='email']", el).setAttribute("placeholder",
+            $("[name='email']", el).getAttribute("placeholder").replace(/ \(.*\)/, ""));
     }
 
     // author is not optional if this config parameter is set
     if (config["require-author"]) {
-        $("[name='author']", el).placeholder = $(
-            "[name='author']",
-            el
-        ).placeholder.replace(/ \(.*\)/, "");
+        $("[name='author']", el).placeholder =
+            $("[name='author']", el).placeholder.replace(/ \(.*\)/, "");
     }
 
     // preview function
@@ -108,15 +90,14 @@ var Postbox = function (parent) {
         api.preview(utils.text($(".nikas-textarea", el).innerHTML)).then(
             function (html) {
                 $(".preview .text", el).innerHTML = html;
-                el.classList.add("nikas-preview-mode");
-            }
-        );
+                el.classList.add('nikas-preview-mode');
+            });
     });
 
     // edit function
     var edit = function () {
-        $(".nikas-preview .nikas-text", el).innerHTML = "";
-        el.classList.remove("nikas-preview-mode");
+        $(".nikas-preview .nikas-text", el).innerHTML = '';
+        el.classList.remove('nikas-preview-mode');
     };
     $("[name='edit']", el).on("click", edit);
     $(".nikas-preview", el).on("click", edit);
@@ -138,9 +119,7 @@ var Postbox = function (parent) {
         localStorage.setItem("nikas-website", JSON.stringify(website));
 
         api.create($("#nikas-thread").getAttribute("data-nikas-id"), {
-            author: author,
-            email: email,
-            website: website,
+            author: author, email: email, website: website,
             text: utils.text($(".nikas-textarea", el).innerHTML),
             parent: parent || null,
             title: $("#nikas-thread").getAttribute("data-title") || null,
@@ -165,59 +144,51 @@ var insert_loader = function (comment, lastcreated) {
     var entrypoint;
     if (comment.id === null) {
         entrypoint = $("#nikas-root");
-        comment.name = "null";
+        comment.name = 'null';
     } else {
-        entrypoint = $(
-            "#nikas-" + comment.id + " > .nikas-text-wrapper > .nikas-follow-up"
-        );
+        entrypoint = $("#nikas-" + comment.id + " > .nikas-text-wrapper > .nikas-follow-up");
         comment.name = comment.id;
     }
-    var el = $.htmlify(template.render("comment-loader", { comment: comment }));
+    var el = $.htmlify(template.render("comment-loader", { "comment": comment }));
 
     entrypoint.append(el);
 
     $("a.nikas-load-hidden", el).on("click", function () {
         el.remove();
-        api.fetch(
-            $("#nikas-thread").getAttribute("data-nikas-id"),
-            config["reveal-on-click"],
-            config["max-comments-nested"],
+        api.fetch($("#nikas-thread").getAttribute("data-nikas-id"),
+            config["reveal-on-click"], config["max-comments-nested"],
             comment.id,
-            lastcreated
-        ).then(
-            function (rv) {
-                if (rv.total_replies === 0) {
-                    return;
-                }
-
-                var lastcreated = 0;
-                rv.replies.forEach(function (commentObject) {
-                    insert(commentObject, false);
-                    if (commentObject.created > lastcreated) {
-                        lastcreated = commentObject.created;
+            lastcreated).then(
+                function (rv) {
+                    if (rv.total_replies === 0) {
+                        return;
                     }
-                });
 
-                if (rv.hidden_replies > 0) {
-                    insert_loader(rv, lastcreated);
-                }
-            },
-            function (err) {
-                console.log(err);
-            }
-        );
+                    var lastcreated = 0;
+                    rv.replies.forEach(function (commentObject) {
+                        insert(commentObject, false);
+                        if (commentObject.created > lastcreated) {
+                            lastcreated = commentObject.created;
+                        }
+                    });
+
+                    if (rv.hidden_replies > 0) {
+                        insert_loader(rv, lastcreated);
+                    }
+                },
+                function (err) {
+                    console.log(err);
+                });
     });
 };
 
 var insert = function (comment, scrollIntoView) {
-    var el = $.htmlify(template.render("comment", { comment: comment }));
+    var el = $.htmlify(template.render("comment", { "comment": comment }));
 
     // update datetime every 60 seconds
     var refresh = function () {
         $(".nikas-permalink > time", el).textContent = i18n.ago(
-            globals.offset.localTime(),
-            new Date(parseInt(comment.created, 10) * 1000)
-        );
+            globals.offset.localTime(), new Date(parseInt(comment.created, 10) * 1000));
         setTimeout(refresh, 60 * 1000);
     };
 
@@ -225,20 +196,14 @@ var insert = function (comment, scrollIntoView) {
     refresh();
 
     if (config["avatar"]) {
-        $(".nikas-avatar > svg", el).replace(
-            identicons.generate(comment.hash, 4, 48, config)
-        );
+        $(".nikas-avatar > svg", el).replace(identicons.generate(comment.hash, 4, 48, config));
     }
 
     var entrypoint;
     if (comment.parent === null) {
         entrypoint = $("#nikas-root");
     } else {
-        entrypoint = $(
-            "#nikas-" +
-                comment.parent +
-                " > .nikas-text-wrapper > .nikas-follow-up"
-        );
+        entrypoint = $("#nikas-" + comment.parent + " > .nikas-text-wrapper > .nikas-follow-up");
     }
 
     entrypoint.append(el);
@@ -247,48 +212,29 @@ var insert = function (comment, scrollIntoView) {
         el.scrollIntoView();
     }
 
-    var footer = $(
-            "#nikas-" +
-                comment.id +
-                " > .nikas-text-wrapper > .nikas-comment-footer"
-        ),
-        header = $(
-            "#nikas-" +
-                comment.id +
-                " > .nikas-text-wrapper > .nikas-comment-header"
-        ),
-        text = $(
-            "#nikas-" + comment.id + " > .nikas-text-wrapper > .nikas-text"
-        );
+    var footer = $("#nikas-" + comment.id + " > .nikas-text-wrapper > .nikas-comment-footer"),
+        header = $("#nikas-" + comment.id + " > .nikas-text-wrapper > .nikas-comment-header"),
+        text = $("#nikas-" + comment.id + " > .nikas-text-wrapper > .nikas-text");
 
-    var form = null; // XXX: probably a good place for a closure
-    $("a.nikas-reply", footer).toggle(
-        "click",
+    var form = null;  // XXX: probably a good place for a closure
+    $("a.nikas-reply", footer).toggle("click",
         function (toggler) {
-            form = footer.insertAfter(
-                new Postbox(
-                    comment.parent === null ? comment.id : comment.parent
-                )
-            );
-            form.onsuccess = function () {
-                toggler.next();
-            };
+            form = footer.insertAfter(new Postbox(comment.parent === null ? comment.id : comment.parent));
+            form.onsuccess = function () { toggler.next(); };
             $(".nikas-textarea", form).focus();
-            $("a.nikas-reply", footer).textContent =
-                i18n.translate("comment-close");
+            $("a.nikas-reply", footer).textContent = i18n.translate("comment-close");
         },
         function () {
             form.remove();
-            $("a.nikas-reply", footer).textContent =
-                i18n.translate("comment-reply");
+            $("a.nikas-reply", footer).textContent = i18n.translate("comment-reply");
         }
     );
 
     if (config.vote) {
-        var voteLevels = config["vote-levels"];
-        if (typeof voteLevels === "string") {
+        var voteLevels = config['vote-levels'];
+        if (typeof voteLevels === 'string') {
             // Eg. -5,5,15
-            voteLevels = voteLevels.split(",");
+            voteLevels = voteLevels.split(',');
         }
 
         // update vote counter
@@ -300,22 +246,18 @@ var insert = function (comment, scrollIntoView) {
                 span.textContent = value;
             }
             if (value) {
-                el.classList.remove("nikas-no-votes");
+                el.classList.remove('nikas-no-votes');
             } else {
-                el.classList.add("nikas-no-votes");
+                el.classList.add('nikas-no-votes');
             }
             if (voteLevels) {
                 var before = true;
                 for (var index = 0; index <= voteLevels.length; index++) {
-                    if (
-                        before &&
-                        (index >= voteLevels.length ||
-                            value < voteLevels[index])
-                    ) {
-                        el.classList.add("nikas-vote-level-" + index);
+                    if (before && (index >= voteLevels.length || value < voteLevels[index])) {
+                        el.classList.add('nikas-vote-level-' + index);
                         before = false;
                     } else {
-                        el.classList.remove("nikas-vote-level-" + index);
+                        el.classList.remove('nikas-vote-level-' + index);
                     }
                 }
             }
@@ -336,19 +278,13 @@ var insert = function (comment, scrollIntoView) {
         votes(comment.likes - comment.dislikes);
     }
 
-    $("a.nikas-edit", footer).toggle(
-        "click",
+    $("a.nikas-edit", footer).toggle("click",
         function (toggler) {
             var edit = $("a.nikas-edit", footer);
-            var avatar =
-                config["avatar"] || config["gravatar"]
-                    ? $(".nikas-avatar", el, false)[0]
-                    : null;
+            var avatar = config["avatar"] || config["gravatar"] ? $(".nikas-avatar", el, false)[0] : null;
 
             edit.textContent = i18n.translate("comment-save");
-            edit.insertAfter(
-                $.new("a.nikas-cancel", i18n.translate("comment-cancel"))
-            ).on("click", function () {
+            edit.insertAfter($.new("a.nikas-cancel", i18n.translate("comment-cancel"))).on("click", function () {
                 toggler.canceled = true;
                 toggler.next();
             });
@@ -373,10 +309,7 @@ var insert = function (comment, scrollIntoView) {
         },
         function (toggler) {
             var textarea = $(".nikas-textarea", text);
-            var avatar =
-                config["avatar"] || config["gravatar"]
-                    ? $(".nikas-avatar", el, false)[0]
-                    : null;
+            var avatar = config["avatar"] || config["gravatar"] ? $(".nikas-avatar", el, false)[0] : null;
 
             if (!toggler.canceled && textarea !== null) {
                 if (utils.text(textarea.innerHTML).length < 3) {
@@ -384,9 +317,7 @@ var insert = function (comment, scrollIntoView) {
                     toggler.wait();
                     return;
                 } else {
-                    api.modify(comment.id, {
-                        text: utils.text(textarea.innerHTML),
-                    }).then(function (rv) {
+                    api.modify(comment.id, { "text": utils.text(textarea.innerHTML) }).then(function (rv) {
                         text.innerHTML = rv.text;
                         comment.text = rv.text;
                     });
@@ -403,13 +334,11 @@ var insert = function (comment, scrollIntoView) {
             }
 
             $("a.nikas-cancel", footer).remove();
-            $("a.nikas-edit", footer).textContent =
-                i18n.translate("comment-edit");
+            $("a.nikas-edit", footer).textContent = i18n.translate("comment-edit");
         }
     );
 
-    $("a.nikas-delete", footer).toggle(
-        "click",
+    $("a.nikas-delete", footer).toggle("click",
         function (toggler) {
             var del = $("a.nikas-delete", footer);
             var state = !toggler.state;
@@ -427,8 +356,7 @@ var insert = function (comment, scrollIntoView) {
                 if (rv) {
                     el.remove();
                 } else {
-                    $("span.nikas-note", header).textContent =
-                        i18n.translate("comment-deleted");
+                    $("span.nikas-note", header).textContent = i18n.translate("comment-deleted");
                     text.innerHTML = "<p>&nbsp;</p>";
                     $("a.nikas-edit", footer).remove();
                     $("a.nikas-delete", footer).remove();
@@ -445,9 +373,7 @@ var insert = function (comment, scrollIntoView) {
                 $(button, footer).remove();
             }
         } else {
-            setTimeout(function () {
-                clear(button);
-            }, 15 * 1000);
+            setTimeout(function () { clear(button); }, 15 * 1000);
         }
     };
 
@@ -457,9 +383,7 @@ var insert = function (comment, scrollIntoView) {
     // show direct reply to own comment when cookie is max aged
     var show = function (el) {
         if (utils.cookie("nikas-" + comment.id)) {
-            setTimeout(function () {
-                show(el);
-            }, 15 * 1000);
+            setTimeout(function () { show(el); }, 15 * 1000);
         } else {
             footer.append(el);
         }
@@ -469,18 +393,21 @@ var insert = function (comment, scrollIntoView) {
         show($("a.nikas-reply", footer).detach());
     }
 
-    if (comment.hasOwnProperty("replies")) {
+    if (comment.hasOwnProperty('replies')) {
         var lastcreated = 0;
         comment.replies.forEach(function (replyObject) {
             insert(replyObject, false);
             if (replyObject.created > lastcreated) {
                 lastcreated = replyObject.created;
             }
+
         });
         if (comment.hidden_replies > 0) {
             insert_loader(comment, lastcreated);
         }
+
     }
+
 };
 
 module.exports = {

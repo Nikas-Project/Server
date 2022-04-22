@@ -1,6 +1,6 @@
 "use strict";
 
-function Element(node) {
+function Element (node) {
     this.obj = node;
 
     this.replace = function (el) {
@@ -50,6 +50,7 @@ function Element(node) {
      * during an event.
      */
     this.toggle = function (type, a, b) {
+
         var toggler = new Toggle(a, b);
         this.on(type, function () {
             toggler.next();
@@ -83,62 +84,34 @@ function Element(node) {
         node.innerHTML = html;
     };
 
-    this.blur = function () {
-        node.blur();
-    };
-    this.focus = function () {
-        node.focus();
-    };
-    this.scrollIntoView = function (args) {
-        node.scrollIntoView(args);
-    };
+    this.blur = function () { node.blur() };
+    this.focus = function () { node.focus() };
+    this.scrollIntoView = function (args) { node.scrollIntoView(args) };
 
-    this.checked = function () {
-        return node.checked;
-    };
+    this.checked = function () { return node.checked; };
 
-    this.setAttribute = function (key, value) {
-        node.setAttribute(key, value);
-    };
-    this.getAttribute = function (key) {
-        return node.getAttribute(key);
-    };
+    this.setAttribute = function (key, value) { node.setAttribute(key, value) };
+    this.getAttribute = function (key) { return node.getAttribute(key) };
 
     this.classList = node.classList;
 
     Object.defineProperties(this, {
-        textContent: {
-            get: function () {
-                return node.textContent;
-            },
-            set: function (textContent) {
-                node.textContent = textContent;
-            },
+        "textContent": {
+            get: function () { return node.textContent; },
+            set: function (textContent) { node.textContent = textContent; }
         },
-        innerHTML: {
-            get: function () {
-                return node.innerHTML;
-            },
-            set: function (innerHTML) {
-                node.innerHTML = innerHTML;
-            },
+        "innerHTML": {
+            get: function () { return node.innerHTML; },
+            set: function (innerHTML) { node.innerHTML = innerHTML; }
         },
-        value: {
-            get: function () {
-                return node.value;
-            },
-            set: function (value) {
-                node.value = value;
-            },
+        "value": {
+            get: function () { return node.value; },
+            set: function (value) { node.value = value; }
         },
-        placeholder: {
-            get: function () {
-                return node.placeholder;
-            },
-            set: function (placeholder) {
-                node.placeholder = placeholder;
-            },
-        },
+        "placeholder": {
+            get: function () { return node.placeholder; },
+            set: function (placeholder) { node.placeholder = placeholder; }
+        }
     });
 }
 
@@ -226,11 +199,7 @@ DOM.new = function (tag, content) {
      */
 
     var el = document.createElement(tag.split(".")[0]);
-    tag.split(".")
-        .slice(1)
-        .forEach(function (val) {
-            el.classList.add(val);
-        });
+    tag.split(".").slice(1).forEach(function (val) { el.classList.add(val); });
 
     if (["A", "LINK"].indexOf(el.nodeName) > -1) {
         el.href = "#";

@@ -2,12 +2,12 @@
 
 // return `cookie` string if set
 var cookie = function (cookie) {
-    return (document.cookie.match("(^|; )" + cookie + "=([^;]*)") || 0)[2];
+    return (document.cookie.match('(^|; )' + cookie + '=([^;]*)') || 0)[2];
 };
 
 var pad = function (n, width, z) {
-    z = z || "0";
-    n = n + "";
+    z = z || '0';
+    n = n + '';
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 };
 
@@ -15,9 +15,9 @@ var HTMLEntity = {
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-    "/": "&#x2F;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
 };
 
 var escape = function (html) {
@@ -28,19 +28,17 @@ var escape = function (html) {
 
 var text = function (html) {
     var _ = document.createElement("div");
-    _.innerHTML = html
-        .replace(/<div><br><\/div>/gi, "<br>")
-        .replace(/<div>/gi, "<br>")
-        .replace(/<br>/gi, "\n")
-        .replace(/&nbsp;/gi, " ");
+    _.innerHTML = html.replace(/<div><br><\/div>/gi, '<br>')
+        .replace(/<div>/gi, '<br>')
+        .replace(/<br>/gi, '\n')
+        .replace(/&nbsp;/gi, ' ');
     return _.textContent.trim();
 };
 
 var detext = function (text) {
     text = escape(text);
-    return text
-        .replace(/\n\n/gi, "<br><div><br></div>")
-        .replace(/\n/gi, "<br>");
+    return text.replace(/\n\n/gi, '<br><div><br></div>')
+        .replace(/\n/gi, '<br>');
 };
 
 // Normalize a BCP47 language tag.
@@ -65,8 +63,8 @@ var normalize_bcp47 = function (tag) {
         } else if (subtags[i].length === 2) {
             subtags[i] = subtags[i].toUpperCase();
         } else if (subtags[i].length === 4) {
-            subtags[i] =
-                subtags[i].charAt(0).toUpperCase() + subtags[i].substr(1);
+            subtags[i] = subtags[i].charAt(0).toUpperCase()
+                + subtags[i].substr(1);
         }
     }
     return subtags.join("-");
@@ -85,13 +83,11 @@ try {
                 storage[key] = val;
             },
             getItem: function (key) {
-                return typeof storage[key] !== "undefined"
-                    ? storage[key]
-                    : null;
+                return typeof (storage[key]) !== 'undefined' ? storage[key] : null;
             },
             removeItem: function (key) {
                 delete storage[key];
-            },
+            }
         };
     })({});
 }
