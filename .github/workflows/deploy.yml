@@ -109,7 +109,9 @@ jobs:
           TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
 
   Docker:
-    needs: Python
+    needs:
+      - Python
+      - Initialize
     runs-on: ubuntu-latest
     env:
       DOCKERFILE: ${{ needs.Initialize.outputs.docker_file }}
