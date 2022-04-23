@@ -22,6 +22,7 @@ jobs:
         uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
+
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -37,13 +38,9 @@ jobs:
       - name: Set Dockerfile
         id: set-docker
         run: |
-          echo "${{ github.ref }}"
-          echo "${{ github.base_ref }}"
-          if [[ "${{ github.base_ref }}" == "master" || "${{ github.ref }}" == "refs/heads/master" ]]; then
-            echo "Production"
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
             echo "::set-output name=file::Dockerfile"
           else
-            echo "Development"
             echo "::set-output name=file::Dockerfile.dev"
           fi
 
