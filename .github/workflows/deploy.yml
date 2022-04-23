@@ -31,6 +31,8 @@ jobs:
       - name: Set Dockerfile
         id: set-docker
         run: |
+          echo "${{ github.ref }}"
+          echo "${{ github.base_ref }}"
           if [[ "${{ github.base_ref }}" == "master" || "${{ github.ref }}" == "refs/heads/master" ]]; then
             echo "Production"
             echo "::set-output name=file::Dockerfile"
