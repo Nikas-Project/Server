@@ -32,7 +32,7 @@ RUN apk upgrade --no-cache \
     tini \
  && pip3 install --upgrade --ignore-installed pip wheel setuptools \
  && pip3 install -r /tmp/requirements.txt \
- && pip3 install --no-cache --ignore-installed --index-url https://test.pypi.org/simple/ nikas==$VERSION \
+ && pip3 install --no-cache --ignore-installed --index-url https://test.pypi.org/simple/ --extra-index-url=https://pypi.org/simple/ nikas==$VERSION \
  && apk del build-dependencies \
  && rm -rf /tmp/* /var/cache/apk/*
 
