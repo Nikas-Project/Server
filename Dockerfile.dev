@@ -14,6 +14,8 @@ LABEL org.opencontainers.image.source="https://github.com/Nikas-Project/Server"
 
 ENV GID=1000 UID=1000
 
+COPY requirements.txt /tmp/requirements.txt
+
 RUN apk upgrade --no-cache \
  && apk add -t build-dependencies \
     python3-dev \
@@ -29,7 +31,7 @@ RUN apk upgrade --no-cache \
     su-exec \
     tini \
  && pip3 install --upgrade --ignore-installed pip wheel setuptools \
- && pip3 install -r requirements.txt \
+ && pip3 install -r /tmp/requirements.txt \
  && pip3 install --no-cache --ignore-installed --index-url https://test.pypi.org/simple/ nikas==$VERSION \
  && apk del build-dependencies \
  && rm -rf /tmp/* /var/cache/apk/*
