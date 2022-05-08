@@ -1,6 +1,6 @@
 var utils = require("app/utils");
 
-'use strict';
+("use strict");
 
 var config = {
     css: true,
