@@ -7,7 +7,7 @@ var i18n = require("app/i18n");
 var identicons = require("app/lib/identicons");
 var globals = require("app/globals");
 
-'use strict';
+("use strict");
 
 var editorify = function (el) {
     el = $.htmlify(el);
@@ -42,7 +42,7 @@ var Postbox = function (parent) {
         );
 
     // callback on success (e.g. to toggle the reply button)
-    el.onsuccess = function () { };
+    el.onsuccess = function () {};
 
     el.validate = function () {
         if (
@@ -234,8 +234,8 @@ var insert = function (comment, scrollIntoView) {
     } else {
         entrypoint = $(
             "#nikas-" +
-            comment.parent +
-            " > .nikas-text-wrapper > .nikas-follow-up"
+                comment.parent +
+                " > .nikas-text-wrapper > .nikas-follow-up"
         );
     }
 
@@ -246,14 +246,14 @@ var insert = function (comment, scrollIntoView) {
     }
 
     var footer = $(
-        "#nikas-" +
-        comment.id +
-        " > .nikas-text-wrapper > .nikas-comment-footer"
-    ),
+            "#nikas-" +
+                comment.id +
+                " > .nikas-text-wrapper > .nikas-comment-footer"
+        ),
         header = $(
             "#nikas-" +
-            comment.id +
-            " > .nikas-text-wrapper > .nikas-comment-header"
+                comment.id +
+                " > .nikas-text-wrapper > .nikas-comment-header"
         ),
         text = $(
             "#nikas-" + comment.id + " > .nikas-text-wrapper > .nikas-text"
