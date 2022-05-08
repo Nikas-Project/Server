@@ -8,7 +8,7 @@ var $ = require("app/dom");
 var svg = require("app/svg");
 var template = require("app/template");
 
-("use strict");
+'use strict';
 
 template.set("conf", config);
 template.set("i18n", i18n.translate);
@@ -18,7 +18,7 @@ template.set("svg", svg);
 var nikas_thread;
 var heading;
 
-function init() {
+function init () {
     nikas_thread = $("#nikas-thread");
     heading = $.new("h4");
 
@@ -53,7 +53,7 @@ function init() {
     nikas_thread.append('<div id="nikas-root"></div>');
 }
 
-function fetchComments() {
+function fetchComments () {
     if (!$("#nikas-root")) {
         return;
     }
@@ -73,8 +73,8 @@ function fetchComments() {
                 ) {
                     console.log(
                         "Nikas: Client value '%s' for setting '%s' overridden by server value '%s'.\n" +
-                            "Since Nikas version 0.12.6, 'data-nikas-%s' is only configured via the server " +
-                            "to keep client and server in sync",
+                        "Since Nikas version 0.12.6, 'data-nikas-%s' is only configured via the server " +
+                        "to keep client and server in sync",
                         config[setting],
                         setting,
                         rv.config[setting],

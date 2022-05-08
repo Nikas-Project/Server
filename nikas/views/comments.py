@@ -1187,6 +1187,7 @@ class API(object):
                                counts=comment_mode_count,
                                order_by=order_by, asc=asc,
                                nikas_host_script=nikas_host_script)
+
     """
     @api {get} /latest latest
     @apiGroup Comment

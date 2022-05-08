@@ -4,7 +4,7 @@ var tmpl_postbox = require("app/templates/postbox");
 var tmpl_comment = require("app/templates/comment");
 var tmpl_comment_loader = require("app/templates/comment-loader");
 
-("use strict");
+'use strict';
 
 var globals = {},
     templates = {};
