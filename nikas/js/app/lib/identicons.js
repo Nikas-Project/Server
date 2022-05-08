@@ -1,6 +1,6 @@
 var Q = require("app/lib/promise");
 
-("use strict");
+'use strict';
 
 // Number of squares width and height
 var GRID = 5;
@@ -43,9 +43,9 @@ var generateIdenticon = function (key, padding, size, config) {
 
     Q.when(key, function (key) {
         var hash = pad(
-                (parseInt(key.substr(-16), 16) % Math.pow(2, 18)).toString(2),
-                18
-            ),
+            (parseInt(key.substr(-16), 16) % Math.pow(2, 18)).toString(2),
+            18
+        ),
             index = 0;
 
         svg.setAttribute("data-hash", key);

@@ -1,7 +1,7 @@
 var Q = require("app/lib/promise");
 var globals = require("app/globals");
 
-("use strict");
+'use strict';
 
 var salt = "Eech7co8Ohloopo9Ol6baimi",
     location = function () {
@@ -47,7 +47,7 @@ if (endpoint[endpoint.length - 1] === "/") {
 var curl = function (method, url, data, resolve, reject) {
     var xhr = new XMLHttpRequest();
 
-    function onload() {
+    function onload () {
         var date = xhr.getResponseHeader("Date");
         if (date !== null) {
             globals.offset.update(new Date(date));

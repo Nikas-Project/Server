@@ -2,7 +2,7 @@ var config = require("app/config");
 
 var fa = require("app/i18n/fa");
 
-("use strict");
+'use strict';
 
 var pluralforms = function (lang) {
     return function (msgs, n) {
