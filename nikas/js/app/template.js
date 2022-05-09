@@ -77,8 +77,8 @@ var render = function (name, locals) {
     // Trim whitespace
     rv = rv.trim();
 
-    for (var i = 0; i < keys.length; i++) {
-        delete globals[keys[i]];
+    for (let value of keys) {
+        delete globals[value];
     }
 
     return rv;
