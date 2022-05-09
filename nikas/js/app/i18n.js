@@ -4,7 +4,7 @@ var fa = require("app/i18n/fa");
 
 ("use strict");
 
-var pluralforms = function (lang) {
+var pluralforms = function (_lang) {
     return function (msgs, n) {
         return msgs[n === 1 ? 0 : 1];
     };
