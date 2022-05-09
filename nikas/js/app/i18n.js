@@ -19,8 +19,8 @@ var catalogue = {
 // off everything but the primary language subtag, before moving
 // on to the next one.
 var lang, plural, translations;
-for (var i = 0; i < config.langs.length; i++) {
-    lang = config.langs[i];
+for (let value of config.langs) {
+    lang = value;
     plural = pluralforms(lang);
     translations = catalogue[lang];
     if (plural && translations) break;
