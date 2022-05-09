@@ -13,6 +13,7 @@ from io import BytesIO as StringIO
 from urllib.parse import unquote, urlparse
 from xml.etree import ElementTree as ET
 from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 
 from itsdangerous import SignatureExpired, BadSignature
 from werkzeug.exceptions import BadRequest, Forbidden, NotFound
@@ -1132,18 +1133,22 @@ class API(object):
 
         ph = PasswordHasher()
 
-        if data['password'] and ph.verify(str(password), str(data['password'])):
-            response = redirect(re.sub(
-                r'/login$',
-                '/admin',
-                get_current_url(env, strip_querystring=True)
-            ))
-            cookie = self.create_cookie(value=self.nikas.sign({"logged": True}),
-                                        expires=datetime.now() + timedelta(1))
-            response.headers.add("Set-Cookie", cookie("admin-session"))
-            response.headers.add("X-Set-Cookie", cookie("nikas-admin-session"))
-            return response
-        else:
+        try:
+            if data['password'] and ph.verify(str(password), str(data['password'])):
+                response = redirect(re.sub(
+                    r'/login$',
+                    '/admin',
+                    get_current_url(env, strip_querystring=True)
+                ))
+                cookie = self.create_cookie(value=self.nikas.sign({"logged": True}),
+                                            expires=datetime.now() + timedelta(1))
+                response.headers.add("Set-Cookie", cookie("admin-session"))
+                response.headers.add("X-Set-Cookie", cookie("nikas-admin-session"))
+                return response
+            else:
+                nikas_host_script = self.nikas.conf.get("server", "public-endpoint") or local.host
+                return render_template('login.html', nikas_host_script=nikas_host_script)
+        except VerifyMismatchError:
             nikas_host_script = self.nikas.conf.get("server", "public-endpoint") or local.host
             return render_template('login.html', nikas_host_script=nikas_host_script)
 
