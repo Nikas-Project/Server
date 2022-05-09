@@ -408,7 +408,7 @@ class API(object):
 
         try:
             self.nikas.unsign(request.cookies.get(str(id), ''))
-        except (SignatureExpired, BadSignature):
+        except SignatureExpired:
             raise Forbidden
 
         for key in set(rv.keys()) - API.FIELDS:
