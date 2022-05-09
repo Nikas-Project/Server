@@ -241,16 +241,17 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
                 padding: 0.7em 0.8em;
                 width: 100%;
                 border-radius: 5px;
-                border: 1px solid #f0f0f0;
+                border: 1px solid #cacaca;
             }
 
+            // TODO: Remove ?
             .nikas-preview {
                 margin-top: 0.2em;
                 color: black;
                 direction: rtl;
                 width: 100%;
                 border-radius: 5px;
-                border: 1px solid #f0f0f0;
+                border: 1px solid #cacaca;
             }
         }
 
