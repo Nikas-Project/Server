@@ -1,4 +1,42 @@
-# 1.1.9 ( Jan 17, 2022 )
+# Changes
+
+## 2.0.0 ()
+
+-   Server
+    -   Python
+        -   Update DB Process
+        -   Update comment process
+        -   Update Python version
+        -   Change template methods
+        -   Change i18n methods
+        -   Improve Backend
+        -   Rewrite tests
+        -   Fix code-smell problems
+        -   Fix security problems
+    -   JavaScript
+        -   Use ES5 Concepts
+        -   Replace Bower with Webpack
+        -   Rewrite tests
+        -   Fix code-smell problems
+        -   Fix security problems
+        -   Use Jest
+-   Client
+    -   Update GULP
+    -   Make assets compressed
+    -   Fix style problems
+    -   Update HTML example
+-   Admin
+    -   Better responsive
+    -   Fix style problems
+-   Repository
+    -   Update deployment process
+    -   Format all codes automatically
+    -   Reconfigure Dependabot
+    -   Add Renovate
+    -   Add new Actions
+    -   Update old workflows
+
+## 1.1.9 ( Jan 17, 2022 )
 
 -   Server
     -   Use `unverified_context` for SMTP connection
@@ -7,7 +45,7 @@
 
 ---
 
-# 1.1.6 ( Jan 14, 2022 )
+## 1.1.6 ( Jan 14, 2022 )
 
 -   Server
     -   Fix problems with `gevent` and `greenlet`
@@ -20,7 +58,7 @@
 
 ---
 
-# 1.1.1 ( Dec 22, 2021 )
+## 1.1.1 ( Dec 22, 2021 )
 
 -   Server
     -   Use [Argon2](https://en.wikipedia.org/wiki/Argon2) instead of SHA-256 for authentication process
@@ -32,7 +70,7 @@
 -   Client
     -   Fix style problems for some CMS platforms
 
-# 1.1.0 ( Sep 1, 2020 )
+## 1.1.0 ( Sep 1, 2020 )
 
 -   Server
     -   Use hashed password
@@ -52,7 +90,7 @@
     -   Fix margin problems
     -   Use justify align
 
-# 1.0.1 ( Aug 1, 2020 )
+## 1.0.1 ( Aug 1, 2020 )
 
 -   Use Gitlab CI
 -   Change EOF
@@ -60,7 +98,7 @@
 -   Fix `Makefile` problems
 -   Fix `.gitignore` problems
 
-# 1.0.0 ( Jul 9, 2020 )
+## 1.0.0 ( Jul 9, 2020 )
 
 -   First beta release
 -   Migrate to Nikas
