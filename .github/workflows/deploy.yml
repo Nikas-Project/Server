@@ -193,16 +193,6 @@ jobs:
           docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.GITHUB_TOKEN }}" docker.pkg.github.com
           docker push ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
 
-      - name: Docker Hub Description
-        uses: peter-evans/dockerhub-description@v3
-        if: github.event_name != 'pull_request'
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ env.IMAGE_NAME }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: ./README.md
-
       - name: Report Failure
         uses: ravsamhq/notify-slack-action@v1
         if: always()
