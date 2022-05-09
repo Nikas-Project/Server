@@ -8,7 +8,7 @@ var fibers = require("fibers"),
 
 var sassOptions = {
     fiber: fibers,
-    outputStyle: "expanded",
+    outputStyle: "compressed",
 };
 
 gulp.task("sass", function () {

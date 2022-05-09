@@ -1,20 +1,16 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import datetime
 import logging
+import pkg_resources
 import re
+
 from email.utils import parseaddr, formataddr
-
-try:
-    from backports.configparser import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
-
-from nikas.compat import text_type as str
+from configparser import ConfigParser, NoOptionError, NoSectionError, DuplicateSectionError
 
 logger = logging.getLogger("nikas")
+
+default_config_file = pkg_resources.resource_filename('nikas', 'nikas.cfg')
 
 
 def timedelta(string):
@@ -83,9 +79,21 @@ class Section(object):
 class NikasParser(ConfigParser):
     """Parse INI-style configuration with some modifications for Nikas.
 
-        * parse human-readable timedelta such as "15m" as "15 minutes"
-        * handle indented lines as "lists"
+        * Parse human-readable timedelta such as "15m" as "15 minutes"
+        * Handle indented lines as "lists"
+        * Disable string interpolation ('%s') for values
     """
+
+    def __init__(self, *args, **kwargs):
+        """Supply modified defaults to configparser.ConfigParser
+        https://docs.python.org/3.9/library/configparser.html#configparser.ConfigParser
+        allow_no_value=True: Allow empty config keys
+        interpolation=None:  Do not attempt to use python string interpolation on
+                             values. This is especially important for parsing
+                             passwords that might contain '%'
+        """
+        return super(NikasParser, self).__init__(
+            allow_no_value=True, interpolation=None, *args, **kwargs)
 
     def getint(self, section, key):
         try:
@@ -110,8 +118,12 @@ class NikasParser(ConfigParser):
         return Section(self, section)
 
 
+def default_file():
+    return default_config_file
+
+
 def new(options=None):
-    cp = NikasParser(allow_no_value=True)
+    cp = NikasParser()
 
     if options:
         cp.read_dict(options)
@@ -126,25 +138,35 @@ def load(default, user=None):
                    for option in cp.options(section))
 
     parser = new()
-    parser.read(default)
+    with open(default, 'r') as f:
+        parser.read_file(f)
 
     a = setify(parser)
 
     if user:
-        parser.read(user)
+        with open(user, 'r') as f:
+            parser.read_file(f)
 
     for item in setify(parser).difference(a):
-        logger.warn("no such option: [%s] %s", *item)
+        logger.warning("no such option: [%s] %s", *item)
         if item in (("server", "host"), ("server", "port")):
-            logger.warn("use `listen = http://$host:$port` instead")
+            logger.warning("use `listen = http://$host:$port` instead")
         if item == ("smtp", "ssl"):
-            logger.warn("use `security = none | starttls | ssl` instead")
+            logger.warning("use `security = none | starttls | ssl` instead")
         if item == ("general", "session-key"):
             logger.info("Your `session-key` has been stored in the "
                         "database itself, this option is now unused")
 
-    if not parseaddr(parser.get("smtp", "from"))[0]:
+    try:
+        parser.add_section('smtp')
+    except DuplicateSectionError:
+        pass
+    try:
+        fromaddr = parser.get("smtp", "from")
+    except (NoOptionError, NoSectionError):
+        fromaddr = ''
+    if not parseaddr(fromaddr)[0]:
         parser.set("smtp", "from",
-                   formataddr(("Ich schrei sonst!", parser.get("smtp", "from"))))
+                   formataddr(("I'll scream otherwise!", fromaddr)))
 
     return parser

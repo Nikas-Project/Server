@@ -1,4 +1,4 @@
-define({
+module.exports = {
     "postbox-text": "متن نظر را اینجا وارد کنید - حداقل ۳ حرف",
     "postbox-author": "نام (اختیاری)",
     "postbox-email": "آدرس ایمیل (اختیاری)",
@@ -19,8 +19,8 @@ define({
     "comment-confirm": "تایید",
     "comment-close": "بستن",
     "comment-cancel": "لغو",
-    "comment-deleted": "نظر حذف شد.",
-    "comment-queued": "در انتظار بررسی توسط مدیریت.",
+    "comment-deleted": "نظر حذف شد",
+    "comment-queued": "در انتظار بررسی توسط مدیریت",
     "comment-anonymous": "ناشناس",
     "comment-hidden": "{{ n }} مخفی",
 
@@ -31,4 +31,4 @@ define({
     "date-week": "هفته پیش\n{{ n }} هفته پیش",
     "date-month": "ماه پیش\n{{ n }} ماه پیش",
     "date-year": "سال پیش\n{{ n }} سال پیش",
-});
+};

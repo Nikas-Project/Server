@@ -50,6 +50,11 @@
           <form method="POST" action="{{ nikas_host_script }}/login">
             <input type="password" name="password" autofocus />
           </form>
+          {% if error == 'empty' %}
+          <p class="error">کلمه عبور خود را وارد کنید</p>
+          {% elif error == 'wrong' %}
+          <p class="error">کلمه عبور وارد شده اشتباه است</p>
+          {% endif %}
         </div>
       </main>
     </div>

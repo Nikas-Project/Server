@@ -1,12 +1,11 @@
 # -*- encoding: utf-8 -*-
 
+import unittest
 import os
 import sqlite3
 import tempfile
-import unittest
 
 from nikas import config
-from nikas.compat import iteritems
 from nikas.db import SQLite3
 
 
@@ -19,6 +18,7 @@ class TestDBMigration(unittest.TestCase):
         os.unlink(self.path)
 
     def test_defaults(self):
+
         conf = config.new({
             "general": {
                 "dbpath": "/dev/null",
@@ -31,6 +31,7 @@ class TestDBMigration(unittest.TestCase):
         self.assertTrue(db.preferences.get("session-key", "").isalnum())
 
     def test_session_key_migration(self):
+
         conf = config.new({
             "general": {
                 "dbpath": "/dev/null",
@@ -90,7 +91,7 @@ class TestDBMigration(unittest.TestCase):
 
             con.execute(
                 "INSERT INTO threads (uri, title) VALUES (?, ?)", ("/", "Test"))
-            for (id, parent) in iteritems(tree):
+            for (id, parent) in tree.items():
                 con.execute("INSERT INTO comments ("
                             "   id, parent, created)"
                             "VALUEs (?, ?, ?)", (id, parent, id))
@@ -103,7 +104,7 @@ class TestDBMigration(unittest.TestCase):
         })
         SQLite3(self.path, conf)
 
-        flattened = list(iteritems({
+        flattened = list({
             1: None,
             2: None,
             3: 2,
@@ -111,7 +112,7 @@ class TestDBMigration(unittest.TestCase):
             5: 2,
             6: None,
             7: 2
-        }))
+        }.items())
 
         with sqlite3.connect(self.path) as con:
             rv = con.execute(

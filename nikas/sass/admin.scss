@@ -1,9 +1,12 @@
-@import "https://cdn.jsdelivr.net/npm/vazir-font@26.0.2/dist/Farsi-Digits/font-face-FD.css";
+@import "https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@32.102/Round-Dots/misc/UI-Farsi-Digits/Vazirmatn-RD-UI-FD-font-face.css";
 
-$font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
+$font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 * {
     box-sizing: border-box;
+    font-family: $font-family;
     margin: 0;
     padding: 0;
     color: #212121;
@@ -14,12 +17,6 @@ a {
     transition: all 250ms;
 }
 
-a,
-p,
-div {
-    font-family: $font-family;
-}
-
 h1,
 h2,
 h3,
@@ -28,12 +25,10 @@ h5,
 h6 {
     font-style: normal;
     font-weight: normal;
-    font-family: $font-family;
 }
 
 input {
     text-align: center;
-    font-family: $font-family;
 }
 
 html,
@@ -56,6 +51,20 @@ html .wrapper header {
     text-align: center;
     width: 100%;
     direction: rtl;
+
+    input {
+        border-radius: 5px;
+        background: white;
+        border: 1px #c9c9c9 solid;
+        padding: 3px;
+        margin-top: 10px;
+    }
+
+    .error {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #b90d0d;
+    }
 }
 
 /*************************** Header ***************************/
@@ -161,6 +170,10 @@ html .wrapper header {
             margin-right: 2em;
             display: flex;
 
+            @media (max-width: 561px) {
+                margin-top: 20px;
+            }
+
             input {
                 margin-left: 5px;
             }
@@ -168,6 +181,14 @@ html .wrapper header {
 
         .pagination {
             float: left;
+
+            @media (max-width: 561px) {
+                margin-top: 20px;
+            }
+
+            input {
+                border-radius: 5px;
+            }
         }
     }
 
@@ -176,7 +197,11 @@ html .wrapper header {
         direction: rtl;
 
         a {
-            font-size: 15px;
+            font-size: 14px;
+
+            @media (max-width: 521px) {
+                font-size: 2.9vw;
+            }
 
             &:first-child {
                 margin-right: 10px;
@@ -198,7 +223,8 @@ html .wrapper header {
 /*************************** Comment ***************************/
 
 .nikas-comment {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+        rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
     transition: 0.3s;
     padding: 1em;
     border-radius: 7px;
@@ -206,7 +232,8 @@ html .wrapper header {
     background-color: #ffffff;
 
     &:hover {
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+            rgba(17, 17, 26, 0.05) 0px 8px 32px;
     }
 
     &:not(:first-of-type) {
@@ -226,6 +253,9 @@ html .wrapper header {
             border-radius: 5px;
             margin: 10px;
             padding: 5px;
+            width: 100%;
+            height: auto;
+            min-height: 50px;
         }
     }
 
@@ -245,10 +275,16 @@ html .wrapper header {
             font-weight: bold;
         }
 
-        .note .label {
-            margin: 9px;
-            padding: 5px;
-            border-radius: 7px;
+        .note {
+            @media (max-width: 650px) {
+                white-space: pre-line;
+            }
+
+            .label {
+                margin: 9px;
+                padding: 5px;
+                border-radius: 7px;
+            }
         }
     }
 
@@ -257,6 +293,14 @@ html .wrapper header {
 
         a {
             cursor: pointer;
+            padding-left: 1em;
+            color: #0d6efd;
+            transition: all 0.25s;
+            font-weight: bold;
+
+            &:hover {
+                color: black;
+            }
         }
 
         .hidden {

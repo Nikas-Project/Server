@@ -1,11 +1,9 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import unittest
 
 from nikas import config
-from nikas.compat import PY2K, string_types
+
 from nikas.utils.hash import Hash, PBKDF2, new
 
 
@@ -21,9 +19,8 @@ class TestHasher(unittest.TestCase):
 
         self.assertRaises(TypeError, h.hash, "...")
         self.assertEqual(h.hash(b"..."), b"...")
-        self.assertIsInstance(h.uhash(u"..."), string_types)
+        self.assertIsInstance(h.uhash("..."), (str, ))
 
-    @unittest.skipIf(PY2K, "byte/str quirks")
     def test_uhash(self):
         h = Hash(b"", func=None)
         self.assertRaises(TypeError, h.uhash, b"...")
@@ -34,7 +31,7 @@ class TestPBKDF2(unittest.TestCase):
     def test_default(self):
         # original setting (and still default)
         pbkdf2 = PBKDF2(iterations=1000)
-        self.assertEqual(pbkdf2.uhash(""), "3e94ef6a5c2d")
+        self.assertEqual(pbkdf2.uhash(""), "42476aafe2e4")
 
     def test_different_salt(self):
         a = PBKDF2(b"a", iterations=1)
@@ -45,6 +42,7 @@ class TestPBKDF2(unittest.TestCase):
 class TestCreate(unittest.TestCase):
 
     def test_custom(self):
+
         def _new(val):
             conf = config.new({
                 "hash": {

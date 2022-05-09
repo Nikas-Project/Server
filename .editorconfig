@@ -26,3 +26,7 @@ insert_final_newline = false
 end_of_line = lf
 insert_final_newline = false
 trim_trailing_whitespace = true
+
+[Makefile]
+insert_final_newline = true
+indent_style = tab

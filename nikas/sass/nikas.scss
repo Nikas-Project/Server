@@ -1,6 +1,8 @@
-@import "https://cdn.jsdelivr.net/npm/vazir-font@26.0.2/dist/Farsi-Digits/font-face-FD.css";
+@import "https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@32.102/Round-Dots/misc/UI-Farsi-Digits/Vazirmatn-RD-UI-FD-font-face.css";
 
-$font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
+$font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 #nikas-thread {
     padding: 0;
@@ -9,6 +11,8 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
     border-top: 1px solid #e8e8e8;
 
     * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
         box-sizing: border-box;
         font-family: $font-family;
     }
@@ -39,7 +43,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
         }
     }
 
-    .textarea {
+    .nikas-textarea {
         min-height: 58px;
         outline: 0;
         color: black;
@@ -50,12 +54,13 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
             border-color: rgba(0, 0, 0, 0.8);
         }
 
-        &.placeholder {
+        .nikas-placeholder {
             color: #757575;
             direction: rtl;
             font-size: 14px;
             display: block;
             cursor: text;
+            transition: all 0.25s;
         }
     }
 
@@ -79,7 +84,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
         }
     }
 
-    .preview {
+    .nikas-preview {
         .nikas-comment {
             padding-top: 0;
             margin: 0;
@@ -94,7 +99,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
 }
 
 .nikas-comment {
-    > div.avatar {
+    > .nikas-avatar {
         display: block;
         width: 7%;
         float: right;
@@ -113,13 +118,13 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
         }
     }
 
-    > div.text-wrapper {
+    > .nikas-text-wrapper {
         display: block;
 
         > .nikas-comment-header {
             font-size: 0.85em;
 
-            .spacer {
+            .nikas-spacer {
                 padding: 0 6px;
                 color: gray !important;
                 font-weight: normal;
@@ -130,7 +135,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
                 }
             }
 
-            a.permalink {
+            a.nikas-permalink {
                 color: gray !important;
                 font-weight: normal;
                 text-shadow: none !important;
@@ -140,7 +145,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
                 }
             }
 
-            .note {
+            .nikas-note {
                 color: gray !important;
                 font-weight: normal;
                 text-shadow: none !important;
@@ -152,7 +157,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
                 }
             }
 
-            a.parent {
+            a.nikas-parent {
                 color: gray !important;
                 font-weight: normal;
                 text-shadow: none !important;
@@ -162,7 +167,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
                 }
             }
 
-            .author {
+            .nikas-author {
                 color: #555;
                 font-size: 12px;
             }
@@ -180,7 +185,6 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
                 text-decoration: none;
                 padding-left: 0;
                 transition: 0.1s linear all;
-                font-size: 14px;
 
                 &:hover {
                     color: #111111 !important;
@@ -190,7 +194,6 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
 
             > a {
                 position: relative;
-                top: 0.2em;
 
                 &.edit {
                     padding-left: 1em;
@@ -203,45 +206,56 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
                 &.cancel {
                     padding-left: 1em;
                 }
+
+                + {
+                    a {
+                        padding-left: 1em;
+                    }
+                }
             }
 
-            .votes {
+            .nikas-votes {
                 color: gray;
             }
 
-            .upvote {
+            .nikas-upvote {
                 svg {
                     position: relative;
-                    top: 0.2em;
                     margin-right: 3px;
                 }
             }
 
-            .downvote {
+            .nikas-downvote {
                 svg {
                     position: relative;
-                    top: 0.2em;
                     margin-right: 3px;
                 }
             }
         }
 
-        > .textarea-wrapper {
-            .textarea {
+        > .nikas-textarea-wrapper {
+            .nikas-textarea {
                 margin-top: 0.2em;
                 color: black;
                 direction: rtl;
                 padding: 0.7em 0.8em;
+                width: 100%;
+                border-radius: 5px;
+                border: 1px solid #cacaca;
             }
 
-            .preview {
+            // TODO: Remove ?
+            .nikas-preview {
                 margin-top: 0.2em;
                 color: black;
                 direction: rtl;
+                width: 100%;
+                border-radius: 5px;
+                border: 1px solid #cacaca;
             }
         }
 
-        > div.text {
+        > .nikas-text {
             p {
                 margin-top: 1em;
                 font-size: 14px;
@@ -263,20 +277,6 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
             h6 {
                 font-size: 130%;
                 font-weight: bold;
-            }
-        }
-
-        > div.textarea-wrapper {
-            .textarea {
-                width: 100%;
-                border: 1px solid #f0f0f0;
-                border-radius: 5px;
-            }
-
-            .preview {
-                width: 100%;
-                border: 1px solid #f0f0f0;
-                border-radius: 5px;
             }
         }
     }
@@ -306,7 +306,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
 .nikas-comment.nikas-no-votes {
     > * {
         > .nikas-comment-footer {
-            span.votes {
+            span.nikas-votes {
                 display: none;
             }
         }
@@ -318,14 +318,14 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
     margin: 0 auto 2em;
     clear: right;
 
-    > .form-wrapper {
+    > .nikas-form-wrapper {
         display: block;
         padding: 0;
 
-        > .auth-section {
+        > .nikas-auth-section {
             display: block;
 
-            .post-action {
+            .nikas-post-action {
                 display: block;
                 float: right;
                 margin: 0 0 0 5px;
@@ -354,7 +354,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
                 }
             }
 
-            .input-wrapper {
+            .nikas-input-wrapper {
                 display: inline-block;
                 position: relative;
                 max-width: 25%;
@@ -376,7 +376,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
             }
         }
 
-        .textarea {
+        .nikas-textarea {
             margin: 0 0 0.3em;
             padding: 0.4em 0.8em;
             border-radius: 5px;
@@ -384,21 +384,19 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
             border: 1px solid rgba(0, 0, 0, 0.2);
         }
 
-        .preview {
+        .nikas-preview {
             margin: 0 0 0.3em;
             padding: 0.4em 0.8em;
             border-radius: 5px;
-            background-color: #fff;
             border: 1px solid rgba(0, 0, 0, 0.2);
             display: none;
-            background: #f8f8f8
-                repeating-linear-gradient(
-                    -45deg,
-                    #f8f8f8,
-                    #f8f8f8 10px,
-                    #fff 10px,
-                    #fff 20px
-                );
+            background: repeating-linear-gradient(
+                -45deg,
+                #f8f8f8,
+                #f8f8f8 10px,
+                #fff 10px,
+                #fff 20px
+            );
         }
 
         input[type="checkbox"] {
@@ -408,7 +406,7 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
             margin-left: 0;
         }
 
-        .notification-section {
+        .nikas-notification-section {
             font-size: 0.9em;
             padding-top: 0.3em;
         }
@@ -417,13 +415,13 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
             display: none;
         }
 
-        > .notification-section {
+        > .nikas-notification-section {
             display: none;
             padding-bottom: 10px;
         }
     }
 
-    > .copyright {
+    > .nikas-copyright {
         display: block;
         padding: 0;
         margin: 0;
@@ -439,17 +437,17 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
     }
 }
 
-.nikas-postbox.preview-mode {
-    > .form-wrapper {
+.nikas-postbox.nikas-preview-mode {
+    > .nikas-form-wrapper {
         input[name="preview"] {
             display: none;
         }
 
-        .textarea {
+        .nikas-textarea {
             display: none;
         }
 
-        .preview {
+        .nikas-preview {
             display: block;
         }
 
@@ -461,9 +459,9 @@ $font-family: "Vazir FD", Georgia, "Times New Roman", Times, serif;
 
 @media screen and (max-width: 600px) {
     .nikas-postbox {
-        > .form-wrapper {
-            > .auth-section {
-                .input-wrapper {
+        > .nikas-form-wrapper {
+            > .nikas-auth-section {
+                .nikas-input-wrapper {
                     display: block;
                     max-width: 100%;
                     margin: 0 0 0.3em;

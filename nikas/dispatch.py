@@ -1,16 +1,15 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
-import logging
-import os
 import sys
+import os
+import logging
+
 from glob import glob
 
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 
-from nikas import dist, make_app, wsgi, config
+from nikas import make_app, wsgi, config
 
 logger = logging.getLogger("nikas")
 
@@ -24,13 +23,12 @@ class Dispatcher(DispatcherMiddleware):
     def __init__(self, *confs):
         self.nikas = {}
 
-        default = os.path.join(
-            dist.location, dist.project_name, "defaults.ini")
+        default = config.default_file()
         for i, path in enumerate(confs):
             conf = config.load(default, path)
 
             if not conf.get("general", "name"):
-                logger.warn("unable to dispatch %r, no 'name' set", confs[i])
+                logger.warning("unable to dispatch %r, no 'name' set", confs[i])
                 continue
 
             self.nikas["/" + conf.get("general", "name")] = make_app(conf)

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+# -*- encoding: utf-8 -*-
 
 import unittest
 
@@ -16,12 +16,13 @@ def hello_world(environ, start_response):
 class CORSTest(unittest.TestCase):
 
     def test_simple(self):
+
         app = CORSMiddleware(hello_world,
                              origin=origin([
                                  "https://example.tld/",
                                  "http://example.tld/",
                              ]),
-                             allowed=("Foo", "Bar"), exposed=("Spam",))
+                             allowed=("Foo", "Bar"), exposed=("Spam", ))
 
         client = Client(app, Response)
 
@@ -50,8 +51,9 @@ class CORSTest(unittest.TestCase):
             c.headers["Access-Control-Allow-Origin"], "https://example.tld")
 
     def test_preflight(self):
+
         app = CORSMiddleware(hello_world, origin=origin(["http://example.tld"]),
-                             allowed=("Foo",), exposed=("Bar",))
+                             allowed=("Foo", ), exposed=("Bar", ))
         client = Client(app, Response)
 
         rv = client.open(method="OPTIONS", path="/",

@@ -2,12 +2,9 @@
 
 import socket
 
-try:
-    import httplib
-    from urlparse import urlparse
-except ImportError:
-    import http.client as httplib
-    from urllib.parse import urlparse
+import http.client as httplib
+
+from urllib.parse import urlparse
 
 from nikas import dist
 from nikas.wsgi import urlsplit
@@ -27,7 +24,7 @@ class curl(object):
     """
 
     headers = {
-        "User-Agent": "Nikas/{0} (+https://nikasproject.ir)".format(dist.version)
+        "User-Agent": "Nikas/{0} (+https://www.nikasproject.ir)".format(dist.version)
     }
 
     def __init__(self, method, host, path, timeout=3):

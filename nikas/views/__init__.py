@@ -1,9 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import pkg_resources
-
 dist = pkg_resources.get_distribution("nikas")
 
 import json
@@ -13,7 +10,6 @@ from werkzeug.routing import Rule
 from werkzeug.exceptions import BadRequest
 
 from nikas import local
-from nikas.compat import text_type as str
 
 
 class requires:
@@ -50,7 +46,6 @@ class requires:
 
 
 class Info(object):
-
     def __init__(self, nikas):
         self.moderation = nikas.conf.getboolean("moderation", "enabled")
         nikas.urls.add(Rule('/info', endpoint=self.show))
@@ -64,3 +59,13 @@ class Info(object):
         }
 
         return Response(json.dumps(rv), 200, content_type="application/json")
+
+
+class Metrics(object):
+    def __init__(self, nikas):
+        nikas.urls.add(Rule('/metrics', endpoint=self.show))
+
+    def show(self, environ, request):
+        content_type = 'text/plain; version=0.0.4; charset=utf-8'
+        metrics = ""
+        return Response(metrics, 200, content_type=content_type)

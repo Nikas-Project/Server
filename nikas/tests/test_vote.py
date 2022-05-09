@@ -1,16 +1,15 @@
-from __future__ import unicode_literals
+# -*- encoding: utf-8 -*-
 
 import json
-import os
 import tempfile
 import unittest
 
-from fixtures import curl, loads, FakeIP, JSONClient
 from werkzeug.wrappers import Response
 
-from nikas import Nikas, core, config, dist
+from nikas import Nikas, core, config
 from nikas.utils import http
 
+from fixtures import curl, loads, FakeIP, JSONClient
 http.curl = curl
 
 
@@ -21,7 +20,7 @@ class TestVote(unittest.TestCase):
 
     def makeClient(self, ip):
 
-        conf = config.load(os.path.join(dist.location, "share", "nikas.conf"))
+        conf = config.load(config.default_file())
         conf.set("general", "dbpath", self.path)
         conf.set("guard", "enabled", "off")
         conf.set("hash", "algorithm", "none")

@@ -12,7 +12,6 @@ function ajax(req) {
     };
     r.send(req.data);
 }
-
 function fade(element) {
     var op = 1; // initial opacity
     var timer = setInterval(function () {
@@ -25,7 +24,6 @@ function fade(element) {
         op -= op * 0.1;
     }, 10);
 }
-
 function moderate(com_id, hash, action, nikas_host_script) {
     ajax({
         method: "POST",
@@ -35,7 +33,6 @@ function moderate(com_id, hash, action, nikas_host_script) {
         },
     });
 }
-
 function edit(
     com_id,
     hash,
@@ -62,59 +59,56 @@ function edit(
         },
     });
 }
-
 function validate_com(com_id, hash, nikas_host_script) {
     moderate(com_id, hash, "activate", nikas_host_script);
 }
-
 function delete_com(com_id, hash, nikas_host_script) {
     moderate(com_id, hash, "delete", nikas_host_script);
 }
-
-function unset_editable(elt_id) {
+function unset_editable(elt_id, save_changes) {
     var elt = document.getElementById(elt_id);
     if (elt) {
+        elt.innerHTML = save_changes
+            ? elt.textContent
+            : elt.dataset["originContent"];
+        delete elt.dataset["originContent"];
         elt.contentEditable = false;
         elt.classList.remove("editable");
     }
 }
-
 function set_editable(elt_id) {
     var elt = document.getElementById(elt_id);
     if (elt) {
+        elt.dataset["originContent"] = elt.innerHTML;
+        elt.textContent = elt.innerHTML;
         elt.contentEditable = true;
         elt.classList.add("editable");
     }
 }
-
 function start_edit(com_id) {
     var editable_elements = [
         "nikas-author-" + com_id,
         "nikas-email-" + com_id,
         "nikas-website-" + com_id,
-        "nikas-text-" + com_id,
     ];
     for (var idx = 0; idx <= editable_elements.length; idx++) {
         set_editable(editable_elements[idx]);
     }
-    document.getElementById("edit-btn-" + com_id).classList.toggle("hidden");
-    document
-        .getElementById("stop-edit-btn-" + com_id)
-        .classList.toggle("hidden");
-    document
-        .getElementById("send-edit-btn-" + com_id)
-        .classList.toggle("hidden");
-}
-
-function stop_edit(com_id) {
-    var editable_elements = [
-        "nikas-author-" + com_id,
-        "nikas-email-" + com_id,
-        "nikas-website-" + com_id,
-        "nikas-text-" + com_id,
-    ];
-    for (var idx = 0; idx <= editable_elements.length; idx++) {
-        unset_editable(editable_elements[idx]);
+    // Append a <textarea> to edit comment text inside <pre>
+    // This preserves original formatting as contentEditable is hard to wrange
+    var elt = document.getElementById("nikas-text-" + com_id);
+    if (elt) {
+        elt.dataset["originContent"] = elt.innerHTML;
+        var textarea = document.createElement("textarea");
+        textarea.id = "nikas-text-" + com_id + "-textarea";
+        textarea.value = elt.dataset["originContent"];
+        textarea.classList.add("editable");
+        // Set row size, but not larger than 40
+        // TODO: Make textarea grow with input
+        // Idea: https://css-tricks.com/auto-growing-inputs-textareas/
+        textarea.rows = Math.min(elt.textContent.split("\n").length, 40);
+        elt.innerHTML = "";
+        elt.appendChild(textarea);
     }
     document.getElementById("edit-btn-" + com_id).classList.toggle("hidden");
     document
@@ -124,14 +118,45 @@ function stop_edit(com_id) {
         .getElementById("send-edit-btn-" + com_id)
         .classList.toggle("hidden");
 }
-
+function stop_edit(com_id, save_changes) {
+    var editable_elements = [
+        "nikas-author-" + com_id,
+        "nikas-email-" + com_id,
+        "nikas-website-" + com_id,
+    ];
+    for (var idx = 0; idx <= editable_elements.length; idx++) {
+        unset_editable(editable_elements[idx], save_changes);
+    }
+    var elt = document.getElementById("nikas-text-" + com_id);
+    var textarea = document.getElementById(
+        "nikas-text-" + com_id + "-textarea"
+    );
+    if (elt && textarea) {
+        elt.innerHTML = save_changes
+            ? textarea.value
+            : elt.dataset["originContent"];
+        delete elt.dataset["originContent"];
+        elt.classList.remove("editable");
+    }
+    document.getElementById("edit-btn-" + com_id).classList.toggle("hidden");
+    document
+        .getElementById("stop-edit-btn-" + com_id)
+        .classList.toggle("hidden");
+    document
+        .getElementById("send-edit-btn-" + com_id)
+        .classList.toggle("hidden");
+}
 function send_edit(com_id, hash, nikas_host_script) {
     var author = document.getElementById("nikas-author-" + com_id).textContent;
     var email = document.getElementById("nikas-email-" + com_id).textContent;
     var website = document.getElementById(
         "nikas-website-" + com_id
     ).textContent;
-    var comment = document.getElementById("nikas-text-" + com_id).textContent;
+    // Need to use element.value instead of textContent for <textarea>, else
+    // only the initial contents will be fetched
+    var comment = document.getElementById(
+        "nikas-text-" + com_id + "-textarea"
+    ).value;
     edit(com_id, hash, author, email, website, comment, nikas_host_script);
-    stop_edit(com_id);
+    stop_edit(com_id, true);
 }

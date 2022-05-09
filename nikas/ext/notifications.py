@@ -1,24 +1,19 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
+import sys
 import io
 import json
 import smtplib
 import socket
-import sys
 import time
+
+from _thread import start_new_thread
 from email.header import Header
 from email.mime.text import MIMEText
 from email.utils import formatdate
-
-try:
-    from urllib.parse import quote
-except ImportError:
-    from urllib import quote
+from urllib.parse import quote
 
 import logging
-
 logger = logging.getLogger("nikas")
 
 try:
@@ -26,13 +21,7 @@ try:
 except ImportError:
     uwsgi = None
 
-from nikas.compat import PY2K
 from nikas import local
-
-if PY2K:
-    from thread import start_new_thread
-else:
-    from _thread import start_new_thread
 
 
 class SMTPConnection(object):
@@ -58,10 +47,6 @@ class SMTPConnection(object):
         username = self.conf.get('username')
         password = self.conf.get('password')
         if username and password:
-            if PY2K:
-                username = username.encode('ascii')
-                password = password.encode('ascii')
-
             self.client.login(username, password)
 
         return self.client

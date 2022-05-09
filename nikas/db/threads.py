@@ -18,14 +18,14 @@ class Threads(object):
             '    id INTEGER PRIMARY KEY, uri VARCHAR(256) UNIQUE, title VARCHAR(256))'])
 
     def __contains__(self, uri):
-        return self.db.execute("SELECT title FROM threads WHERE uri=?", (uri,)) \
-                   .fetchone() is not None
+        return self.db.execute("SELECT title FROM threads WHERE uri=?", (uri, )) \
+                      .fetchone() is not None
 
     def __getitem__(self, uri):
-        return Thread(*self.db.execute("SELECT * FROM threads WHERE uri=?", (uri,)).fetchone())
+        return Thread(*self.db.execute("SELECT * FROM threads WHERE uri=?", (uri, )).fetchone())
 
     def get(self, id):
-        return Thread(*self.db.execute("SELECT * FROM threads WHERE id=?", (id,)).fetchone())
+        return Thread(*self.db.execute("SELECT * FROM threads WHERE id=?", (id, )).fetchone())
 
     def new(self, uri, title):
         self.db.execute(

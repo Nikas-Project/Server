@@ -1,20 +1,17 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import json
-import os
 import tempfile
 import unittest
 
-from fixtures import curl, FakeIP
 from werkzeug import __version__
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
-from nikas import Nikas, config, core, dist
+from nikas import Nikas, config, core
 from nikas.utils import http
 
+from fixtures import curl, FakeIP
 http.curl = curl
 
 if __version__.startswith("0.8"):
@@ -25,6 +22,7 @@ if __version__.startswith("0.8"):
 
 
 class TestGuard(unittest.TestCase):
+
     data = json.dumps({"text": "Lorem ipsum."})
 
     def setUp(self):
@@ -33,7 +31,7 @@ class TestGuard(unittest.TestCase):
     def makeClient(self, ip, ratelimit=2, direct_reply=3, self_reply=False,
                    require_email=False, require_author=False):
 
-        conf = config.load(os.path.join(dist.location, "share", "nikas.conf"))
+        conf = config.load(config.default_file())
         conf.set("general", "dbpath", self.path)
         conf.set("hash", "algorithm", "none")
         conf.set("guard", "enabled", "true")
@@ -109,7 +107,7 @@ class TestGuard(unittest.TestCase):
             "UPDATE comments SET",
             "    created = created - ?",
             "WHERE id = 1"
-        ], (client.application.conf.getint("general", "max-age"),))
+        ], (client.application.conf.getint("general", "max-age"), ))
 
         self.assertEqual(client.post(
             "/new?uri=test", data=payload(1)).status_code, 201)

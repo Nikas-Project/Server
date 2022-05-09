@@ -1,12 +1,12 @@
 # -*- encoding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import tempfile
 import unittest
+
 from os.path import join, dirname
 
 from nikas import config
+
 from nikas.db import SQLite3
 from nikas.migrate import Disqus, WordPress, autodetect, Generic
 
