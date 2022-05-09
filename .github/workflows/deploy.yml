@@ -9,6 +9,8 @@ on:
 env:
   IMAGE_NAME: nikasproject/server
   GITHUB_IMAGE_NAME: docker.pkg.github.com/nikas-project/server/server
+  TARGET_NODE: "14"
+  TARGET_PYTHON: "3.8"
 
 jobs:
   Initialize:
@@ -107,6 +109,11 @@ jobs:
         run: |
           python setup.py sdist bdist_wheel
           TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
+
+      - name: Deploy to main server
+        if: github.event_name != 'pull_request' && matrix.python-version == ${{ env.TARGET_PYTHON }} && matrix.node-version == ${{ env.TARGET_NODE }}
+        run: |
+          TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
 
       - name: Report Failure
         uses: ravsamhq/notify-slack-action@v1
