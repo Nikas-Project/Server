@@ -108,6 +108,19 @@ jobs:
           python setup.py sdist bdist_wheel
           TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
 
+      - name: Report Failure
+        uses: ravsamhq/notify-slack-action@v1
+        if: always()
+        with:
+          status: ${{ job.status }}
+          notify_when: "failure,warnings"
+          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          notification_title: "Deployment ( Python ) has a problem"
+          message_format: "{emoji} *{workflow}* pipeline {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}> | <{workflow_url}|View Workflow>"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
   Docker:
     needs:
       - Python
@@ -181,3 +194,16 @@ jobs:
           repository: ${{ env.IMAGE_NAME }}
           short-description: ${{ github.event.repository.description }}
           readme-filepath: ./README.md
+
+      - name: Report Failure
+        uses: ravsamhq/notify-slack-action@v1
+        if: always()
+        with:
+          status: ${{ job.status }}
+          notify_when: "failure,warnings"
+          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          notification_title: "Deployment ( Docker ) has a problem"
+          message_format: "{emoji} *{workflow}* pipeline {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}> | <{workflow_url}|View Workflow>"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
