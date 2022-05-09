@@ -1147,10 +1147,10 @@ class API(object):
                 return response
             else:
                 nikas_host_script = self.nikas.conf.get("server", "public-endpoint") or local.host
-                return render_template('login.html', nikas_host_script=nikas_host_script)
+                return render_template('login.html', nikas_host_script=nikas_host_script, error="empty")
         except VerifyMismatchError:
             nikas_host_script = self.nikas.conf.get("server", "public-endpoint") or local.host
-            return render_template('login.html', nikas_host_script=nikas_host_script)
+            return render_template('login.html', nikas_host_script=nikas_host_script, error="wrong")
 
     def logout(self, env, req):
         response = redirect('/admin')

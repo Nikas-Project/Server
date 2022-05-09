@@ -51,6 +51,20 @@ html .wrapper header {
     text-align: center;
     width: 100%;
     direction: rtl;
+
+    input {
+        border-radius: 5px;
+        background: white;
+        border: 1px #c9c9c9 solid;
+        padding: 3px;
+        margin-top: 10px;
+    }
+
+    .error {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #b90d0d;
+    }
 }
 
 /*************************** Header ***************************/
