@@ -2,7 +2,7 @@ html5lib==1.1
 misaka==2.1.1
 Jinja2==2.11.3
 itsdangerous==1.1.0
-Flask==1.1.2
+Flask==2.1.2
 Flask-Caching==1.9.0
 bleach==3.3.0
 Werkzeug==1.0.1
