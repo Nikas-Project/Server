@@ -23,7 +23,7 @@ nikas/js/%.dev.js: $(JS_SRC)
 
 js: $(JS_DST)
 
-css:
+sass:
 	gulp sass
 
 coverage: $(PY_SRC)
