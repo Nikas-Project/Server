@@ -4,8 +4,8 @@ Jinja2==3.1.2
 itsdangerous==2.1.2
 Flask==2.1.2
 Flask-Caching==1.10.1
-bleach==3.3.0
 Werkzeug==2.0.3
+bleach==5.0.0
 argon2-cffi==21.3.0
 cffi==1.15.0
 MarkupSafe==2.1.1
