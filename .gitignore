@@ -8,7 +8,6 @@
 *.pyc
 .Python
 .sass-cache
-.vagrant
 
 # Nikas
 /bin
@@ -23,6 +22,7 @@
 /nikas/js/embed.dev.js
 /nikas/js/count.min.js
 /nikas/js/count.dev.js
+/nikas/js/**/*.map
 nikas.conf
 
 /pip-selfcheck.json
@@ -72,6 +72,9 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+nosetests.json
+cover
+local/
 
 # Translations
 *.mo
@@ -126,11 +129,6 @@ ENV/
 # Libs
 bower_components
 node_modules
-
-# Tests
-nosetests.json
-cover
-local/
 
 # Others
 problems.md
