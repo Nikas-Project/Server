@@ -8,6 +8,9 @@ from setuptools import setup, find_packages
 with open('requirements.txt', 'r') as reqs:
     requires = reqs.readlines()
 
+with open('version.env', 'r') as v:
+    version = v.readlines()
+
 tests_require = ['pytest', 'pytest-cov']
 
 this_directory = Path(__file__).parent
@@ -16,7 +19,7 @@ long_description = re_sub(r"\n## License\n.*LICENSE.*\n", "", long_description)
 
 setup(
     name='nikas',
-    version='2.0.0',
+    version=version[0],
     author='Arash Hatami',
     author_email='hatamiarash7@gmail.com',
     packages=find_packages(),
