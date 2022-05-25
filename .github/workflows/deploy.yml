@@ -108,12 +108,12 @@ jobs:
       - name: Deploy to test server
         run: |
           python setup.py sdist bdist_wheel
-          TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
+          TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --verbose dist/*
 
       - name: Deploy to main server
         if: github.event_name != 'pull_request' && matrix.python-version == env.TARGET_PYTHON && matrix.node-version == env.TARGET_NODE
         run: |
-          TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing dist/*
+          TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing --verbose dist/*
 
       - name: Report Failure
         uses: ravsamhq/notify-slack-action@v1
