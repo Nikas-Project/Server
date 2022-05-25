@@ -1,5 +1,15 @@
 # Changes
 
+## 2.0.1 ( May 25, 2022 )
+
+-   Server
+    -   Rewrite `Makefile`
+    -   Update dependencies
+-   Admin
+    -   Show auth errors
+-   Repository
+    -   Fix ignored files
+
 ## 2.0.0 ( May 9, 2022 )
 
 -   Server
