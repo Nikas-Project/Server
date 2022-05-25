@@ -1,0 +1,7 @@
+{
+  "makefile.extensionOutputFolder": "./.vscode",
+  "cSpell.words": ["domready", "pluralforms", "reqs"],
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": "file:///home/hatamiarash7/projects/Nikas-Server/.github/workflows/deploy.yml"
+  }
+}

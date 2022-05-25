@@ -120,7 +120,7 @@ ENV/
 .ropeproject
 
 # IDE
-.vscode
+.vscode/*.log
 .idea
 
 # Libs
