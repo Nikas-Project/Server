@@ -1,19 +1,13 @@
 include .env.pypi
 
-NIKAS_JS_SRC := $(shell find nikas/js/app -type f) \
+JS_SRC := $(shell find nikas/js/app -type f) \
 	       $(shell ls nikas/js/*.js | grep -vE "(min|dev)")
 
-NIKAS_JS_DST := nikas/js/embed.min.js nikas/js/embed.dev.js \
+JS_DST := nikas/js/embed.min.js nikas/js/embed.dev.js \
 	       nikas/js/count.min.js nikas/js/count.dev.js \
 	       nikas/js/count.dev.js.map nikas/js/embed.dev.js.map
 
-NIKAS_CSS := nikas/css/nikas.css
-
-NIKAS_PY_SRC := $(shell git ls-files | grep -E "^nikas/.+.py$$")
-
-RJS = r.js
-
-SASS = sassc
+PY_SRC := $(shell git ls-files | grep -E "^nikas/.+.py$$")
 
 init:
 	npm install -f
@@ -21,26 +15,26 @@ init:
 flakes:
 	flake8 nikas/ --count --max-line-length=127 --show-source --statistics
 
-nikas/js/%.min.js: $(NIKAS_JS_SRC)
+nikas/js/%.min.js: $(JS_SRC)
 	npm run build-prod
 
-nikas/js/%.dev.js: $(NIKAS_JS_SRC)
+nikas/js/%.dev.js: $(JS_SRC)
 	npm run build-dev
 
-js: $(NIKAS_JS_DST)
+js: $(JS_DST)
 
 sass:
 	gulp sass
 
-coverage: $(NIKAS_PY_SRC)
+coverage: $(PY_SRC)
 	coverage run --omit='*/tests/*' --source nikas -m pytest
 	coverage report --omit='*/tests/*'
 
-test: $(NIKAS_PY_SRC)
+test: $(PY_SRC)
 	pytest --doctest-modules nikas/
 
 clean:
-	rm -f $(NIKAS_JS_DST)
+	rm -f $(JS_DST)
 
 .PHONY: clean init js coverage test
 
