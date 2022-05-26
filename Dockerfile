@@ -16,11 +16,10 @@ ENV GID=1000 UID=1000
 
 RUN apk upgrade --no-cache \
  && apk add --no-cache -t build-dependencies \
-    python3-dev \
     libffi-dev \
     build-base \
- && apk add \
     python3 \
+    python3-dev \
     py3-pip \
     sqlite \
     openssl \
