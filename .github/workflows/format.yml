@@ -32,14 +32,16 @@ jobs:
         uses: hadolint/hadolint-action@v2.1.0
         with:
           dockerfile: "Dockerfile"
-          recursive: true
           verbose: true
+          failure-threshold: error
+          format: tty
           ignore: "DL3013,DL3018"
 
       - name: Lint Docker files
         uses: hadolint/hadolint-action@v2.1.0
         with:
           dockerfile: "Dockerfile.dev"
-          recursive: true
           verbose: true
+          failure-threshold: error
+          format: tty
           ignore: "DL3013,DL3018"
