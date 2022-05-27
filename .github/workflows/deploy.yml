@@ -135,6 +135,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKERFILE: ${{ needs.Initialize.outputs.docker_file }}
+      DOCKER_BUILDKIT: 1
     permissions:
       contents: read
       packages: write
