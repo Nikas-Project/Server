@@ -206,3 +206,16 @@ jobs:
           footer: "Linked Repo <{repo_url}|{repo}> | <{workflow_url}|View Workflow>"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Report Success
+        uses: ravsamhq/notify-slack-action@v1
+        if: github.event_name != 'pull_request'
+        with:
+          status: ${{ job.status }}
+          notify_when: "success"
+          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          notification_title: "New version deployed"
+          message_format: "{emoji} *{workflow}* pipeline {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}> | <{workflow_url}|View Workflow>"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
