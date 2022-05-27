@@ -5,6 +5,7 @@
 -   Server
     -   Rewrite `Makefile`
     -   Update dependencies
+    -   Reduce the size of the Docker image ( 48 -> 18 )
 -   Admin
     -   Show auth errors
 -   Repository
