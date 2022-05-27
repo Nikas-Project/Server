@@ -2,12 +2,14 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
     paths:
       - "nikas/**"
       - ".github/workflows/codeql-analysis.yml"
   pull_request:
-    branches: [master]
+    branches:
+      - master
     paths:
       - "nikas/**"
       - ".github/workflows/codeql-analysis.yml"

@@ -2,13 +2,49 @@ name: Deploy
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+    paths:
+      - ".github/workflows/deploy.yml"
+      - "nikas/**"
+      - "share/**"
+      - "Dockerfile"
+      - "Dockerfile.dev"
+      - "gulpfile.js"
+      - "Makefile"
+      - "MANIFEST.in"
+      - "package-lock.json"
+      - "package.json"
+      - "requirements.txt"
+      - "setup.cfg"
+      - "setup.py"
+      - "tox.ini"
+      - "uwsgi.ini"
+      - "version.env"
   pull_request:
-    branches: [master]
+    branches:
+      - master
+    paths:
+      - ".github/workflows/deploy.yml"
+      - "nikas/**"
+      - "share/**"
+      - "Dockerfile"
+      - "Dockerfile.dev"
+      - "gulpfile.js"
+      - "Makefile"
+      - "MANIFEST.in"
+      - "package-lock.json"
+      - "package.json"
+      - "requirements.txt"
+      - "setup.cfg"
+      - "setup.py"
+      - "tox.ini"
+      - "uwsgi.ini"
+      - "version.env"
 
 env:
   IMAGE_NAME: nikasproject/server
-  GITHUB_IMAGE_NAME: docker.pkg.github.com/nikas-project/server/server
+  GITHUB_IMAGE_NAME: ${{ github.repository }}/server
   TARGET_NODE: "14"
   TARGET_PYTHON: "3.8"
 
