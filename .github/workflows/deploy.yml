@@ -44,7 +44,7 @@ on:
 
 env:
   IMAGE_NAME: nikasproject/server
-  GITHUB_IMAGE_NAME: ${{ github.repository }}/server
+  GITHUB_IMAGE_NAME: docker.pkg.github.com/nikas-project/server/server
   TARGET_NODE: "14"
   TARGET_PYTHON: "3.8"
 
