@@ -53,7 +53,7 @@ jobs:
         uses: github/codeql-action/analyze@v2
 
       - name: Set up Python ${{ matrix.python-version }} on ${{ matrix.os }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         if: matrix.language == 'python'
         with:
           python-version: ${{ matrix.python-version }}
