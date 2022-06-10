@@ -1,5 +1,10 @@
 # Changes
 
+## 2.0.2 ( Jun 10, 2022 )
+
+-   Server
+    -   Fix security problems
+
 ## 2.0.1 ( May 25, 2022 )
 
 -   Server
