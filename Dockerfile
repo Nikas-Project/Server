@@ -13,7 +13,8 @@ LABEL org.opencontainers.image.description="The first Persian comment system"
 LABEL org.opencontainers.image.source="https://github.com/Nikas-Project/Server"
 
 RUN apk upgrade --no-cache \
-    && apk add --no-cache -t gcc \
+    && apk add --no-cache -t build-dependencies \
+    gcc \
     musl-dev \
     libffi-dev \
     python3 \
@@ -25,7 +26,7 @@ RUN apk upgrade --no-cache \
     ca-certificates \
     && pip3 install --upgrade --no-cache --no-cache-dir --ignore-installed pip wheel \
     && pip3 install --no-cache --no-cache-dir --ignore-installed nikas==$VERSION \
-    && apk del gcc \
+    && apk del build-dependencies \
     && rm -rf /tmp/* \
     && rm -rf /var/cache/apk/*
 
