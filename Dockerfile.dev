@@ -15,7 +15,8 @@ LABEL org.opencontainers.image.source="https://github.com/Nikas-Project/Server"
 COPY requirements.txt /tmp/requirements.txt
 
 RUN apk upgrade --no-cache \
-    && apk add --no-cache -t build-dependencies \
+    && apk add --no-cache -t gcc \
+    musl-dev \
     libffi-dev \
     python3 \
     python3-dev \
@@ -27,7 +28,7 @@ RUN apk upgrade --no-cache \
     && pip3 install --upgrade --no-cache --no-cache-dir --ignore-installed pip wheel \
     && pip3 install --no-cache --no-cache-dir -r /tmp/requirements.txt \
     && pip3 install --no-cache --no-cache-dir --ignore-installed --index-url https://test.pypi.org/simple/ --extra-index-url=https://pypi.org/simple/ nikas==$VERSION \
-    && apk del build-dependencies \
+    && apk del gcc \
     && rm -rf /tmp/* \
     && rm -rf /var/cache/apk/*
 
