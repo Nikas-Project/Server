@@ -1,5 +1,5 @@
 argon2-cffi==21.3.0
-bleach==5.0.0
+bleach==5.0.1
 cffi==1.15.0
 Flask==2.1.2
 Flask-Caching==1.11.1
