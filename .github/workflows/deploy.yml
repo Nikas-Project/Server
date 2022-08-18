@@ -152,7 +152,7 @@ jobs:
           TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} TWINE_USERNAME=__token__ python -m twine upload --skip-existing --verbose dist/*
 
       - name: Report Failure
-        uses: ravsamhq/notify-slack-action@v1
+        uses: ravsamhq/notify-slack-action@v2
         if: always()
         with:
           status: ${{ job.status }}
@@ -234,7 +234,7 @@ jobs:
           docker push ${{ env.GITHUB_IMAGE_NAME }}:${{ env.NIKAS_VERSION }}
 
       - name: Report Failure
-        uses: ravsamhq/notify-slack-action@v1
+        uses: ravsamhq/notify-slack-action@v2
         if: always()
         with:
           status: ${{ job.status }}
@@ -247,7 +247,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Report Success
-        uses: ravsamhq/notify-slack-action@v1
+        uses: ravsamhq/notify-slack-action@v2
         if: github.event_name != 'pull_request'
         with:
           status: ${{ job.status }}
