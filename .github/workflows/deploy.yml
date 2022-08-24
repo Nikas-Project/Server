@@ -180,7 +180,7 @@ jobs:
 
     steps:
       - name: Sleep for 60 seconds
-        run: sleep 60s
+        run: sleep 90s
 
       - name: Checkout
         uses: actions/checkout@v3
