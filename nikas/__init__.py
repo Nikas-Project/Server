@@ -192,25 +192,25 @@ def make_app(conf=None, threading=True, multiprocessing=False, uwsgi=False):
 
 
 def main():
-    parser = ArgumentParser(description="a blog comment hosting service")
+    parser = ArgumentParser(description="The first persian comment system")
     subparser = parser.add_subparsers(help="commands", dest="command")
 
     parser.add_argument('--version', action='version',
                         version='%(prog)s ' + dist.version)
     parser.add_argument("-c", dest="conf", default="/etc/nikas.cfg",
-                        metavar="/etc/nikas.cfg", help="set configuration file")
+                        metavar="/etc/nikas.cfg", help="Set configuration file")
 
-    imprt = subparser.add_parser('import', help="import Disqus XML export")
+    imprt = subparser.add_parser('import', help="Import Disqus XML export")
     imprt.add_argument("dump", metavar="FILE")
     imprt.add_argument("-n", "--dry-run", dest="dryrun", action="store_true",
-                       help="perform a trial run with no changes made")
+                       help="Perform a trial run with no changes made")
     imprt.add_argument("-t", "--type", dest="type", default=None,
-                       choices=["disqus", "wordpress", "generic"], help="export type")
+                       choices=["disqus", "wordpress", "generic"], help="Export type")
     imprt.add_argument("--empty-id", dest="empty_id", action="store_true",
-                       help="workaround for weird Disqus XML exports, #135")
+                       help="Workaround for weird Disqus XML exports, #135")
 
     # run nikas as stand-alone server
-    subparser.add_parser("run", help="run server")
+    subparser.add_parser("run", help="Run nikas server")
 
     args = parser.parse_args()
     conf = config.load(config.default_file(), args.conf)
