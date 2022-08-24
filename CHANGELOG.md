@@ -1,5 +1,16 @@
 # Changes
 
+## 2.0.4 ( Aug 24, 2022 )
+
+-   Fix v2 problems
+
+## 2.0.3 ( Aug 24, 2022 )
+
+-   Server
+    -   Update dependencies
+-   Client
+    -   Update dependencies
+
 ## 2.0.2 ( Jun 10, 2022 )
 
 -   Server
