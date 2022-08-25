@@ -235,7 +235,7 @@ jobs:
 
       - name: Report Failure
         uses: ravsamhq/notify-slack-action@v2
-        if: always()
+        if: github.event_name != 'pull_request'
         with:
           status: ${{ job.status }}
           notify_when: "failure,warnings"
