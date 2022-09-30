@@ -40,9 +40,9 @@ for (var i = 0; i < js.length; i++) {
         var attr = js[i].attributes[j];
         if (/^data-nikas-/.test(attr.name)) {
             try {
-                config[attr.name.substring(10)] = JSON.parse(attr.value);
+                config[attr.name.substring(11)] = JSON.parse(attr.value);
             } catch (ex) {
-                config[attr.name.substring(10)] = attr.value;
+                config[attr.name.substring(11)] = attr.value;
             }
         }
     }
