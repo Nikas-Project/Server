@@ -23,13 +23,27 @@ function init() {
     heading = $.new("h4");
 
     if (config["css"] && $("style#nikas-style") === null) {
+        var theme;
+
+        if (config["theme"] === "dark") {
+            theme = "dark";
+        } else if (config["theme"] === "light") {
+            theme = "light";
+        } else {
+            console.log(
+                "Nikas: Unknown theme '%s', using 'light' instead",
+                config["theme"]
+            );
+            theme = "light";
+        }
+
         var style = $.new("link");
         style.id = "nikas-style";
         style.rel = "stylesheet";
         style.type = "text/css";
         style.href = config["css-url"]
             ? config["css-url"]
-            : api.endpoint + "/css/nikas.css";
+            : api.endpoint + "/css/nikas-" + theme + ".css";
         $("head").append(style);
     }
 

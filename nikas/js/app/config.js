@@ -30,6 +30,7 @@ var config = {
     vote: true,
     "vote-levels": null,
     feed: false,
+    theme: "light",
 };
 
 var js = document.getElementsByTagName("script");
