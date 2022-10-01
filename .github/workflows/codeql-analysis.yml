@@ -1,4 +1,4 @@
-name: "CodeQL"
+name: CodeQL
 
 on:
   push:
@@ -25,13 +25,12 @@ jobs:
       actions: read
       contents: read
       security-events: write
-
     strategy:
       fail-fast: false
       matrix:
         language: ["javascript", "python"]
         os: ["ubuntu-latest"]
-        python-version: ["3.9"]
+        python-version: ["3.9", "3.10"]
 
     steps:
       - name: Cancel previous workflow
