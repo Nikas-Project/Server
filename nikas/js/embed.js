@@ -87,7 +87,7 @@ function fetchComments() {
                 ) {
                     console.log(
                         "Nikas: Client value '%s' for setting '%s' overridden by server value '%s'.\n" +
-                            "Since Nikas version 0.12.6, 'data-nikas-%s' is only configured via the server " +
+                            "In future, some 'data-nikas-%s' options will only configured via the server " +
                             "to keep client and server in sync",
                         config[setting],
                         setting,
