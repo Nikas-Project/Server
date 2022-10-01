@@ -49,6 +49,8 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
         color: black;
         direction: rtl;
         font-size: 14px;
+        text-align: right;
+        text-align-last: right;
 
         &:focus {
             border-color: rgba(0, 0, 0, 0.8);
@@ -123,6 +125,7 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
 
         > .nikas-comment-header {
             font-size: 0.85em;
+            text-align: right;
 
             .nikas-spacer {
                 padding: 0 6px;
@@ -139,6 +142,7 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
                 color: gray !important;
                 font-weight: normal;
                 text-shadow: none !important;
+                unicode-bidi: embed;
 
                 &:hover {
                     color: #606060 !important;
@@ -179,20 +183,19 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
             color: gray !important;
             clear: left;
             margin-top: 10px;
+            text-align: right;
 
             a {
                 font-weight: bold;
                 text-decoration: none;
-                padding-left: 0;
+                padding-left: 1em;
                 transition: 0.1s linear all;
 
                 &:hover {
                     color: #111111 !important;
                     text-shadow: #aaaaaa 0 0 1px !important;
                 }
-            }
 
-            > a {
                 position: relative;
 
                 &.edit {
@@ -206,12 +209,6 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
                 &.cancel {
                     padding-left: 1em;
                 }
-
-                + {
-                    a {
-                        padding-left: 1em;
-                    }
-                }
             }
 
             .nikas-votes {
@@ -219,6 +216,7 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
             }
 
             .nikas-upvote {
+                padding-left: 0;
                 svg {
                     position: relative;
                     margin-right: 3px;
@@ -369,6 +367,7 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
                     border: 1px solid rgba(0, 0, 0, 0.2);
                     font-family: $font-family;
                     text-align: center;
+                    text-align-last: auto;
                     font-size: 12px;
                     color: black;
                     box-shadow: none;
@@ -428,6 +427,8 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
         font-size: 10px;
         color: #757575;
         text-align: left;
+        text-align-last: left;
+        line-height: 25px;
 
         a {
             margin-left: 3px;
