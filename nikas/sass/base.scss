@@ -103,16 +103,25 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
             font-size: 0.85em;
             text-align: right;
 
+            a {
+                transition: 0.1s linear all;
+
+                &.nikas-permalink {
+                    font-weight: normal;
+                    text-shadow: none !important;
+                    unicode-bidi: embed;
+                }
+
+                &.nikas-parent {
+                    font-weight: normal;
+                    text-shadow: none !important;
+                }
+            }
+
             .nikas-spacer {
                 padding: 0 6px;
                 font-weight: normal;
                 text-shadow: none !important;
-            }
-
-            a.nikas-permalink {
-                font-weight: normal;
-                text-shadow: none !important;
-                unicode-bidi: embed;
             }
 
             .nikas-note {
@@ -120,11 +129,6 @@ $font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
                 text-shadow: none !important;
                 float: left;
                 margin-left: 5px;
-            }
-
-            a.nikas-parent {
-                font-weight: normal;
-                text-shadow: none !important;
             }
 
             .nikas-author {
