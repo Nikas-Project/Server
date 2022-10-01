@@ -15,12 +15,10 @@ LABEL org.opencontainers.image.source="https://github.com/Nikas-Project/Server"
 RUN apk upgrade --no-cache \
     && apk add --no-cache -t build-dependencies \
     gcc \
-    python3-dev \
-    libffi-dev \
-    build-base \
-    && apk add --no-cache \
     musl-dev \
+    libffi-dev \
     python3 \
+    python3-dev \
     py3-pip \
     sqlite \
     openssl \
@@ -29,7 +27,8 @@ RUN apk upgrade --no-cache \
     && pip3 install --upgrade --no-cache --no-cache-dir --ignore-installed pip wheel \
     && pip3 install --no-cache --no-cache-dir --ignore-installed nikas==$VERSION \
     && apk del build-dependencies \
-    && rm -rf /tmp/* /var/cache/apk/*
+    && rm -rf /tmp/* \
+    && rm -rf /var/cache/apk/*
 
 EXPOSE 8080
 
