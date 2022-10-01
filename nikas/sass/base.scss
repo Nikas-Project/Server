@@ -1,0 +1,386 @@
+@import "https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@32.102/Round-Dots/misc/UI-Farsi-Digits/Vazirmatn-RD-UI-FD-font-face.css";
+
+$font-family: Vazirmatn RD UI FD, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+#nikas-thread {
+    padding: 0;
+    margin: 10px 0 10px 0;
+    font-family: $font-family;
+
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        font-family: $font-family;
+    }
+
+    .nikas-comment-header {
+        a {
+            text-decoration: none;
+            font-size: 12px;
+        }
+    }
+
+    > h4 {
+        font-weight: 500;
+        text-align: center;
+        direction: rtl;
+        margin: 20px 0 5px 0;
+        font-size: unset;
+    }
+
+    > .nikas-feedlink {
+        float: right;
+        padding-left: 1em;
+
+        > a {
+            font-size: 0.8em;
+            vertical-align: bottom;
+        }
+    }
+
+    .nikas-textarea {
+        min-height: 58px;
+        outline: 0;
+        direction: rtl;
+        font-size: 14px;
+        text-align: right;
+        text-align-last: right;
+
+        .nikas-placeholder {
+            direction: rtl;
+            font-size: 14px;
+            display: block;
+            cursor: text;
+            transition: all 0.25s;
+        }
+    }
+}
+
+#nikas-root {
+    direction: rtl;
+
+    .nikas-comment {
+        max-width: 68em;
+        padding-top: 0.95em;
+        margin: 0.95em auto;
+    }
+
+    .nikas-preview {
+        .nikas-comment {
+            padding-top: 0;
+            margin: 0;
+        }
+    }
+}
+
+.nikas-comment {
+    > .nikas-avatar {
+        display: block;
+        width: 7%;
+        float: right;
+        margin: 3px 0 0 15px;
+
+        > svg {
+            max-width: 48px;
+            max-height: 48px;
+            border-radius: 15px;
+        }
+
+        > img {
+            max-width: 48px;
+            max-height: 48px;
+            border-radius: 15px;
+        }
+    }
+
+    > .nikas-text-wrapper {
+        display: block;
+
+        > .nikas-comment-header {
+            font-size: 0.85em;
+            text-align: right;
+
+            .nikas-spacer {
+                padding: 0 6px;
+                font-weight: normal;
+                text-shadow: none !important;
+            }
+
+            a.nikas-permalink {
+                font-weight: normal;
+                text-shadow: none !important;
+                unicode-bidi: embed;
+            }
+
+            .nikas-note {
+                font-weight: normal;
+                text-shadow: none !important;
+                float: left;
+                margin-left: 5px;
+            }
+
+            a.nikas-parent {
+                font-weight: normal;
+                text-shadow: none !important;
+            }
+
+            .nikas-author {
+                font-size: 12px;
+            }
+        }
+
+        > .nikas-comment-footer {
+            font-size: 0.95em;
+            font-size: 0.8em;
+            clear: left;
+            margin-top: 10px;
+            text-align: right;
+
+            a {
+                font-weight: bold;
+                text-decoration: none;
+                padding-left: 1em;
+                transition: 0.1s linear all;
+                position: relative;
+
+                &.edit {
+                    padding-left: 1em;
+                }
+
+                &.reply {
+                    padding-left: 1em;
+                }
+
+                &.cancel {
+                    padding-left: 1em;
+                }
+            }
+
+            .nikas-upvote {
+                padding-left: 0;
+                svg {
+                    position: relative;
+                    margin-right: 3px;
+                }
+            }
+
+            .nikas-downvote {
+                svg {
+                    position: relative;
+                    margin-right: 3px;
+                }
+            }
+        }
+
+        > .nikas-textarea-wrapper {
+            .nikas-textarea {
+                margin-top: 0.2em;
+                direction: rtl;
+                padding: 0.7em 0.8em;
+                width: 100%;
+                border-radius: 5px;
+            }
+
+            // TODO: Remove ?
+            .nikas-preview {
+                margin-top: 0.2em;
+                direction: rtl;
+                width: 100%;
+                border-radius: 5px;
+            }
+        }
+
+        > .nikas-text {
+            p {
+                margin-top: 1em;
+                font-size: 14px;
+                font-weight: 400;
+                direction: rtl;
+                text-align: justify;
+                text-align-last: right;
+
+                &:last-child {
+                    margin-bottom: 0.2em;
+                }
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-size: 130%;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .nikas-follow-up {
+        padding-left: unset;
+        padding-right: calc(7% + 20px);
+    }
+
+    .nikas-postbox {
+        margin-top: 0.8em;
+    }
+}
+
+.nikas-feedlink {
+    font-weight: bold;
+    text-decoration: none;
+    padding-left: 0;
+    transition: 0.1s linear all;
+}
+
+.nikas-comment.nikas-no-votes {
+    > * {
+        > .nikas-comment-footer {
+            span.nikas-votes {
+                display: none;
+            }
+        }
+    }
+}
+
+.nikas-postbox {
+    max-width: 68em;
+    margin: 0 auto 2em;
+    clear: right;
+
+    > .nikas-form-wrapper {
+        display: block;
+        padding: 0;
+
+        > .nikas-auth-section {
+            display: block;
+
+            .nikas-post-action {
+                display: block;
+                float: right;
+                margin: 0 0 0 5px;
+
+                > input {
+                    border-radius: 5px;
+                    cursor: pointer;
+                    outline: 0;
+                    line-height: 1.4em;
+                    padding: 5px 10px 5px 10px;
+                    transition: 0.2s linear all;
+                    font-size: 12px;
+                    margin-bottom: 0;
+                    box-shadow: none;
+                }
+            }
+
+            .nikas-input-wrapper {
+                display: inline-block;
+                position: relative;
+                max-width: 25%;
+                margin: 0 5px 0 0;
+
+                input {
+                    padding: 0.3em 10px;
+                    max-width: 100%;
+                    border-radius: 5px;
+                    line-height: 1.4em;
+                    font-family: $font-family;
+                    text-align: center;
+                    text-align-last: auto;
+                    font-size: 12px;
+                    box-shadow: none;
+                }
+            }
+        }
+
+        .nikas-textarea {
+            margin: 0 0 0.3em;
+            padding: 0.4em 0.8em;
+            border-radius: 5px;
+        }
+
+        .nikas-preview {
+            margin: 0 0 0.3em;
+            padding: 0.4em 0.8em;
+            border-radius: 5px;
+            display: none;
+        }
+
+        input[type="checkbox"] {
+            vertical-align: middle;
+            position: relative;
+            bottom: 1px;
+            margin-left: 0;
+        }
+
+        .nikas-notification-section {
+            font-size: 0.9em;
+            padding-top: 0.3em;
+        }
+
+        input[name="edit"] {
+            display: none;
+        }
+
+        > .nikas-notification-section {
+            display: none;
+            padding-bottom: 10px;
+        }
+    }
+
+    > .nikas-copyright {
+        display: block;
+        padding: 0;
+        margin: 0;
+        font-size: 10px;
+        text-align: left;
+        text-align-last: left;
+        line-height: 25px;
+
+        a {
+            margin-left: 3px;
+            text-decoration: none;
+        }
+    }
+}
+
+.nikas-postbox.nikas-preview-mode {
+    > .nikas-form-wrapper {
+        input[name="preview"] {
+            display: none;
+        }
+
+        .nikas-textarea {
+            display: none;
+        }
+
+        .nikas-preview {
+            display: block;
+        }
+
+        input[name="edit"] {
+            display: inline;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .nikas-postbox {
+        > .nikas-form-wrapper {
+            > .nikas-auth-section {
+                .nikas-input-wrapper {
+                    display: block;
+                    max-width: 100%;
+                    margin: 0 0 0.3em;
+
+                    input {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
