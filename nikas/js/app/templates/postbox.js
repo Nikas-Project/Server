@@ -7,7 +7,7 @@ var html = function (globals) {
     return (
         "" +
         "<div class='nikas-postbox'>" +
-        "<p class='nikas-copyright'>Powered by<a href='https://www.nikasproject.ir' target='_blank'>Nikas</a></p>" +
+        "<p class='nikas-copyright'>Powered by<a href='https://www.nikasproject.ir?utm_source=Client' target='_blank'>Nikas</a></p>" +
         "<div class='nikas-form-wrapper'>" +
         "<div class='nikas-textarea-wrapper'>" +
         "<div class='nikas-textarea nikas-placeholder' contenteditable='true'>" +
