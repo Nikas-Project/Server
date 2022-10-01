@@ -17,6 +17,7 @@ COPY requirements.txt /tmp/requirements.txt
 RUN apk upgrade --no-cache \
     && apk add --no-cache -t build-dependencies \
     gcc \
+    g++ \
     musl-dev \
     libffi-dev \
     python3 \

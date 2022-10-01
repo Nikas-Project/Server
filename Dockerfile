@@ -15,6 +15,7 @@ LABEL org.opencontainers.image.source="https://github.com/Nikas-Project/Server"
 RUN apk upgrade --no-cache \
     && apk add --no-cache -t build-dependencies \
     gcc \
+    g++ \
     musl-dev \
     libffi-dev \
     python3 \
