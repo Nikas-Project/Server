@@ -1,5 +1,19 @@
 # Changes
 
+## 2.1.0 ( Oct 1, 2022 )
+
+-   Server
+    -   Fix Issue [#146](https://github.com/Nikas-Project/Server/issues/146)
+    -   Update package lock version
+-   Client
+    -   Add dark theme
+    -   Fix style problems
+    -   Update CP link
+-   Repository
+    -   Update workflows
+    -   Change deploy process
+    -   Update dependabot
+
 ## 2.0.4 ( Aug 24, 2022 )
 
 -   Fix v2 problems
