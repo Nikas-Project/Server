@@ -3,7 +3,7 @@
 ## 2.1.1 ( Oct 1, 2022 )
 
 -   Repository
-    -   Fix Dockerfiles
+    -   Fix Dockerfile problems
 
 ## 2.1.0 ( Oct 1, 2022 )
 
