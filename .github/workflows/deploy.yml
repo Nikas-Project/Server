@@ -183,14 +183,14 @@ jobs:
 
     steps:
       - name: Sleep for 90 seconds
+        if: github.ref_type == 'tag'
         run: sleep 90s
 
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Get version
-        run: |
-          echo "NIKAS_VERSION=$(cat version.env)" >> $GITHUB_ENV
+        run: echo "NIKAS_VERSION=$(cat version.env)" >> $GITHUB_ENV
 
       - name: Get Current Date
         id: date
