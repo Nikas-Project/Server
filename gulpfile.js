@@ -13,7 +13,7 @@ var sassOptions = {
 
 gulp.task("sass", function () {
     return gulp
-        .src("./nikas/sass/*.scss")
+        .src("./nikas/sass/nikas-*.scss")
         .pipe(sourcemaps.init())
         .pipe(sass(sassOptions).on("error", sass.logError))
         .pipe(prefixer())
@@ -22,5 +22,5 @@ gulp.task("sass", function () {
 });
 
 gulp.task("sass:watch", function () {
-    gulp.watch("./nikas/sass/*.scss", ["sass"]);
+    gulp.watch("./nikas/sass/nikas-*.scss", ["sass"]);
 });

@@ -9,10 +9,12 @@ include nikas/nikas.cfg
 include nikas/templates/admin.html
 include nikas/templates/disabled.html
 include nikas/templates/login.html
-include nikas/css/admin.css
-include nikas/css/admin.css.map
-include nikas/css/nikas.css
-include nikas/css/nikas.css.map
+include nikas/css/nikas-admin.css
+include nikas/css/nikas-admin.css.map
+include nikas/css/nikas-light.css
+include nikas/css/nikas-light.css.map
+include nikas/css/nikas-dark.css
+include nikas/css/nikas-dark.css.map
 
 include nikas/img/logo.png
 include nikas/img/favicon.ico
