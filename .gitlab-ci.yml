@@ -29,9 +29,6 @@ test:
     - pip3 install -e .
     - nikas --version
     - make test
-  artifacts:
-    reports:
-      junit: nosetests.xml
 
 deploy:gitlab:
   stage: Deploy package
