@@ -28,6 +28,7 @@ test:
     - pip3 install setuptools flake8 pytest pytest-cov wheel twine nose-py3 gunicorn cffi flask
     - pip3 install -e .
     - nikas --version
+    - touch .env.pypi
     - make test
 
 deploy:gitlab:
