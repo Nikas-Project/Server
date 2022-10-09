@@ -18,14 +18,17 @@ services:
 
 test:
   stage: Test
+  variables:
+    PYTHONHASHSEED: "random"
   script:
     - apk update
     - apk upgrade
     - apk add -t build-dependencies python3-dev libffi-dev build-base
     - apk add python3 py3-pip sqlite openssl openssl-dev ca-certificates su-exec tini
-    - pip3 install nose wheel
-    - python3 setup.py install
-    - python3 setup.py nosetests --with-xunit
+    - pip3 install setuptools flake8 pytest pytest-cov wheel twine nose-py3 gunicorn cffi flask
+    - pip3 install -e .
+    - nikas --version
+    - make test
   artifacts:
     reports:
       junit: nosetests.xml
