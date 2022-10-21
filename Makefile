@@ -9,7 +9,7 @@ JS_DST := nikas/js/embed.min.js nikas/js/embed.dev.js \
 
 PY_SRC := $(shell git ls-files | grep -E "^nikas/.+.py$$")
 
-init: ## Install JS dependencies
+init: ## Install JavaScript modules
 	npm install -f
 
 flakes: ## Run flake8
@@ -21,7 +21,7 @@ nikas/js/%.min.js: $(JS_SRC)
 nikas/js/%.dev.js: $(JS_SRC)
 	npm run build-dev
 
-js: $(JS_DST)
+js: $(JS_DST) ## Build the frontend
 
 sass: ## Compile SASS files
 	gulp sass
