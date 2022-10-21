@@ -9,10 +9,10 @@ JS_DST := nikas/js/embed.min.js nikas/js/embed.dev.js \
 
 PY_SRC := $(shell git ls-files | grep -E "^nikas/.+.py$$")
 
-init:
+init: ## Install JS dependencies
 	npm install -f
 
-flakes:
+flakes: ## Run flake8
 	flake8 nikas/ --count --max-line-length=127 --show-source --statistics
 
 nikas/js/%.min.js: $(JS_SRC)
@@ -23,22 +23,26 @@ nikas/js/%.dev.js: $(JS_SRC)
 
 js: $(JS_DST)
 
-sass:
+sass: ## Compile SASS files
 	gulp sass
 
-coverage: $(PY_SRC)
+coverage: $(PY_SRC) ## Run tests with coverage
 	coverage run --omit='*/tests/*' --source nikas -m pytest
 	coverage report --omit='*/tests/*'
 
-test: $(PY_SRC)
+test: $(PY_SRC) ## Run tests
 	pytest --doctest-modules nikas/
 
-clean:
+clean: ## Clean up
 	rm -f $(JS_DST)
 
-.PHONY: clean init js coverage test
-
-pypi:
+pypi: ## Upload pacakge to PyPI
 	python3 setup.py sdist bdist_wheel
 	@-twine upload --repository-url https://test.pypi.org/legacy/ -u hatamiarash7 -p $(PYPI_TEST_PASSWORD) dist/*
 	@-twine upload -u __token__ -p $(PYPI_TOKEN) dist/*
+
+help: ## Show this help
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: clean init js coverage test help
+.DEFAULT_GOAL := help
