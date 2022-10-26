@@ -35,7 +35,7 @@ stages:
       - job: Build
         displayName: Build, Scan and Push
         steps:
-          - task: CmdLine@2.201.1
+          - task: CmdLine@2.212.0
             displayName: "Show build info"
             inputs:
               script: |
@@ -61,7 +61,7 @@ stages:
               trivy -v
             displayName: "Download and install Trivy"
 
-          - task: CmdLine@2.201.1
+          - task: CmdLine@2.212.0
             displayName: "Run trivy scan"
             inputs:
               script: |
