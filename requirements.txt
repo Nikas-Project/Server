@@ -11,5 +11,5 @@ MarkupSafe==2.1.2
 misaka==2.1.1
 pytest==7.3.1
 pytest-cov==4.0.0
-Werkzeug==2.2.3
+Werkzeug==2.3.3
 setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
