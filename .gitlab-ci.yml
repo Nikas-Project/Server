@@ -1,4 +1,4 @@
-image: docker:20
+image: docker:24
 
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
