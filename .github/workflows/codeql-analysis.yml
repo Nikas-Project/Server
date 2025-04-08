@@ -72,7 +72,7 @@ jobs:
         if: matrix.language == 'python'
 
       - name: Create .env
-        uses: 1arp/create-a-file-action@0.2
+        uses: 1arp/create-a-file-action@0.3
         if: matrix.language == 'python'
         with:
           file: ".env.pypi"
