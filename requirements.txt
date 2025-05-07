@@ -3,7 +3,7 @@ bleach==5.0.1
 cffi==1.15.1
 Flask==2.2.5
 Flask-Caching==2.0.2
-gevent==21.12.0
+gevent==25.4.1
 html5lib==1.1
 itsdangerous==2.1.2
 Jinja2==3.1.2
@@ -12,4 +12,4 @@ misaka==2.1.1
 pytest==7.4.1
 pytest-cov==4.1.0
 Werkzeug==2.3.6
-setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools>=78.1.1 # not directly required, pinned by Snyk to avoid a vulnerability
