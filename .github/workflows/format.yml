@@ -23,7 +23,7 @@ jobs:
           persist-credentials: false
 
       - name: Format code
-        uses: creyD/prettier_action@v4.3
+        uses: creyD/prettier_action@v4.6
         with:
           prettier_options: --write **/*.{md,js,html,scss,yaml,yml}
           same_commit: false
